@@ -32,6 +32,14 @@
       "url": "https://build.seeplore.com/",
       "icon": "https://seeplore.com/icons/series/build.png",
       "desc": "땅속 25 m 말뚝부터 20층 꼭대기까지 — 아파트 한 동이 지어지는 30개월을 3D 타임랩스로"
+    },
+    {
+      "id": "ai",
+      "label": "신호로 보는\nAI",
+      "title": "신호로 보는 AI",
+      "url": "https://ai-neural.seeplore.com/",
+      "icon": "https://seeplore.com/icons/series/ai.png",
+      "desc": "답을 내고, 틀리고, 배우는 과정을 선 1,440개에 흐르는 값으로 — 3D · 음성 해설"
     }
   ]
 }
