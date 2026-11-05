@@ -1,0 +1,37 @@
+{
+  "about": "seeplore 시리즈 작품 목록 — 모든 작품 사이트의 시리즈 줄과 seeplore.com 첫 페이지가 이 파일을 쓴다. 순서 = 화면 순서. 출시한 작품만 넣는다.",
+  "works": [
+    {
+      "id": "korea",
+      "label": "지도로 보는\n한국사",
+      "title": "지도로 보는 한국사",
+      "url": "https://koreamap.seeplore.com/",
+      "icon": "https://seeplore.com/icons/series/korea.png",
+      "desc": "고조선에서 판문점까지, 지도 위에서 펼쳐지는 우리 역사 — 음성 해설 · 3D 지형"
+    },
+    {
+      "id": "space",
+      "label": "위험한 우주",
+      "title": "위험한 우주",
+      "url": "https://danger-space.seeplore.com/",
+      "icon": "https://seeplore.com/icons/series/space.png",
+      "desc": "소행성부터 블랙홀까지, 지구를 위협하는 천체 순위와 거리 — 3D · 음성 해설"
+    },
+    {
+      "id": "sea",
+      "label": "깊이로 보는\n바다",
+      "title": "깊이로 보는 바다",
+      "url": "https://deepsea.seeplore.com/",
+      "icon": "https://seeplore.com/icons/series/sea.png",
+      "desc": "수면에서 챌린저 해연(약 10,900 m)까지, 바닷속을 깊이 순서로 — 3D · 음성 해설"
+    },
+    {
+      "id": "build",
+      "label": "아파트가\n올라가는 시간",
+      "title": "아파트가 올라가는 시간",
+      "url": "https://build.seeplore.com/",
+      "icon": "https://seeplore.com/icons/series/build.png",
+      "desc": "땅속 25 m 말뚝부터 20층 꼭대기까지 — 아파트 한 동이 지어지는 30개월을 3D 타임랩스로"
+    }
+  ]
+}
