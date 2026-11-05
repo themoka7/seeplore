@@ -40,6 +40,14 @@
       "url": "https://ai-neural.seeplore.com/",
       "icon": "https://seeplore.com/icons/series/ai.png",
       "desc": "손글씨 숫자부터 고양이·강아지 낙서까지 — 작은 AI가 답을 내고, 틀리고, 배우는 과정을 3D로 · 음성 해설"
+    },
+    {
+      "id": "slot",
+      "label": "한 글자씩\n쓰는 AI",
+      "title": "한 글자씩 쓰는 AI",
+      "url": "https://ai-slot.seeplore.com/",
+      "icon": "https://seeplore.com/icons/series/slot.png",
+      "desc": "다음 글자마다 퍼센트를 매기고, 레버를 당겨 하나를 뽑는다 — 동화를 읽은 작은 AI가 글을 쓰는 과정을 3D 슬롯머신으로"
     }
   ]
 }
