@@ -7,6 +7,18 @@
 1. **시리즈 목록의 원본** `series.json` — 모든 작품 사이트의 시리즈 줄(첫 화면 위, ☰ 메뉴, 다큐 끝 화면)이 `https://seeplore.com/series.json` 을 읽는다.
 2. **seeplore.com 첫 페이지** — 같은 목록으로 작품 모음 페이지를 만든다.
 
+## 새 작품 시작하기 (새 세션에서)
+
+1. GitHub 에서 새 저장소를 만든다 — **"Add a README file" 체크**(그래야 `main` 이 생기고 Vercel 실서비스 브랜치가 `main` 으로 잡힌다).
+2. Claude Code(웹)에서 그 저장소로 새 세션을 열고 첫 메시지:
+
+   > 시리즈 새 작품 만들자. 저장소는 themoka7/<새 저장소>. 주제는 ○○ (보여 주고 싶은 것: ○○). series-web-doc 스킬대로 계획부터 보여 줘.
+
+3. 다른 AI 가 준 기획안이 있으면 같이 붙여 넣는다. 계획 → 골격 → 데이터 → 다큐 → 음성 → 검색·공유 → 출시 순서로, 단계마다 미리보기 주소(`<프로젝트>-git-dev-thejmok.vercel.app`)로 확인한다.
+4. 주소는 `<작품 이름>.seeplore.com` — Spaceship DNS 에 CNAME 한 줄(호스트 `<작품 이름>`, 값 `cname.vercel-dns.com`).
+
+제작 지침 원본: `themoka7/myspacever1` 의 `skills/series-web-doc/` (계정 스킬로 올리는 묶음: `skills/series-web-doc.skill`).
+
 ## 새 작품을 냈을 때
 
 1. `public/icons/series/<id>.png` (192×192, 시리즈 아이콘 문법) 추가
