@@ -76,6 +76,8 @@ const html = `<!doctype html>
 <title>seeplore | 지도와 3D로 보는 웹 다큐멘터리 시리즈</title>
 <meta name="description" content="${esc(works.map((w) => w.title).join(' · '))} — 지도와 3D 위에서 펼쳐지는 음성 해설 웹 다큐멘터리 시리즈.">
 <link rel="canonical" href="${SITE}/">
+<!-- 네이버 서치어드바이저 소유 확인 -->
+<meta name="naver-site-verification" content="07dc96c0d781f67fb9257f031aac64107c365247">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="seeplore">
 <meta property="og:title" content="seeplore — 보면서 탐험하는 웹 다큐멘터리">
