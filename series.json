@@ -80,6 +80,14 @@
       "url": "https://money.seeplore.com/",
       "icon": "https://seeplore.com/icons/series/money.png",
       "desc": "누를 때만 나오는 돈과, 내가 자는 동안에도 도는 기계 — 평균 월급의 한 사람, 28세부터 노후와 부의 대물림까지 3D로"
+    },
+    {
+      "id": "class",
+      "label": "통계로 보는\n우리 반",
+      "title": "통계로 보는 우리 반",
+      "url": "https://class.seeplore.com/",
+      "icon": "https://seeplore.com/icons/series/class.png",
+      "desc": "15세 교실에서 80세 동창회까지 — 공식 통계를 한 반 25명으로 줄여 진학·직업·소득·은퇴를 3D로 · 내 구슬 고르기"
     }
   ]
 }
