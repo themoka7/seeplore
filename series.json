@@ -48,6 +48,14 @@
       "url": "https://ai-slot.seeplore.com/",
       "icon": "https://seeplore.com/icons/series/slot.png",
       "desc": "다음 글자마다 퍼센트를 매기고, 레버를 당겨 하나를 뽑는다 — 동화를 읽은 작은 AI가 글을 쓰는 과정을 3D 슬롯머신으로"
+    },
+    {
+      "id": "fly",
+      "label": "250톤이\n뜨는 원리",
+      "title": "250톤이 뜨는 원리",
+      "url": "https://fly.seeplore.com/",
+      "icon": "https://seeplore.com/icons/series/fly.png",
+      "desc": "승용차 170대 무게의 여객기가 뜨는 순간까지 — 날개 둘레 공기를 계산해 3D로 · 직접 해 보기"
     }
   ]
 }
