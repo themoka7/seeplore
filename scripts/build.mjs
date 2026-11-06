@@ -49,6 +49,10 @@ const cards = works
 // 구조화 데이터: 이 사이트가 'seeplore' 라는 시리즈(조직)의 중심이라는 것 + 작품·블로그 연결
 // (구글 'seeplore' 검색에서 이름이 같은 다른 프로젝트로 잡히던 문제 — 2026-11-07)
 const BLOG = 'https://blog.seeplore.com/';
+// 검색 결과 설명: 네이버 권장 80자 이내 (작품 이름 나열은 201자라 잘렸다)
+const SHORT_DESC = `지도와 3D 위에서 장면을 넘기며 음성 해설로 듣는 무료 웹 다큐멘터리. 한국사·우주·바다·AI·경제까지 ${works.length}편.`;
+if (SHORT_DESC.length > 80) throw new Error(`[seo] 설명 ${SHORT_DESC.length}자 — 80자 이내로`);
+
 const ld = {
   '@context': 'https://schema.org',
   '@graph': [
@@ -104,14 +108,14 @@ const html = `<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#050608">
 <title>seeplore | 지도와 3D로 보는 웹 다큐멘터리 시리즈</title>
-<meta name="description" content="${esc(works.map((w) => w.title).join(' · '))} — 지도와 3D 위에서 펼쳐지는 음성 해설 웹 다큐멘터리 시리즈.">
+<meta name="description" content="${esc(SHORT_DESC)}">
 <link rel="canonical" href="${SITE}/">
 <!-- 네이버 서치어드바이저 소유 확인 -->
 <meta name="naver-site-verification" content="07dc96c0d781f67fb9257f031aac64107c365247">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="seeplore">
 <meta property="og:title" content="seeplore — 보면서 탐험하는 웹 다큐멘터리">
-<meta property="og:description" content="${esc(works.map((w) => w.title).join(' · '))}">
+<meta property="og:description" content="${esc(SHORT_DESC)}">
 <meta property="og:url" content="${SITE}/">
 <meta property="og:locale" content="ko_KR">
 <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-32.png">
