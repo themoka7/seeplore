@@ -88,6 +88,14 @@
       "url": "https://class.seeplore.com/",
       "icon": "https://seeplore.com/icons/series/class.png",
       "desc": "15세 교실에서 80세 동창회까지 — 공식 통계를 한 반 25명으로 줄여 진학·직업·소득·은퇴를 3D로 · 내 구슬 고르기"
+    },
+    {
+      "id": "pc",
+      "label": "0.05초 안의\n컴퓨터",
+      "title": "0.05초 안의 컴퓨터",
+      "url": "https://computer.seeplore.com/",
+      "icon": "https://seeplore.com/icons/series/pc.png",
+      "desc": "W 키 하나가 화면 속 한 걸음이 되기까지 — 컴퓨터 안의 0.05초를 3D 슬로모션으로"
     }
   ]
 }
