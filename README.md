@@ -24,6 +24,7 @@
 1. `public/icons/series/<id>.png` (192×192, 시리즈 아이콘 문법) 추가
 2. `series.json` 의 `works` 끝에 한 줄 추가 (`id` · `label`(\n 줄바꿈) · `title` · `url` · `icon` · `desc`)
 3. `main` 에 푸시 → Vercel 자동 배포 → 모든 작품 사이트의 시리즈 줄이 바뀐다(브라우저 캐시 5분)
+   - 푸시했는데 배포 목록에 그 커밋이 없으면(웹훅 누락) Vercel 대시보드에서 Redeploy 하거나 다음 푸시를 기다린다. API 배포(`create_deployment`)는 팀 무료 한도(하루 100회)에 걸릴 수 있다.
 
 작품 저장소는 손대지 않아도 된다. 단, 각 저장소 `src/ui/series.ts` 의 `SERIES`(허브를 못 읽을 때 쓰는 목록, 정적 페이지용)는 가끔 맞춰 둔다.
 
