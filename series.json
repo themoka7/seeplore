@@ -56,6 +56,14 @@
       "url": "https://fly.seeplore.com/",
       "icon": "https://seeplore.com/icons/series/fly.png",
       "desc": "승용차 170대 무게의 여객기가 뜨는 순간까지 — 날개 둘레 공기를 계산해 3D로 · 직접 해 보기"
+    },
+    {
+      "id": "bridge",
+      "label": "다리가\n이어지는 시간",
+      "title": "다리가 이어지는 시간",
+      "url": "https://bridge.seeplore.com/",
+      "icon": "https://seeplore.com/icons/series/bridge.png",
+      "desc": "바닷속 기초부터 150 m 주탑, 1 km 케이블까지 — 바다 위 현수교가 지어지는 5년을 3D 타임랩스로 · 음성 해설"
     }
   ]
 }
