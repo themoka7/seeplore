@@ -96,6 +96,14 @@
       "url": "https://computer.seeplore.com/",
       "icon": "https://seeplore.com/icons/series/pc.png",
       "desc": "W 키 하나가 화면 속 한 걸음이 되기까지 — 컴퓨터 안의 0.05초를 3D 슬로모션으로"
+    },
+    {
+      "id": "germ",
+      "label": "위험한\n병원체",
+      "title": "위험한 병원체",
+      "url": "https://danger-germ.seeplore.com/",
+      "icon": "https://seeplore.com/icons/series/germ.png",
+      "desc": "인간에게 위험한 병원체 순위 — 감염 경로와 몸에서 일어나는 일을 3D 로"
     }
   ]
 }
