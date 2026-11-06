@@ -64,6 +64,14 @@
       "url": "https://bridge.seeplore.com/",
       "icon": "https://seeplore.com/icons/series/bridge.png",
       "desc": "바닷속 기초부터 150 m 주탑, 1 km 케이블까지 — 바다 위 현수교가 지어지는 5년을 3D 타임랩스로 · 음성 해설"
+    },
+    {
+      "id": "earth",
+      "label": "그림으로 보는\n지구 환경",
+      "title": "그림으로 보는 지구 환경",
+      "url": "https://earth.seeplore.com/",
+      "icon": "https://seeplore.com/icons/series/earth.png",
+      "desc": "태양에서 빗방울까지 — 햇빛이 바람과 구름과 비가 되는 과정을 10배씩 다가가며 3D로"
     }
   ]
 }
