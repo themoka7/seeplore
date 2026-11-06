@@ -46,14 +46,44 @@ const cards = works
   )
   .join('');
 
+// 구조화 데이터: 이 사이트가 'seeplore' 라는 시리즈(조직)의 중심이라는 것 + 작품·블로그 연결
+// (구글 'seeplore' 검색에서 이름이 같은 다른 프로젝트로 잡히던 문제 — 2026-11-07)
+const BLOG = 'https://blog.seeplore.com/';
 const ld = {
   '@context': 'https://schema.org',
-  '@type': 'CollectionPage',
-  name: 'seeplore',
-  url: `${SITE}/`,
-  inLanguage: 'ko',
-  description: '지도와 3D 위에서 펼쳐지는 음성 해설 웹 다큐멘터리 시리즈',
-  hasPart: works.map((w) => ({ '@type': 'WebApplication', name: w.title, url: w.url, description: w.desc })),
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': `${SITE}/#org`,
+      name: 'seeplore',
+      alternateName: ['시플로어', 'seeplore 시리즈'],
+      url: `${SITE}/`,
+      logo: `${SITE}/icons/icon-512.png`,
+      description: '지도와 3D 위에서 펼쳐지는 음성 해설 웹 다큐멘터리 시리즈. 보면서(see) 탐험하는(explore) 교육용 무료 사이트.',
+      sameAs: [BLOG, ...works.map((w) => w.url)],
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${SITE}/#site`,
+      name: 'seeplore',
+      url: `${SITE}/`,
+      inLanguage: 'ko',
+      publisher: { '@id': `${SITE}/#org` },
+    },
+    {
+      '@type': 'CollectionPage',
+      name: 'seeplore — 보면서 탐험하는 웹 다큐멘터리',
+      url: `${SITE}/`,
+      inLanguage: 'ko',
+      isPartOf: { '@id': `${SITE}/#site` },
+      about: { '@id': `${SITE}/#org` },
+      description: '지도와 3D 위에서 펼쳐지는 음성 해설 웹 다큐멘터리 시리즈',
+      hasPart: [
+        ...works.map((w) => ({ '@type': 'WebApplication', name: w.title, url: w.url, description: w.desc, applicationCategory: 'EducationalApplication', isAccessibleForFree: true, publisher: { '@id': `${SITE}/#org` } })),
+        { '@type': 'Blog', name: 'seeplore 블로그', url: BLOG, publisher: { '@id': `${SITE}/#org` } },
+      ],
+    },
+  ],
 };
 
 const html = `<!doctype html>
@@ -96,6 +126,7 @@ const html = `<!doctype html>
 * { box-sizing: border-box; }
 html, body { margin: 0; background: var(--bg); -webkit-text-size-adjust: 100%; }
 main { width: min(100% - 32px, 720px); margin: 0 auto; padding: calc(env(safe-area-inset-top, 0px) + 56px) 0 64px; word-break: keep-all; }
+.blog { margin: 28px 0 0; font-size: 15px; } .blog a { color: var(--text); text-decoration: none; border-bottom: 1px solid var(--border); padding-bottom: 2px; }
 .kicker { margin: 0; font-size: 15px; font-weight: 600; color: var(--muted); }
 h1 { margin: 10px 0 0; font-size: clamp(48px, 13vw, 84px); line-height: 1; font-weight: 900; letter-spacing: -0.05em; }
 .lead { margin: 18px 0 0; font-size: 16px; line-height: 1.7; color: #c9d0d6; }
@@ -119,6 +150,7 @@ footer { margin-top: 40px; font-size: 12px; line-height: 1.6; color: #6f777e; }
   <ul>${cards}
   </ul>
   <p class="soon">+ 다음 작품 준비 중</p>
+  <p class="blog"><a href="${BLOG}">seeplore 블로그 — 작품 뒤의 원리와 만든 이야기 →</a></p>
   <footer>작품 ${works.length}편 · 무료 · 회원 가입 없음</footer>
 </main>
 </body>
