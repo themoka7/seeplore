@@ -72,6 +72,14 @@
       "url": "https://earth.seeplore.com/",
       "icon": "https://seeplore.com/icons/series/earth.png",
       "desc": "태양에서 빗방울까지 — 햇빛이 바람과 구름과 비가 되는 과정을 10배씩 다가가며 3D로"
+    },
+    {
+      "id": "money",
+      "label": "노동과\n자본",
+      "title": "노동과 자본",
+      "url": "https://money.seeplore.com/",
+      "icon": "https://seeplore.com/icons/series/money.png",
+      "desc": "누를 때만 나오는 돈과, 내가 자는 동안에도 도는 기계 — 평균 월급의 한 사람, 28세부터 노후와 부의 대물림까지 3D로"
     }
   ]
 }
