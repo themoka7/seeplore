@@ -60,6 +60,17 @@ const html = `<!doctype html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
+<!-- 방문 통계: Google Analytics — 작품별 (아직 없음) + 시리즈 전체 G-TBYJ6JBLYF (스킬 series-web-doc 4절) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TBYJ6JBLYF"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  if (/^(localhost|127\\.|192\\.168\\.)/.test(location.hostname)) {
+    window['ga-disable-G-TBYJ6JBLYF'] = true;
+  }
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-TBYJ6JBLYF', { content_group: 'hub' });
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#050608">
 <title>seeplore | 지도와 3D로 보는 웹 다큐멘터리 시리즈</title>
