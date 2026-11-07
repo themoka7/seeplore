@@ -112,6 +112,14 @@
       "url": "https://nucleus.seeplore.com/",
       "icon": "https://seeplore.com/icons/series/nuke.png",
       "desc": "연필심 속 원자에서 버섯구름까지 — 원자핵이 쪼개지는 원리를 3D로 · 음성 해설 · 부산에서 직접 해 보기"
+    },
+    {
+      "id": "ground",
+      "label": "깊이로 보는\n땅속",
+      "title": "깊이로 보는 땅속",
+      "url": "https://underground.seeplore.com/",
+      "icon": "https://seeplore.com/icons/series/ground.png",
+      "desc": "발밑의 흙에서 지구 중심(약 6,371 km)까지, 땅속을 깊이 순서로 — 3D · 음성 해설"
     }
   ]
 }
