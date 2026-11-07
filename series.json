@@ -104,6 +104,14 @@
       "url": "https://danger-germ.seeplore.com/",
       "icon": "https://seeplore.com/icons/series/germ.png",
       "desc": "인간에게 위험한 병원체 순위 — 감염 경로와 몸에서 일어나는 일을 3D 로"
+    },
+    {
+      "id": "nuke",
+      "label": "원자에서\n핵폭발로",
+      "title": "원자에서 핵폭발로",
+      "url": "https://nucleus.seeplore.com/",
+      "icon": "https://seeplore.com/icons/series/nuke.png",
+      "desc": "연필심 속 원자에서 버섯구름까지 — 원자핵이 쪼개지는 원리를 3D로 · 음성 해설 · 부산에서 직접 해 보기"
     }
   ]
 }
