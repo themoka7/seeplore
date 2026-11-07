@@ -120,6 +120,14 @@
       "url": "https://underground.seeplore.com/",
       "icon": "https://seeplore.com/icons/series/ground.png",
       "desc": "발밑의 흙에서 지구 중심(약 6,371 km)까지, 땅속을 깊이 순서로 — 3D · 음성 해설"
+    },
+    {
+      "id": "life",
+      "label": "생명이\n이어 온 시간",
+      "title": "생명이 이어 온 시간",
+      "url": "https://earthhistory.seeplore.com/",
+      "icon": "https://seeplore.com/icons/series/life.png",
+      "desc": "바닷속 첫 세포에서 공룡과 소행성, 불을 든 사람까지 — 약 38억 년 생명의 역사를 3D로 · 음성 해설"
     }
   ]
 }
