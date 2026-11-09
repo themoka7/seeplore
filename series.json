@@ -128,6 +128,18 @@
       "url": "https://earthhistory.seeplore.com/",
       "icon": "https://seeplore.com/icons/series/life.png",
       "desc": "바닷속 첫 세포에서 공룡과 소행성, 불을 든 사람까지 — 약 38억 년 생명의 역사를 3D로 · 음성 해설"
+    },
+    {
+      "id": "exo",
+      "label": "기괴한\n외계 행성",
+      "title": "기괴한 외계 행성",
+      "url": "https://exo.seeplore.com/",
+      "icon": "https://seeplore.com/icons/series/exo.png",
+      "desc": "유리 비, 철 비, 다이아몬드 행성까지 — 가장 이상한 외계 행성 10개를 거리 지도와 3D로 · 음성 해설",
+      "titleEn": "Weird Exoplanets",
+      "labelEn": "Weird\nExoplanets",
+      "descEn": "Glass rain, iron rain and a “diamond planet” — ten of the strangest exoplanets on a distance map and in 3D · narrated",
+      "urlEn": "https://exo.seeplore.com/en/"
     }
   ]
 }
