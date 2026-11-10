@@ -152,6 +152,18 @@
       "labelEn": "Spacetime and\nBlack Holes",
       "descEn": "How curved spacetime slows time — follow the clock from Earth to a black hole in 3D · narrated",
       "urlEn": "https://blackhole.seeplore.com/en/"
+    },
+    {
+      "id": "rainbow",
+      "label": "42도의\n무지개",
+      "title": "42도의 무지개",
+      "url": "https://rainbow.seeplore.com/",
+      "icon": "https://seeplore.com/icons/series/rainbow.png",
+      "desc": "햇빛은 왜 42°에서 무지개가 될까 — 빗방울 속 빛의 길을 따라가는 3D · 음성 해설",
+      "titleEn": "The 42° Rainbow",
+      "labelEn": "The 42°\nRainbow",
+      "descEn": "Why does sunlight make a rainbow at 42°? Follow light through a raindrop in 3D · narrated",
+      "urlEn": "https://rainbow.seeplore.com/en/"
     }
   ]
 }
