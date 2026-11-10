@@ -164,6 +164,18 @@
       "labelEn": "The 42°\nRainbow",
       "descEn": "Why does sunlight make a rainbow at 42°? Follow light through a raindrop in 3D · narrated",
       "urlEn": "https://rainbow.seeplore.com/en/"
+    },
+    {
+      "id": "wave",
+      "label": "파도의\n긴 여행",
+      "title": "파도의 긴 여행",
+      "url": "https://wave.seeplore.com/",
+      "icon": "https://seeplore.com/icons/series/wave.png",
+      "desc": "파도는 가고 물은 남는다 — 바람에서 해변까지, 파도가 치는 원리를 3D로 · 음성 해설",
+      "titleEn": "The Long Journey of a Wave",
+      "labelEn": "Journey\nof a Wave",
+      "descEn": "The wave moves on, the water stays — how ocean waves work, from wind to beach, in 3D · narrated",
+      "urlEn": "https://wave.seeplore.com/en/"
     }
   ]
 }
