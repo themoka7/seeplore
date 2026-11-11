@@ -2,7 +2,8 @@
 // 데이터는 페이지의 <script id="office-data" type="application/json"> 에서 받는다:
 //   { works:[{id,title,url,icon}], info:{이름:{name,who,tool,does}}, sheets:{indoor,chars} }
 // 모드: 기본(자유) — 팀원이 자기 책상에서 일하고, 누르면 설명·작품 이동.
-//       ▶ 하루 보기 — 새 작품 하나가 나오기까지를 팀원들이 실제로 움직이며 보여 준다(카메라가 따라간다).
+//       늘 — 한가한 사람이 심부름(녹음·점검·배포·커피·회의)을 다녀온다. 화면은 항상 사무실 전체.
+//       ▶ 하루 보기 — 새 작품 하나가 나오기까지 순서대로(주인공 발밑에 노란 표시).
 //       ?shorts — 세로 9:16 화면(쇼츠 녹화용), 하루 보기를 바로 재생.
 // 그림: Kenney Roguelike Indoor / Characters (CC0). 모니터·벽·바닥·종이는 코드로.
 (() => {
@@ -76,17 +77,18 @@
   const walkTo = (key, tx, ty) => new Promise((done) => { const p = people[key]; p.path = route(p, tx, ty); p.typing = false; p.onArrive = done; });
   const walkToPerson = (key, other) => { const o = people[other]; return walkTo(key, o.homeX + 14, o.homeY + 2); };
   const goHome = (key) => walkTo(key, people[key].homeX, people[key].homeY).then(() => { people[key].typing = true; });
-  const say = (key, s, ms = 2200) => { const p = people[key]; p.say = s; p.sayUntil = performance.now() + ms; return wait(ms); };
+  const say = (key, s, ms = 2200) => { const p = people[key]; p.say = s; p.sayUntil = performance.now() + ms; return wait(ms).then(() => { if (p.sayUntil <= performance.now()) p.say = ''; }); };
   const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
   // ---------------------------------------------------------------- 하루 보기 (새 작품 하나가 나오기까지 — 실제 만드는 순서)
   const STAR = desks.find((d) => d.w.id === 'rainbow') ?? desks[desks.length - 1];
   const SK = 'work:' + STAR.w.id;
   let focusKey = null, flash = 0, playing = false;
+  const busy = new Set();            // 하루 보기에 나오는 사람 — 돌아다니기에서 뺀다
   const setCap = (s) => { if (cap) cap.textContent = s; };
   async function story() {
     if (playing) return; playing = true; playBtn && (playBtn.disabled = true);
-    const st = (k) => (focusKey = k);
+    const st = (k) => { focusKey = k; busy.add(k); };
     setCap('대표가 다음 작품 주제를 정합니다');
     st('대표'); await walkToPerson('대표', '기획 담당'); await say('대표', '다음은 무지개 어때요?');
     st('기획 담당'); await say('기획 담당', '기획안 정리할게요');
@@ -112,7 +114,7 @@
     setCap('아침 08:47, 업로드 봇이 서버실에서 올립니다');
     st('업로드 봇'); people['업로드 봇'].carry = true; await walkTo('업로드 봇', 30 * T, 16.6 * T); people['업로드 봇'].carry = false; flash = 40; await say('업로드 봇', '@seeplore 업로드 완료', 2200); goHome('업로드 봇');
     setCap('이렇게 작품 하나가 나옵니다 — seeplore.com');
-    focusKey = null; await wait(2500);
+    focusKey = null; busy.clear(); await wait(2500);
     setCap(''); playing = false; playBtn && (playBtn.disabled = false);
   }
 
@@ -124,7 +126,7 @@
   const hm = (x) => `${String(x.getUTCHours()).padStart(2, '0')}:${String(x.getUTCMinutes()).padStart(2, '0')}`;
   function status(key) {
     const n = kst(), h = n.getUTCHours(), dow = n.getUTCDay();
-    if (key.startsWith('work:')) return '출시 · 고칠 곳 대기';
+    if (key.startsWith('work:')) return pick(['출시 · 대기', '장면 다시 보는 중', '숫자 출처 확인 중']);
     switch (key) {
       case '업로드 봇': return `${hm(nextAt([0, 1, 2, 3, 4, 5, 6], 8, 47))} 실행 대기`;
       case '블로그 작가': return dow === 0 && h >= 21 ? '다음 주 글 쓰는 중' : `${md(nextAt([2, 5], 8, 47))} 글 공개 대기`;
@@ -137,8 +139,51 @@
       default: return '';
     }
   }
+  // ---------------------------------------------------------------- 늘 움직이는 사무실: 한가한 사람에게 심부름을 준다
   const keys = Object.keys(people);
-  setInterval(() => { if (playing) return; const k = keys[Math.floor(Math.random() * keys.length)]; say(k, status(k), 2600); }, 2800);
+  const out = new Set();               // 지금 자리를 비운 사람
+  const at = (key) => [people[key].homeX + 14, people[key].homeY + 2];
+  const spot = { 음성: [28.5 * T + 16, 2.4 * T + 18], 점검: [27.5 * T + 16, 10 * T + 18], 서버: [26.4 * T, 16.6 * T], 커피: [4 * T, 22.4 * T], 탁자: [10 * T, 23 * T], 기획: [9 * T + 16, 2.4 * T + 18], 대표: [3 * T + 16, 2.4 * T + 18], 홍보: [17 * T + 16, 2.4 * T + 18] };
+  const pick = (a) => a[Math.floor(Math.random() * a.length)];
+  const randomDesk = () => pick(desks);
+  function errands(key) {
+    const d = randomDesk(), dp = [d.x + 14, d.y + 16];
+    if (key.startsWith('work:')) return pick([
+      [spot.음성, '원고 녹음 부탁해요', true], [spot.점검, '점검 부탁해요'], [spot.서버, '배포 준비'], [spot.커피, '커피 한 잔'], [spot.탁자, '잠깐 회의'], [spot.기획, '기획안 질문 있어요', true], [dp, '이 장면 어때요?'],
+    ]);
+    switch (key) {
+      case '대표': return pick([[spot.홍보, '조회수 어때요?'], [dp, '잘 돼 가요?'], [spot.커피, '커피 한 잔'], [spot.서버, '오늘 배포 몇 번?']]);
+      case '기획 담당': return pick([[dp, '다음 기획안이에요', true], [spot.대표, '주제 후보 셋', true], [spot.탁자, '아이디어 회의']]);
+      case '홍보팀장': return pick([[spot.대표, '이번 주 글 2편', true], [dp, '쇼츠 장면 골라요'], [spot.커피, '커피 한 잔']]);
+      case '블로그 작가': return pick([[dp, '숫자 확인할게요'], [at('업로드 봇'), '글 예약 부탁', true], [spot.탁자, '글감 고르는 중']]);
+      case '쇼츠 PD': return pick([[spot.음성, '쇼츠 녹음 부탁', true], [dp, '표지 장면 찍을게요'], [spot.서버, '렌더링 확인']]);
+      case '업로드 봇': return pick([[spot.서버, '업로드 준비', true], [spot.홍보, '공개 목록 확인'], [spot.커피, '충전 중…']]);
+      case '내레이터': return pick([[dp, '발음 확인해요'], [spot.탁자, '목 풀기']]);
+      case '점검 로봇': return pick([[dp, '장면 점검 중…'], [dp, '이름표 잘림 없음'], [spot.서버, '배포 확인']]);
+      default: return null;
+    }
+  }
+  async function errand(key) {
+    const job = errands(key); if (!job) return;
+    const [[x, y], line, paper] = job; const p = people[key];
+    out.add(key); p.carry = !!paper;
+    await walkTo(key, x, y); p.carry = false;
+    await say(key, line, 1800 + Math.random() * 900);
+    if (key.startsWith('work:') && Math.random() < 0.5) {         // 상대가 대답
+      const near = Object.values(people).find((q) => q.key !== key && Math.hypot(q.x - p.x, q.y - p.y) < 40 && !q.path.length);
+      if (near) await say(near.key, pick(['좋아요!', '바로 할게요', '확인!', '잠깐만요']), 1300);
+    }
+    await goHome(key); out.delete(key);
+  }
+  setInterval(() => {
+    if (document.hidden) return;
+    const idle = keys.filter((k) => !out.has(k) && !busy.has(k));
+    const want = SHORTS ? 4 : 7;                                    // 동시에 돌아다니는 사람 수
+    for (let i = out.size; i < want && idle.length; i++) errand(idle.splice(Math.floor(Math.random() * idle.length), 1)[0]);
+    // 자리에 있는 사람 하나는 지금 상태를 말한다
+    const seat = keys.filter((k) => !out.has(k) && !busy.has(k) && !people[k].say);
+    if (seat.length && !playing) { const k = pick(seat); say(k, status(k), 2400); }
+  }, 900);
 
   // ---------------------------------------------------------------- 그리기
   function drawRoom(r) {
@@ -181,19 +226,17 @@
     g.beginPath(); g.moveTo(cx - 3, by + 13); g.lineTo(cx, by + 17); g.lineTo(cx + 3, by + 13); g.fill();
     text(s, x + w / 2, by + 9.2, 7, '#2b241c');
   }
-  // 카메라: 기본은 전체, 쇼츠·하루 보기에서는 지금 움직이는 사람을 따라간다
+  // 카메라: 항상 사무실 전체
   const cam = { x: WW / 2, y: WH / 2, z: 1 };
   function updateCam() {
     const portrait = canvas.height > canvas.width;
     const fit = Math.min(canvas.width / WW, canvas.height / WH);
     let tx = WW / 2, ty = WH / 2, tz = fit;
-    if (focusKey && people[focusKey]) { const p = people[focusKey]; tz = portrait ? canvas.width / (WW * 0.42) : fit * 1.6; tx = p.x; ty = p.y + (portrait ? canvas.height * 0.12 / tz : 0); } // 세로: 사람을 화면 38% 높이에(자막은 57% 아래)
-    else if (portrait) tz = canvas.height / WH * 0.98;
+    if (portrait) { tz = canvas.width / WW; ty = WH / 2 + (canvas.height * 0.08) / tz; } // 항상 사무실 전체 — 세로(쇼츠)는 폭에 맞추고 위쪽에
     cam.x += (tx - cam.x) * 0.08; cam.y += (ty - cam.y) * 0.08; cam.z += (tz - cam.z) * 0.08;
     // 화면 밖으로 나가지 않게
     const hw = canvas.width / cam.z / 2, hh = canvas.height / cam.z / 2;
-    cam.x = hw * 2 >= WW ? WW / 2 : Math.max(hw, Math.min(WW - hw, cam.x));
-    cam.y = hh * 2 >= WH ? WH / 2 : Math.max(hh, Math.min(WH - hh, cam.y));
+
   }
   let t = 0;
   function frame() {
@@ -232,6 +275,7 @@
       // 책상과 사람 (위에서 아래 순서로)
       const all = Object.values(people);
       for (const p of all) deskAt(p.deskX, p.deskY, p.work ? icons[p.work.id] : null, p.typing && !p.path.length && Math.abs(p.x - p.homeX) < 1, t);
+      if (focusKey && people[focusKey]) { const f = people[focusKey]; g.fillStyle = 'rgba(255,200,40,.45)'; g.beginPath(); g.ellipse(f.x, f.y + 7, 10, 4, 0, 0, 7); g.fill(); }
       for (const p of [...all].sort((a, b) => a.y - b.y)) drawPerson(p, t);
       for (const p of all) if (!p.work) tag(p.label, p.homeX, p.homeY + 10);
       const now = performance.now();
