@@ -87,6 +87,7 @@ h1 { margin: 6px 0 0; font-size: clamp(40px, 10vw, 72px); line-height: 1; font-w
 #play:disabled { opacity: .45; cursor: default; }
 #play:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
 .hint { margin: 0; font-size: 13px; color: var(--soft); }
+.themes { display: flex; gap: 4px; } .themes button { font: 700 13px inherit; font-family: inherit; color: var(--ink); background: transparent; border: 1px solid var(--line); border-radius: 999px; padding: 8px 12px; cursor: pointer; } .themes button[aria-pressed="true"] { background: var(--ink); color: #050608; }
 #caption { position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); max-width: calc(100% - 24px); background: rgba(5,6,8,.86); color: #fff; font-weight: 800; font-size: clamp(13px, 2vw, 17px); padding: 8px 14px; border-radius: 10px; text-align: center; pointer-events: none; }
 #caption:empty { display: none; }
 .tip { position: absolute; z-index: 3; max-width: 250px; background: #11151a; color: var(--ink); border: 1px solid var(--line); border-radius: 10px; padding: 9px 11px; font-size: 12.5px; line-height: 1.55; box-shadow: 0 8px 24px rgba(0,0,0,.5); pointer-events: none; }
@@ -117,7 +118,7 @@ body.shorts #caption { top: 57%; bottom: auto; font-size: 22px; }
     <h1>seeplore 스튜디오</h1>
     <p class="lead">seeplore를 실제로 이렇게 나눠서 만들고 있어서 회사처럼 꾸며 봤습니다. 대표 한 명이 정하고, 나머지는 AI와 자동화 도구가 맡습니다.</p>
   </div>
-  <div class="bar"><button id="play" type="button">▶ 작품 하나가 나오기까지 보기</button><p class="hint">팀원을 누르면 하는 일과 지금 상태가 보입니다. 제작본부 책상을 누르면 그 작품으로.</p></div>
+  <div class="bar"><button id="play" type="button">▶ 작품 하나가 나오기까지 보기</button><div class="themes" role="group" aria-label="시안"><button type="button" data-t="day">낮</button><button type="button" data-t="night">밤</button><button type="button" data-t="line">도면</button><button type="button" data-t="mono">흑백</button></div><p class="hint">팀원을 누르면 하는 일과 지금 상태가 보입니다. 제작본부 책상을 누르면 그 작품으로.</p></div>
   <div class="stage">
     <canvas id="office" width="1024" height="800" role="img" aria-label="위에서 내려다본 seeplore 스튜디오. 대표실, 기획실, 홍보팀, 음성 부스, 작품 ${works.length}개를 맡은 제작본부, 품질관리, 서버실, 휴게실."></canvas>
     <div id="caption" aria-live="polite"></div>
@@ -135,6 +136,7 @@ body.shorts #caption { top: 57%; bottom: auto; font-size: 22px; }
 <script>if (document.body.classList.contains('shorts')) { const c = document.getElementById('office'); c.width = 720; c.height = 1280; }</script>
 <script id="office-data" type="application/json">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>
 <script src="/team/office.js"></script>
+<script>{ const bs = document.querySelectorAll('.themes button'); const cur = new URLSearchParams(location.search).get('theme') || 'day'; bs.forEach((b) => { b.setAttribute('aria-pressed', b.dataset.t === cur); b.onclick = () => { window.__setTheme(b.dataset.t); bs.forEach((x) => x.setAttribute('aria-pressed', x === b)); }; }); }</script>
 </body>
 </html>
 `;

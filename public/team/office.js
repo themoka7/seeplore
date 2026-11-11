@@ -26,8 +26,28 @@
   const text = (s, x, y, size, col, align = 'center', w = 700) => { g.font = `${w} ${size}px ${FONT}`; g.fillStyle = col; g.textAlign = align; g.fillText(s, x, y); };
 
   // ---------------------------------------------------------------- 사무실 배치 (타일)
+  // ---------------------------------------------------------------- 시안(테마): ?theme=day|night|line|mono
+  const THEMES = {
+    day:   { name: '낮', bg: '#6e5338', corridor: '#cdb48e', wall: '#8a6a4a', label: '#5c4630', line: 'rgba(120,90,50,.07)', tagBg: 'rgba(40,30,20,.78)', floors: ['#ead6b4', '#dbe8f3', '#f4e0dc', '#e8e0f3', '#efe3c8', '#dcefe0', '#dfe4ea', '#e8efdc'], furn: 'normal', people: 'normal' },
+    night: { name: '밤', bg: '#050608', corridor: '#161b22', wall: '#2b323b', label: '#8b95a1', line: 'rgba(255,255,255,.025)', tagBg: 'rgba(0,0,0,.7)', floors: ['#1d1913', '#121a23', '#201719', '#1b1724', '#1a170f', '#111d16', '#13171c', '#151b12'], furn: 'dark', people: 'dim', glow: true },
+    line:  { name: '도면', bg: '#050608', corridor: '#050608', wall: '#3b4450', label: '#6f7a86', line: null, tagBg: 'rgba(5,6,8,.85)', floors: Array(8).fill('#080a0d'), furn: 'ghost', people: 'normal', glow: true, outline: true },
+    mono:  { name: '흑백', bg: '#050608', corridor: '#101317', wall: '#2a2f36', label: '#8b95a1', line: 'rgba(255,255,255,.02)', tagBg: 'rgba(0,0,0,.75)', floors: ['#17191c', '#15171a', '#17191c', '#15171a', '#131518', '#15171a', '#131518', '#15171a'], furn: 'gray', people: 'gray', accent: '#ffd24a' },
+  };
+  let TH = THEMES[new URLSearchParams(location.search).get('theme')] ?? THEMES.day;
+  window.__setTheme = (k) => { if (THEMES[k]) { TH = THEMES[k]; ROOMS.forEach((r, i) => (r.floor = TH.floors[i])); } };
+  // 그림 시트 보정본(어둡게·흑백·흐리게) — 픽셀을 직접 바꿔 캔버스로 만든다(모든 브라우저에서 같게)
+  function variant(img, fn) {
+    if (!img) return null;
+    const c = document.createElement('canvas'); c.width = img.width; c.height = img.height;
+    const x = c.getContext('2d'); x.drawImage(img, 0, 0);
+    const d = x.getImageData(0, 0, c.width, c.height), a = d.data;
+    for (let i = 0; i < a.length; i += 4) fn(a, i);
+    x.putImageData(d, 0, 0); return c;
+  }
+  const gray = (a, i) => { const v = 0.3 * a[i] + 0.59 * a[i + 1] + 0.11 * a[i + 2]; a[i] = a[i + 1] = a[i + 2] = v; };
+  const SHEETS = {};
   const CORRIDOR_Y = 7.25 * T;          // 위층 방들과 제작본부 사이 복도 가운데
-  const ROOMS = [
+  const ROOMS0 = [
     { name: '대표실', x: 0, y: 0, w: 6, h: 6.5, floor: '#ead6b4', door: 3 },
     { name: '기획실', x: 6, y: 0, w: 6, h: 6.5, floor: '#dbe8f3', door: 9 },
     { name: '홍보팀', x: 12, y: 0, w: 13, h: 6.5, floor: '#f4e0dc', door: 18.5 },
@@ -37,6 +57,7 @@
     { name: '서버실', x: 23, y: 13.5, w: 9, h: 6, floor: '#dfe4ea', door: 27.5 },
     { name: '휴게실', x: 0, y: 19.5, w: 32, h: 5.5, floor: '#e8efdc', door: 16 },
   ];
+  const ROOMS = ROOMS0.map((r, i) => ({ ...r, floor: TH.floors[i] }));
 
   // 사람: 자기 자리(책상 앞 의자 위치, 픽셀)와 캐릭터 그림(시트 칸)
   const people = {};
@@ -189,12 +210,13 @@
   function drawRoom(r) {
     const x = r.x * T, y = r.y * T, w = r.w * T, h = r.h * T;
     R(x, y, w, h, r.floor);
-    for (let yy = y + 6; yy < y + h; yy += 8) R(x, yy, w, 1, 'rgba(120,90,50,.07)');
-    R(x, y, w, 3, '#8a6a4a'); R(x, y, 2, h, '#8a6a4a'); R(x + w - 2, y, 2, h, '#8a6a4a'); R(x, y + h - 2, w, 2, '#8a6a4a');
+    if (TH.line) for (let yy = y + 6; yy < y + h; yy += 8) R(x, yy, w, 1, TH.line);
+    if (TH.outline) { for (let gx = x + 8; gx < x + w; gx += 16) for (let gy = y + 8; gy < y + h; gy += 16) R(gx, gy, 1, 1, '#1a2028'); R(x, y, w, 1, TH.wall); R(x, y, 1, h, TH.wall); R(x + w - 1, y, 1, h, TH.wall); R(x, y + h - 1, w, 1, TH.wall); }
+    else { R(x, y, w, 3, TH.wall); R(x, y, 2, h, TH.wall); R(x + w - 2, y, 2, h, TH.wall); R(x, y + h - 2, w, 2, TH.wall); }
     // 문(벽 틈)
     const dx = r.door * T - 10;
     if (r.top) R(dx, y, 20, 3, r.floor); else R(dx, y + h - 2, 20, 2, r.floor);
-    text(r.name, x + 7, y + 13, 7.5, '#5c4630', 'left', 800);
+    text(TH.outline ? r.name.toUpperCase() : r.name, x + 7, y + 13, TH.outline ? 6.5 : 7.5, TH.label, 'left', 800);
   }
   function monitor(x, y, on, icon) {
     R(x - 6, y - 9, 12, 9, '#30353d'); R(x - 5, y - 8, 10, 7, on);
@@ -210,13 +232,13 @@
     const bob = moving ? Math.abs(Math.sin(t / 3)) * 2 : p.typing ? ((t >> 2) % 2) * 0.6 : 0;
     g.save(); g.translate(Math.round(p.x), Math.round(p.y - bob));
     if (p.flip) g.scale(-1, 1);
-    tile(chars, p.ch[0], p.ch[1], -8, -8);
+    tile(TH.people === 'gray' && (moving || p.say) ? SHEETS.ch_normal : chars, p.ch[0], p.ch[1], -8, -8);
     g.restore();
     if (p.carry) { R(p.x - 4, p.y - 18 - bob, 8, 9, '#ffffff'); R(p.x - 3, p.y - 16 - bob, 6, 1, '#9aa3ab'); R(p.x - 3, p.y - 13 - bob, 5, 1, '#9aa3ab'); }
   }
   function tag(s, cx, y) {
     g.font = `700 6.5px ${FONT}`; const w = g.measureText(s).width + 7;
-    R(cx - w / 2, y, w, 9, 'rgba(40,30,20,.78)'); text(s, cx, y + 6.8, 6.5, '#fff');
+    R(cx - w / 2, y, w, 9, TH.tagBg); text(s, cx, y + 6.8, 6.5, '#fff');
   }
   function bubble(s, cx, y) {
     g.font = `700 7px ${FONT}`; const w = g.measureText(s).width + 12;
@@ -251,10 +273,12 @@
     }
     updateCam();
     g.setTransform(1, 0, 0, 1, 0, 0); g.imageSmoothingEnabled = false;
-    R(0, 0, canvas.width, canvas.height, '#6e5338');
+    R(0, 0, canvas.width, canvas.height, TH.bg);
     g.setTransform(cam.z, 0, 0, cam.z, canvas.width / 2 - cam.x * cam.z, canvas.height / 2 - cam.y * cam.z);
-    R(0, 7 * T, WW, 1 * T, '#cdb48e');                        // 복도
-    R(0, 19.5 * T - 1, WW, 1, '#8a6a4a');
+    R(0, 7 * T, WW, 1 * T, TH.corridor);                      // 복도
+    if (!TH.outline) R(0, 19.5 * T - 1, WW, 1, TH.wall);
+    // 테마에 맞는 그림 시트
+    indoor = SHEETS['in_' + TH.furn] ?? SHEETS.in_normal; chars = SHEETS['ch_' + TH.people] ?? SHEETS.ch_normal;
     for (const r of ROOMS) drawRoom(r);
     if (indoor && chars) {
       // 소품
@@ -271,7 +295,7 @@
       tile(indoor, 0, 12, 2 * T, 20.8 * T, 3, 1); tile(indoor, 5, 12, 5 * T, 20.8 * T);
       for (const bx of [10, 15]) { tile(indoor, 3, 0, bx * T, 21.6 * T); tile(indoor, 1, 2, (bx - 1) * T, 21.6 * T); tile(indoor, 3, 2, (bx + 1) * T, 21.6 * T); }
       tile(indoor, 16, 0, 20 * T, 22 * T); tile(indoor, 17, 0, 30.4 * T, 22 * T);
-      text('커피', 3.5 * T, 22.8 * T, 6, '#5c4630');
+      text('커피', 3.5 * T, 22.8 * T, 6, TH.label);
       // 책상과 사람 (위에서 아래 순서로)
       const all = Object.values(people);
       for (const p of all) deskAt(p.deskX, p.deskY, p.work ? icons[p.work.id] : null, p.typing && !p.path.length && Math.abs(p.x - p.homeX) < 1, t);
@@ -280,7 +304,8 @@
       for (const p of all) if (!p.work) tag(p.label, p.homeX, p.homeY + 10);
       const now = performance.now();
       for (const p of all) if (p.say && p.sayUntil > now) bubble(p.say, p.x, p.y - 4);
-    } else text('불러오는 중…', WW / 2, WH / 2, 12, '#5c4630');
+      if (TH.glow) { g.globalCompositeOperation = 'lighter'; for (const p of all) { const gr = g.createRadialGradient(p.deskX, p.deskY + 2, 0, p.deskX, p.deskY + 2, 26); gr.addColorStop(0, 'rgba(120,200,255,.18)'); gr.addColorStop(1, 'rgba(120,200,255,0)'); g.fillStyle = gr; g.fillRect(p.deskX - 26, p.deskY - 24, 52, 52); } g.globalCompositeOperation = 'source-over'; }
+    } else text('불러오는 중…', WW / 2, WH / 2, 12, TH.label);
     if (flash > 0) flash--;
     requestAnimationFrame(frame);
   }
@@ -317,6 +342,12 @@
 
   // ---------------------------------------------------------------- 시작
   Promise.all([load(DATA.sheets.indoor), load(DATA.sheets.chars), ...DATA.works.map((w) => load(w.icon).then((im) => (icons[w.id] = im)))]).then(([a, b]) => {
+    SHEETS.in_normal = a; SHEETS.ch_normal = b;
+    SHEETS.in_dark = variant(a, (d, i) => { d[i] *= 0.55; d[i + 1] *= 0.55; d[i + 2] *= 0.6; });
+    SHEETS.in_gray = variant(a, (d, i) => { gray(d, i); d[i] *= 0.6; d[i + 1] *= 0.6; d[i + 2] *= 0.6; });
+    SHEETS.in_ghost = variant(a, (d, i) => { gray(d, i); d[i + 3] *= 0.35; });
+    SHEETS.ch_dim = variant(b, (d, i) => { d[i] *= 0.85; d[i + 1] *= 0.85; d[i + 2] *= 0.85; });
+    SHEETS.ch_gray = variant(b, (d, i) => { gray(d, i); d[i] *= 0.8; d[i + 1] *= 0.8; d[i + 2] *= 0.8; });
     indoor = a; chars = b;
     if (SHORTS) setTimeout(story, 600);
   });
