@@ -1,5 +1,7 @@
 /**
- * /team — 가상의 회사 "seeplore 스튜디오"를 위에서 내려다본 픽셀 사무실(오리지널 그림, canvas). 방마다 팀, 책상마다 팀원.
+ * /team — 가상의 회사 "seeplore 스튜디오"의 밤 사무실(위에서 내려다본 그림). 허브와 같은 검정 바탕.
+ * 가구·사람 그림: Kenney Roguelike Indoor / Roguelike Characters (CC0, public/team/). 모니터·벽·바닥은 코드로 그린다.
+ * 말풍선: 예약 일정에서 계산한 상태(업로드·글 공개) + 맡은 일. 지어낸 숫자는 쓰지 않는다.
  * 실제로는 사람 1명(대표) + AI 도구들이 일한다. 재미로 꾸몄지만 내용은 사실대로:
  * 누가 어떤 도구이고 무슨 일을 하는지 그대로 적는다(지어낸 직원·숫자 없음).
  * 업무일지(LOG)는 손으로 적는다 — 새 일이 있으면 맨 위에 한 줄.
@@ -56,37 +58,10 @@ export function teamHtml({ works, esc, SITE, BLOG }) {
     },
   ];
   const all = DEPTS.flatMap((d) => d.members ?? []);
-  const by = Object.fromEntries(all.map((m) => [m.name, m]));
   const memberCount = all.length + works.length;
-  // 사무실 배치 (논리 좌표 320×210, 화면에서 4배로 그림)
-  const ROOMS = [
-    ['대표실', 0, 0, 56, 70, '#ecd2a8'],
-    ['기획실', 56, 0, 56, 70, '#d3e6f6'],
-    ['홍보팀', 112, 0, 128, 70, '#f6dcdc'],
-    ['음성 부스', 240, 0, 80, 70, '#e6daf4'],
-    [`제작본부 · 작품 ${works.length}편`, 0, 70, 240, 92, '#f4e6c8'],
-    ['품질관리', 240, 70, 80, 46, '#d9efdd'],
-    ['서버실', 240, 116, 80, 46, '#d8dee6'],
-    ['휴게실', 0, 162, 320, 48, '#e6f0dc'],
-  ];
-  const PEOPLE = [
-    // [팀원 이름, 이름표, 옷 색, x, y]
-    ['대표', '대표', '#ff7a3d', 26, 34],
-    ['기획 담당', 'Gemini', '#4f86e8', 82, 34],
-    ['홍보팀장', '홍보팀장', '#d97757', 128, 34],
-    ['블로그 작가', '블로그', '#d97757', 158, 34],
-    ['쇼츠 PD', '쇼츠 PD', '#d97757', 188, 34],
-    ['업로드 봇', '업로드 봇', '#4caf7a', 218, 34],
-    ['내레이터', 'Aoede', '#a865d8', 278, 34],
-    ['점검 로봇', '점검 로봇', '#4caf7a', 278, 96],
-  ];
-  const OBJECTS = [
-    ['서류함', 'GitHub', 258, 128],
-    ['건물 관리', 'Vercel', 290, 128],
-  ];
-  const WORKS = works.map((w, i) => ({ id: w.id, title: w.title, url: w.url, icon: w.icon.replace(SITE, ''), x: 26 + (i % 5) * 46, y: 84 + Math.floor(i / 5) * 19.5 })); // x = 책상 가운데
-  const INFO = Object.fromEntries(all.map((m) => [m.name, { name: m.name, who: m.who, tool: m.tool, does: m.does, mood: m.mood }]));
-  const card = (m) => `<li class="m"><b>${esc(m.name)}</b> <span>${esc(m.who)} · ${esc(m.tool)}</span><p>${esc(m.does)}</p></li>`;
+  const INFO = Object.fromEntries(all.map((m) => [m.name, { name: m.name, who: m.who, tool: m.tool, does: m.does }]));
+  const WORKS = works.map((w) => ({ id: w.id, title: w.title, url: w.url, icon: w.icon.replace(SITE, '') }));
+  const card = (m) => `<li><b>${esc(m.name)}</b><span>${esc(m.who)} · ${esc(m.tool)}</span><p>${esc(m.does)}</p></li>`;
   const logRows = LOG.map(([d, who, t]) => `<li><time>${esc(d)}</time><b>${esc(who)}</b><span>${esc(t)}</span></li>`).join('');
 
   return `<!doctype html>
@@ -96,177 +71,209 @@ export function teamHtml({ works, esc, SITE, BLOG }) {
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-TBYJ6JBLYF"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-TBYJ6JBLYF',{content_group:'hub'});</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#050608">
 <title>seeplore 스튜디오</title>
-<meta name="description" content="seeplore를 만드는 가상의 회사를 위에서 내려다본 픽셀 사무실. 대표 한 명과 AI 팀원들(Claude, Gemini, Google TTS 등)이 방마다 맡은 일을 합니다.">
+<meta name="description" content="seeplore를 만드는 가상의 회사. 대표 한 명과 AI 팀원들(Claude, Gemini, Google TTS 등)이 방마다 맡은 일을 합니다.">
 <link rel="canonical" href="${SITE}/team">
-<meta property="og:title" content="seeplore 스튜디오 — 대표 1명과 AI 팀원들의 사무실">
+<meta property="og:title" content="seeplore 스튜디오 — 대표 1명과 AI 팀원들">
 <meta property="og:description" content="seeplore 웹 다큐 시리즈를 만드는 가상의 회사. 작품마다 담당 AI가 한 명씩.">
 <meta property="og:url" content="${SITE}/team">
 <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-32.png">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap">
 <style>
-/* 위에서 내려다본 픽셀 사무실 + 아래 상태판. 따뜻한 나무색 바탕 */
-:root { --bg: #f7efe2; --panel: #fffaf2; --line: #e2cfb1; --ink: #3d3328; --soft: #8a7a66; --accent: #e8752a; --ok: #3f9a5e; --body: 'Nanum Gothic', 'Apple SD Gothic Neo', sans-serif; color-scheme: light; }
+:root { --bg: #050608; --panel: #0c0f13; --text: #f3f5f7; --muted: #9aa3ab; --border: rgba(255,255,255,.12); --accent: #ffd24a; --ok: #4cd17a;
+  color-scheme: dark; font-family: 'Pretendard', 'Noto Sans KR', system-ui, -apple-system, sans-serif; color: var(--text); }
 * { box-sizing: border-box; }
-html, body { margin: 0; }
-body { background: var(--bg); color: var(--ink); font: 13px/1.6 var(--body); padding-block: 14px 40px; padding-left: max(12px, env(safe-area-inset-left, 0px)); padding-right: max(12px, env(safe-area-inset-right, 0px)); word-break: keep-all; }
-.wrap { max-width: 1000px; margin: 0 auto; display: grid; gap: 10px; }
-.head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 6px 12px; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px; }
-.head b { font-size: 14px; } .head span { color: var(--soft); font-size: 12px; } .head a { color: var(--accent); font-size: 12px; }
-.mapbox { position: relative; background: #8b5e3c; border-radius: 10px; padding: 6px; overflow-x: auto; }
-.mapin { position: relative; min-width: 640px; }
-#office { width: 100%; height: auto; display: block; image-rendering: pixelated; border-radius: 4px; cursor: default; }
-.tip { position: absolute; z-index: 2; max-width: 240px; background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; font-size: 12px; box-shadow: 0 4px 14px rgba(60,40,20,.18); pointer-events: none; }
-.tip b { display: block; } .tip .t { color: var(--soft); font-size: 11px; } .tip p { margin: 4px 0 0; }
-.status { display: flex; gap: 8px; align-items: center; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 6px 12px; font-size: 12px; }
-.status i { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); flex: none; }
-.grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; }
-.box { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; min-width: 0; }
-h2 { margin: 0 0 6px; font-size: 13px; }
+html, body { margin: 0; background: var(--bg); }
+body { padding-block: calc(env(safe-area-inset-top, 0px) + 28px) 56px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); word-break: keep-all; }
+.wrap { max-width: 1040px; margin: 0 auto; display: grid; gap: 14px; }
+.back { font-size: 14px; color: var(--muted); text-decoration: none; }
+.kicker { margin: 6px 0 0; font-size: 14px; font-weight: 600; color: var(--muted); }
+h1 { margin: 4px 0 0; font-size: clamp(34px, 8vw, 56px); line-height: 1.05; font-weight: 900; letter-spacing: -0.04em; }
+.lead { margin: 10px 0 0; font-size: 15px; line-height: 1.7; color: #c9d0d6; max-width: 640px; }
+.map { position: relative; border: 1px solid var(--border); border-radius: 14px; overflow-x: auto; background: #07090c; }
+.mapin { position: relative; min-width: 700px; }
+#office { display: block; width: 100%; height: auto; image-rendering: pixelated; }
+.tip { position: absolute; z-index: 2; max-width: 250px; background: #11151a; border: 1px solid var(--border); border-radius: 10px; padding: 9px 11px; font-size: 12.5px; line-height: 1.55; box-shadow: 0 8px 24px rgba(0,0,0,.5); pointer-events: none; }
+.tip b { display: block; font-size: 13.5px; } .tip .t { color: var(--muted); font-size: 11.5px; } .tip p { margin: 4px 0 0; color: #c9d0d6; }
+.hint { margin: 0; font-size: 12.5px; color: var(--muted); }
+.cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; }
+.box { border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px; background: rgba(255,255,255,.02); min-width: 0; }
+h2 { margin: 0 0 8px; font-size: 15px; letter-spacing: -0.01em; }
 ul { list-style: none; margin: 0; padding: 0; }
-.next li { display: flex; justify-content: space-between; gap: 10px; padding: 5px 0; border-bottom: 1px dotted var(--line); }
-.next time { font-weight: 800; color: var(--accent); font-variant-numeric: tabular-nums; white-space: nowrap; }
-.log li { display: grid; grid-template-columns: 40px 70px minmax(0, 1fr); gap: 6px; padding: 4px 0; border-bottom: 1px dotted var(--line); }
-.log time { color: var(--soft); font-variant-numeric: tabular-nums; } .log b { color: var(--accent); }
-.team { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; }
-.m { border: 1px solid var(--line); border-radius: 8px; padding: 8px; background: #fff; }
-.m span { color: var(--soft); font-size: 11px; } .m p { margin: 4px 0 0; }
-.note { color: var(--soft); font-size: 12px; margin: 0 0 8px; }
-.foot { text-align: center; color: var(--soft); font-size: 11px; } .foot a { color: var(--soft); }
-@media (max-width: 700px) { .grid { grid-template-columns: 1fr; } .log li { grid-template-columns: 36px minmax(0, 1fr); } .log li span { grid-column: 2; } }
+.next li { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; border-bottom: 1px solid var(--border); font-size: 13.5px; color: #c9d0d6; }
+.next li:last-child { border-bottom: 0; }
+.next time { color: var(--accent); font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.log li { display: grid; grid-template-columns: 44px 78px minmax(0, 1fr); gap: 8px; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: #c9d0d6; }
+.log li:last-child { border-bottom: 0; }
+.log time { color: var(--muted); font-variant-numeric: tabular-nums; } .log b { color: var(--text); }
+.team { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+.team li { border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px; }
+.team b { font-size: 14px; } .team span { display: block; color: var(--muted); font-size: 12px; } .team p { margin: 6px 0 0; font-size: 13px; line-height: 1.6; color: #c9d0d6; }
+.note { margin: 0 0 10px; font-size: 13px; color: var(--muted); }
+footer { font-size: 12px; line-height: 1.7; color: #6f777e; } footer a { color: #6f777e; }
+@media (max-width: 720px) { .cols { grid-template-columns: 1fr; } .log li { grid-template-columns: 40px minmax(0, 1fr); } .log li span { grid-column: 2; } }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="head"><div><b>seeplore 스튜디오</b> <span>가상의 회사 · 대표 1명, 나머지는 다 AI · 팀원 ${memberCount}</span></div><a href="/">seeplore.com →</a></div>
-  <div class="mapbox"><div class="mapin">
-    <canvas id="office" width="1280" height="840" role="img" aria-label="위에서 내려다본 seeplore 스튜디오 사무실. 대표실, 기획실(Gemini), 홍보팀(Claude 넷), 음성 부스(Aoede), 작품 ${works.length}개를 맡은 제작본부, 품질관리, 서버실, 휴게실이 있다."></canvas>
+  <a class="back" href="/">← seeplore</a>
+  <div>
+    <p class="kicker">가상의 회사 · 사람 1명, AI 팀원 ${memberCount - 1}</p>
+    <h1>seeplore 스튜디오</h1>
+    <p class="lead">seeplore를 실제로 이렇게 나눠서 만들고 있어서 회사처럼 꾸며 봤습니다. 대표 한 명이 정하고, 나머지는 AI와 자동화 도구가 맡습니다. 말풍선은 예약된 일정에서 계산한 지금 상태입니다.</p>
+  </div>
+  <div class="map"><div class="mapin">
+    <canvas id="office" width="1024" height="768" role="img" aria-label="위에서 내려다본 밤의 seeplore 스튜디오. 대표실, 기획실(Gemini), 홍보팀(Claude 셋과 봇), 음성 부스(Aoede), 작품 ${works.length}개를 맡은 제작본부, 품질관리, 서버실, 휴게실."></canvas>
     <div class="tip" id="tip" hidden></div>
   </div></div>
-  <div class="status"><i></i><span id="st">팀원을 눌러 보세요(PC는 마우스를 올리면). 제작본부 책상을 누르면 그 작품으로 갑니다. 휴대폰에서는 지도를 옆으로 밀어 보세요.</span></div>
-  <div class="grid">
-    <div class="box"><h2>다음 일정</h2><ul class="next" id="next"></ul><p class="note" style="margin:6px 0 0">시간은 한국 시각. 실제로 예약돼 돌아가는 일정입니다.</p></div>
+  <p class="hint">팀원을 누르면(PC는 마우스를 올리면) 하는 일이 보입니다. 제작본부 책상을 누르면 그 작품으로 갑니다. 휴대폰에서는 그림을 옆으로 밀어 보세요.</p>
+  <div class="cols">
+    <div class="box"><h2>다음 일정</h2><ul class="next" id="next"></ul></div>
     <div class="box"><h2>업무일지</h2><ul class="log">${logRows}</ul></div>
   </div>
   <div class="box">
     <h2>팀원</h2>
-    <p class="note">사람은 대표 한 명. 나머지는 실제로 쓰는 AI·도구입니다. 제작본부는 작품 하나에 Claude 하나씩 ${works.length}명.</p>
+    <p class="note">사람은 대표 한 명. 나머지는 실제로 쓰는 AI와 도구입니다. 제작본부는 작품 하나에 Claude 하나씩 ${works.length}명.</p>
     <ul class="team">${all.map(card).join('')}</ul>
   </div>
-  <p class="foot">ⓒ seeplore · <a href="/about">회사 소개</a> · <a href="${BLOG}">블로그</a> · <a href="https://www.youtube.com/@seeplore">YouTube</a> · AI 도구 이름은 각 회사의 상표입니다</p>
+  <footer>가구·사람 그림: Kenney Roguelike Indoor · Roguelike Characters (CC0) · <a href="/about">seeplore 소개</a> · <a href="${BLOG}">블로그</a> · <a href="https://www.youtube.com/@seeplore">YouTube</a> · AI 도구 이름은 각 회사의 상표입니다</footer>
 </div>
 <script>
-const ROOMS = ${JSON.stringify(ROOMS)};
-const PEOPLE = ${JSON.stringify(PEOPLE)};
-const OBJECTS = ${JSON.stringify(OBJECTS)};
 const WORKS = ${JSON.stringify(WORKS)};
 const INFO = ${JSON.stringify(INFO)};
 const c = document.getElementById('office'), g = c.getContext('2d');
-g.scale(4, 4); g.imageSmoothingEnabled = false;
+const T = 16, S = 2;                       // 타일 16px, 화면 2배 (논리 512×384 = 32×24 타일)
+g.scale(S, S); g.imageSmoothingEnabled = false;
+const load = (src) => new Promise((r) => { const im = new Image(); im.onload = () => r(im); im.onerror = () => r(null); im.src = src; });
+const tile = (sheet, cx, cy, x, y, w = 1, h = 1) => sheet && g.drawImage(sheet, cx * 17, cy * 17, w * 17 - 1, h * 17 - 1, x, y, w * 16, h * 16);
 const R = (x, y, w, h, col) => { g.fillStyle = col; g.fillRect(x, y, w, h); };
-const txt = (s, x, y, size, col, align = 'center', weight = 700) => { g.font = weight + ' ' + size + 'px Nanum Gothic, sans-serif'; g.fillStyle = col; g.textAlign = align; g.fillText(s, x, y); };
-const tag = (s, x, y) => { g.font = '700 4.5px Nanum Gothic, sans-serif'; const w = g.measureText(s).width + 4; R(x - w / 2, y, w, 6.5, 'rgba(255,255,255,.92)'); R(x - w / 2, y + 6.5, w, 0.5, '#c9b08c'); txt(s, x, y + 4.8, 4.5, '#3d3328'); };
-const icons = {};
-for (const w of WORKS) { const im = new Image(); im.src = w.icon; im.onload = () => (icons[w.id] = im); }
-function desk(x, y, w = 18) { R(x - w / 2, y, w, 7, '#b07b4f'); R(x - w / 2, y + 7, w, 1, '#8a5a34'); R(x - 4, y - 5, 8, 6, '#2b2f36'); R(x - 3, y - 4, 6, 4, '#86d3f5'); }
-function person(x, y, col, t, i) {
-  const bob = Math.round(Math.sin(t / 6 + i) * 0.6);
-  R(x - 3, y + 6, 6, 3, '#6b4a2e');               // 의자
-  R(x - 3, y + 1 + bob, 6, 5, col);                // 몸
-  R(x - 2, y - 3 + bob, 4, 4, '#ffd9b8');           // 머리
-  R(x - 2, y - 4 + bob, 4, 1.5, '#3a2a20');         // 머리카락
+const text = (s, x, y, size, col, align = 'center', w = 700) => { g.font = w + ' ' + size + 'px Pretendard, "Noto Sans KR", sans-serif'; g.fillStyle = col; g.textAlign = align; g.fillText(s, x, y); };
+
+// ---- 지금 상태 (한국 시각, 실제 예약 일정) ----
+const kst = () => new Date(Date.now() + 9 * 3600e3);
+function nextAt(days, hh, mm) { const n = kst(); for (let d = 0; d < 8; d++) { const x = new Date(Date.UTC(n.getUTCFullYear(), n.getUTCMonth(), n.getUTCDate() + d, hh, mm)); if (days.includes(x.getUTCDay()) && x > n) return x; } }
+const DAY = '일월화수목금토';
+const md = (x) => (x.getUTCMonth() + 1) + '.' + x.getUTCDate() + '(' + DAY[x.getUTCDay()] + ')';
+const hm = (x) => String(x.getUTCHours()).padStart(2, '0') + ':' + String(x.getUTCMinutes()).padStart(2, '0');
+function status(key) {
+  const n = kst(), h = n.getUTCHours(), dow = n.getUTCDay();
+  const up = nextAt([0, 1, 2, 3, 4, 5, 6], 8, 47), post = nextAt([2, 5], 8, 47), write = nextAt([0], 21, 13);
+  switch (key) {
+    case '업로드 봇': return (h === 8 && n.getUTCMinutes() >= 47 && n.getUTCMinutes() < 55) ? '올리는 중' : hm(up) + ' 실행 대기';
+    case '블로그 작가': return (dow === 0 && h >= 21) ? '다음 주 글 쓰는 중' : md(post) + ' 글 공개 대기';
+    case '쇼츠 PD': return (dow === 0 && h >= 21) ? '쇼츠 렌더링 중' : '쇼츠 자막 검토 중';
+    case '홍보팀장': return h < 9 ? '오늘 공개분 확인 중' : '검색 색인 확인 중';
+    case '대표': return '결재 대기 중';
+    case '기획 담당': return '다음 주제 검토 중';
+    case '내레이터': return '다음 원고 대기';
+    case '점검 로봇': return '장면 점검 대기';
+    default: return '';
+  }
 }
-function plant(x, y) { R(x - 2, y + 2, 4, 3, '#a05a2c'); R(x - 3, y - 2, 6, 4, '#4f9a5c'); R(x - 1, y - 4, 2, 2, '#6cc07a'); }
-let t = 0, bubble = null;
+
+// ---- 사무실 배치 (타일 단위, 40×26) ----
+const ROOMS = [
+  ['대표실', 0, 0, 6, 7], ['기획실', 6, 0, 6, 7], ['홍보팀', 12, 0, 13, 7], ['음성 부스', 25, 0, 7, 7],
+  ['제작본부 · 작품 ' + WORKS.length + '편', 0, 7, 23, 12], ['품질관리', 23, 7, 9, 6], ['서버실', 23, 13, 9, 6], ['휴게실', 0, 19, 32, 5],
+];
+// 팀원: [팀원 이름, 이름표, 캐릭터(시트 칸 x,y), 책상 타일 x,y]
+const PEOPLE = [
+  ['대표', '대표', [0, 9], 2, 2.6],
+  ['기획 담당', 'Gemini', [1, 6], 8, 2.6],
+  ['홍보팀장', '홍보팀장', [0, 5], 13, 2.6],
+  ['블로그 작가', '블로그', [0, 7], 16, 2.6],
+  ['쇼츠 PD', '쇼츠 PD', [1, 7], 19, 2.6],
+  ['업로드 봇', '업로드 봇', [1, 11], 22, 2.6],
+  ['내레이터', 'Aoede', [1, 5], 27.5, 2.6],
+  ['점검 로봇', '점검 로봇', [1, 11], 26.5, 9.2],
+];
+const DESK = WORKS.map((w, i) => ({ ...w, tx: 1.2 + (i % 5) * 4.4, ty: 9 + Math.floor(i / 5) * 2.4 }));
+const WORK_CHARS = [[0, 5], [0, 6], [1, 6], [0, 7], [1, 7], [0, 8], [1, 8], [0, 9], [1, 9], [0, 10]];
+
+let indoor, chars; const icons = {};
+function monitor(x, y, glow, icon) {
+  R(x + 3, y - 9, 12, 9, '#1b1f26'); R(x + 4, y - 8, 10, 7, glow);
+  if (icon) g.drawImage(icon, x + 5, y - 8, 8, 7);
+  R(x + 8, y, 2, 2, '#1b1f26');
+  g.fillStyle = 'rgba(120,200,255,.06)'; g.beginPath(); g.ellipse(x + 9, y + 4, 14, 8, 0, 0, 7); g.fill(); // 화면 불빛
+}
+function desk(tx, ty, icon) {
+  const x = tx * T, y = ty * T;
+  tile(indoor, 0, 0, x, y); tile(indoor, 2, 0, x + T, y);
+  monitor(x + 7, y + 6, '#7cc6ff', icon);
+}
+function person(ch, tx, ty) { tile(chars, ch[0], ch[1], tx * T + 8, ty * T + 13); }
+function nameTag(s, cx, y) {
+  g.font = '700 7px Pretendard, "Noto Sans KR", sans-serif'; const w = g.measureText(s).width + 8;
+  R(cx - w / 2, y, w, 10, 'rgba(0,0,0,.72)'); text(s, cx, y + 7.5, 7, '#e9edf1');
+}
+function bubble(s, cx, y) {
+  g.font = '700 7px Pretendard, "Noto Sans KR", sans-serif'; const w = g.measureText(s).width + 16;
+  const x = Math.max(2, Math.min(510 - w, cx - w / 2)), by = Math.max(2, y - 16);
+  R(x, by, w, 12, '#f3f5f7'); R(cx - 1.5, by + 12, 3, 3, '#f3f5f7');
+  g.fillStyle = '#4cd17a'; g.beginPath(); g.arc(x + 5, by + 6, 1.8, 0, 7); g.fill();
+  text(s, x + 10, by + 8.5, 7, '#111', 'left');
+}
+let bubbleKey = '대표', t = 0;
 function draw() {
-  R(0, 0, 320, 210, '#8b5e3c');
-  for (const [name, x, y, w, h, col] of ROOMS) {
-    R(x + 1, y + 1, w - 2, h - 2, col);
-    for (let yy = y + 1; yy < y + h - 1; yy += 6) R(x + 1, yy, w - 2, 0.4, 'rgba(0,0,0,.05)');
-    txt(name, x + 4, y + 7, 5, '#5a4632', 'left', 800);
+  R(0, 0, 512, 384, '#0a0c10');
+  for (const [name, x, y, w, h] of ROOMS) {
+    R(x * T + 2, y * T + 2, w * T - 4, h * T - 4, '#151a21');                                   // 바닥
+    for (let yy = y * T + 2; yy < (y + h) * T - 2; yy += 8) R(x * T + 2, yy, w * T - 4, 1, 'rgba(255,255,255,.025)');
+    R(x * T + 2, y * T + 2, w * T - 4, 3, '#222a33');                                           // 벽 윗선
+    text(name, x * T + 8, y * T + 15, 8, '#9aa3ab', 'left', 800);
   }
-  // 대표실·기획실
-  desk(26, 22, 22); plant(48, 60); R(6, 50, 12, 14, '#c28b5a'); txt('결재', 12, 58, 3.5, '#fff');
-  desk(82, 22, 20); R(62, 12, 14, 9, '#fffdf6'); R(64, 14, 6, 1, '#4f86e8'); R(64, 17, 9, 1, '#4f86e8'); plant(104, 60);
-  // 홍보팀 책상 넷
-  for (const x of [128, 158, 188, 218]) desk(x, 22);
-  R(140, 54, 76, 11, '#fff'); txt('블로그 화·금 · 쇼츠 08:47', 178, 61.5, 4.5, '#e8752a'); tag('봇 자리', 218, 33);
-  // 음성 부스
-  R(262, 18, 32, 26, '#cbb8e6'); R(264, 20, 28, 22, '#efe6fb'); R(277, 22, 2, 8, '#555'); R(275, 20, 6, 3, '#333'); txt('ON AIR', 280, 56, 4.5, '#a865d8', 'center', 800);
-  // 제작본부 — 작품마다 책상 하나
-  WORKS.forEach((w, i) => {
-    R(w.x - 12, w.y + 2, 24, 7, '#b07b4f'); R(w.x - 12, w.y + 9, 24, 1, '#8a5a34');   // 책상
-    R(w.x - 6, w.y - 4, 12, 10, '#2b2f36');                                            // 모니터
-    const im = icons[w.id]; if (im) g.drawImage(im, w.x - 5, w.y - 3, 10, 8); else R(w.x - 5, w.y - 3, 10, 8, '#86d3f5');
-    person(w.x + 17, w.y + 4, '#d97757', t, i + 10);                                    // 담당(Claude) — 책상 옆
-  });
-  // 품질관리
-  desk(278, 84, 22); R(300, 82, 12, 18, '#fff'); for (let k = 0; k < 4; k++) R(302, 84 + k * 4, 8, 2, k % 2 ? '#3f9a5e' : '#e8752a');
-  // 서버실
-  R(250, 126, 16, 22, '#6b7380'); for (let k = 0; k < 5; k++) R(252, 128 + k * 4, 12, 2, '#9aa4b2');
-  R(282, 124, 16, 26, '#2f343c'); for (let k = 0; k < 6; k++) R(284, 126 + k * 4, 12, 2, (t + k) % 6 < 3 ? '#4cd17a' : '#1c2026');
-  for (const [, label, x, y] of OBJECTS) tag(label, x, y + 24);
-  // 휴게실
-  R(14, 176, 40, 12, '#7aa7c7'); R(14, 172, 40, 5, '#5f8fb0'); R(70, 178, 18, 10, '#b07b4f'); R(76, 180, 5, 4, '#fff');
-  plant(110, 186); plant(304, 186); R(200, 172, 30, 22, '#ffffff'); txt('커피', 215, 186, 5, '#8b5e3c');
-  // 업로드 봇이 복도(휴게실)를 오간다
-  const bx = 130 + Math.sin(t / 30) * 50;
-  // 사람들
-  PEOPLE.forEach(([key, label, col, x, y], i) => {
-    if (key === '업로드 봇') { person(bx, 190, col, t, i); tag(label, bx, 196); return; }
-    person(x, y, col, t, i); tag(label, x, y + 10);
-  });
+  if (!indoor || !chars) return;
+  // 소품 (Kenney 타일)
+  tile(indoor, 23, 0, 0.4 * T, 1.2 * T); tile(indoor, 24, 0, 1.4 * T, 1.2 * T);             // 대표실 책장
+  tile(indoor, 16, 0, 4.6 * T, 5 * T); tile(indoor, 17, 0, 10.6 * T, 5 * T); tile(indoor, 16, 0, 23.6 * T, 5 * T); // 화분
+  tile(indoor, 19, 12, 6.6 * T, 4.6 * T); tile(indoor, 20, 12, 7.6 * T, 4.6 * T);                 // 기획실 기획안 액자
+  tile(indoor, 23, 8, 25.6 * T, 4.8 * T, 2, 1);                                                   // 음성 부스 녹음 장비
+  for (let k = 0; k < 3; k++) { tile(indoor, 25 + (k % 2), 8, (24.4 + k * 2.4) * T, 14.8 * T, 1, 2); for (let j = 0; j < 4; j++) R((24.4 + k * 2.4) * T + 5, 14.8 * T + 6 + j * 6, 3, 2, (t + j + k) % 5 < 3 ? '#4cd17a' : '#1f6b3b'); }
+  nameTag('GitHub · Vercel', 27.4 * T, 17.3 * T);
+  tile(indoor, 0, 12, 2 * T, 20.4 * T, 3, 1); tile(indoor, 5, 12, 5 * T, 20.4 * T);               // 휴게실 커피 카운터
+  tile(indoor, 3, 0, 10 * T, 21 * T); tile(indoor, 1, 2, 9 * T, 21 * T); tile(indoor, 3, 2, 11 * T, 21 * T); // 둥근 탁자·의자
+  tile(indoor, 3, 0, 15 * T, 21 * T); tile(indoor, 1, 2, 14 * T, 21 * T); tile(indoor, 3, 2, 16 * T, 21 * T);
+  tile(indoor, 16, 0, 20 * T, 21.4 * T); tile(indoor, 17, 0, 30.6 * T, 21.4 * T);
+  // 제작본부: 작품마다 책상 + 담당 Claude
+  DESK.forEach((d, i) => { desk(d.tx, d.ty, icons[d.id]); person(WORK_CHARS[i % WORK_CHARS.length], d.tx, d.ty); });
+  // 팀원
+  for (const [key, label, ch, tx, ty] of PEOPLE) { desk(tx, ty, null); person(ch, tx, ty); nameTag(label, tx * T + 16, ty * T + 31); }
   // 말풍선
-  if (bubble) {
-    const s = bubble.text; g.font = '700 5px Nanum Gothic, sans-serif'; const w = Math.min(g.measureText(s).width + 8, 120);
-    const x = Math.max(4, Math.min(316 - w, bubble.x - w / 2)), y = Math.max(2, bubble.y - 20);
-    R(x, y, w, 10, '#fff'); R(x, y + 10, w, 0.6, '#c9b08c'); R(bubble.x - 1, y + 10, 2, 3, '#fff');
-    txt(s, x + w / 2, y + 7, 5, '#3d3328');
-  }
+  const p = PEOPLE.find((q) => q[0] === bubbleKey);
+  if (p) bubble(status(p[0]), p[3] * T + 16, p[4] * T + 4);
 }
-// 말풍선: 몇 초마다 한 사람이 '오늘의 기분'을 말한다
-function nextBubble() {
-  const pool = PEOPLE.filter(([k]) => INFO[k]);
-  const [key, , , x, y] = pool[Math.floor(Math.random() * pool.length)];
-  bubble = { text: INFO[key].mood, x: key === '업로드 봇' ? 130 + Math.sin(t / 30) * 50 : x, y: key === '업로드 봇' ? 190 : y };
-}
+Promise.all([load('/team/indoor.png'), load('/team/chars.png'), ...WORKS.map((w) => load(w.icon).then((im) => (icons[w.id] = im)))]).then(([a, b]) => { indoor = a; chars = b; draw(); });
+draw();
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-nextBubble(); document.fonts.ready.then(draw); draw();
-if (!reduce) { setInterval(() => { t++; draw(); }, 100); setInterval(nextBubble, 3500); }
-// 손가락·마우스: 팀원 설명, 작품 책상은 눌러서 이동
+let bi = 0;
+setInterval(() => { t++; if (!reduce && t % 30 === 0) { bi = (bi + 1) % PEOPLE.length; bubbleKey = PEOPLE[bi][0]; } draw(); }, 100);
+
+// 누르기·마우스: 설명, 작품 책상은 이동
 const tip = document.getElementById('tip');
 function hit(ev) {
-  const r = c.getBoundingClientRect(), k = 320 / r.width;
-  const x = (ev.clientX - r.left) * k, y = (ev.clientY - r.top) * k;
-  for (const w of WORKS) if (x > w.x - 13 && x < w.x + 22 && y > w.y - 5 && y < w.y + 13) return { work: w, px: w.x, py: w.y };
-  for (const [key, , , px, py] of PEOPLE) { const X = key === '업로드 봇' ? 130 + Math.sin(t / 30) * 50 : px, Y = key === '업로드 봇' ? 190 : py; if (Math.abs(x - X) < 10 && Math.abs(y - Y) < 12) return { key, px: X, py: Y }; }
-  for (const [key, , px, py] of OBJECTS) if (x > px - 10 && x < px + 18 && y > py - 2 && y < py + 30) return { key, px, py };
+  const r = c.getBoundingClientRect(), k = 512 / r.width, x = (ev.clientX - r.left) * k, y = (ev.clientY - r.top) * k;
+  for (const d of DESK) if (x > d.tx * T && x < d.tx * T + 34 && y > d.ty * T - 6 && y < d.ty * T + 30) return { work: d, px: d.tx * T + 16, py: d.ty * T };
+  for (const [key, , , tx, ty] of PEOPLE) if (x > tx * T && x < tx * T + 34 && y > ty * T - 6 && y < ty * T + 42) return { key, px: tx * T + 16, py: ty * T };
   return null;
 }
 function showTip(h) {
   if (!h) { tip.hidden = true; c.style.cursor = 'default'; return; }
-  const r = c.getBoundingClientRect(), s = r.width / 320;
-  if (h.work) { tip.innerHTML = '<b>' + h.work.title + ' 담당</b><span class="t">Claude · 누르면 작품으로</span>'; c.style.cursor = 'pointer'; }
-  else { const m = INFO[h.key]; tip.innerHTML = '<b>' + m.name + '</b><span class="t">' + m.who + ' · ' + m.tool + '</span><p>' + m.does + '</p>'; c.style.cursor = 'default'; }
+  const r = c.getBoundingClientRect(), s = r.width / 512;
+  if (h.work) { tip.innerHTML = '<b>' + h.work.title + ' 담당</b><span class="t">Claude · 출시 · 누르면 작품으로</span>'; c.style.cursor = 'pointer'; }
+  else { const m = INFO[h.key]; tip.innerHTML = '<b>' + m.name + '</b><span class="t">' + m.who + ' · ' + m.tool + '</span><p>' + m.does + '</p><p class="t">지금: ' + status(h.key) + '</p>'; bubbleKey = h.key; c.style.cursor = 'default'; }
   tip.hidden = false;
-  const left = Math.min(r.width - tip.offsetWidth - 4, Math.max(4, h.px * s - tip.offsetWidth / 2));
-  tip.style.left = left + 'px'; tip.style.top = Math.max(4, h.py * s - tip.offsetHeight - 14) + 'px';
+  tip.style.left = Math.min(r.width - tip.offsetWidth - 6, Math.max(6, h.px * s - tip.offsetWidth / 2)) + 'px';
+  tip.style.top = Math.max(6, h.py * s - tip.offsetHeight - 22) + 'px';
 }
 c.addEventListener('pointermove', (e) => showTip(hit(e)));
 c.addEventListener('pointerleave', () => showTip(null));
 c.addEventListener('click', (e) => { const h = hit(e); if (h && h.work) location.href = h.work.url; else showTip(h); });
-// 다음 일정 (한국 시각): 블로그 공개 화·금 08:47, 쇼츠 업로드 매일 08:47, 주간 글쓰기 일 21:13
-function nextAt(days, hh, mm) {
-  const now = new Date(Date.now() + 9 * 3600e3); // KST 를 UTC 칸에
-  for (let d = 0; d < 8; d++) {
-    const x = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + d, hh, mm));
-    if (days.includes(x.getUTCDay()) && x > now) return x;
-  }
-}
-const W = '일월화수목금토';
-const fmt = (x) => (x.getUTCMonth() + 1) + '.' + x.getUTCDate() + '(' + W[x.getUTCDay()] + ') ' + String(x.getUTCHours()).padStart(2, '0') + ':' + String(x.getUTCMinutes()).padStart(2, '0');
-const NEXT = [['업로드 봇 · 날짜 된 글 공개, 쇼츠 업로드', [0, 1, 2, 3, 4, 5, 6], 8, 47], ['블로그 작가 · 블로그 글 공개일', [2, 5], 8, 47], ['블로그 작가 · 다음 주 글 2편 쓰기', [0], 21, 13]];
-document.getElementById('next').innerHTML = NEXT.map(([what, d, h, m]) => '<li><span>' + what + '</span><time>' + fmt(nextAt(d, h, m)) + '</time></li>').join('');
+
+// 다음 일정
+const fmt = (x) => md(x) + ' ' + hm(x);
+const NEXT = [['업로드 봇 · 날짜 된 글 공개, 쇼츠 업로드', nextAt([0, 1, 2, 3, 4, 5, 6], 8, 47)], ['블로그 작가 · 블로그 글 공개', nextAt([2, 5], 8, 47)], ['블로그 작가 · 다음 주 글 2편 쓰기', nextAt([0], 21, 13)]];
+document.getElementById('next').innerHTML = NEXT.map(([w, x]) => '<li><span>' + w + '</span><time>' + fmt(x) + '</time></li>').join('');
 </script>
 </body>
 </html>
