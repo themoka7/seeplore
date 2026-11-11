@@ -5,17 +5,7 @@
  * 말풍선: 예약 일정에서 계산한 상태(업로드·글 공개) + 맡은 일. 지어낸 숫자는 쓰지 않는다.
  * 실제로는 사람 1명(대표) + AI 도구들이 일한다. 재미로 꾸몄지만 내용은 사실대로:
  * 누가 어떤 도구이고 무슨 일을 하는지 그대로 적는다(지어낸 직원·숫자 없음).
- * 업무일지(LOG)는 손으로 적는다 — 새 일이 있으면 맨 위에 한 줄.
  */
-const LOG = [
-  ['11.11', '홍보팀', '소개 페이지와 AI용 요약(llms.txt)을 만들었다. 구글 AI가 우리를 "도시 이야기"로 착각해서.'],
-  ['11.10', '쇼츠 PD', '쇼츠를 전부 다시 만들었다. 질문으로 시작하고, 화려한 장면으로 눈을 붙잡고, 자막은 버튼에 안 가리게.'],
-  ['11.10', '업로드 봇', '쇼츠가 대표님 개인 채널로 올라간 걸 들켰다. 이제 올리기 전에 채널부터 확인한다.'],
-  ['11.10', '음성팀', '쉼표 자리에서 "읔" 소리가 나던 버릇을 고쳤다. 쉼표마다 잘라 읽고 0.25초 쉰다.'],
-  ['11.08', '블로그 작가', '매주 일요일 밤 글 두 편을 쓰기 시작했다. 네이버·X·스레드용 원고도 같이.'],
-  ['11.07', '홍보팀', '첫 글 「챗GPT 원리, 다음 글자 맞히기로 쉽게 이해하기」 발행.'],
-  ['11.06', '대표', 'blog.seeplore.com 문을 열었다.'],
-];
 
 export function teamHtml({ works, esc, SITE, BLOG }) {
   const role = (name, who, tool, does, mood) => ({ name, who, tool, does, mood });
@@ -63,7 +53,6 @@ export function teamHtml({ works, esc, SITE, BLOG }) {
   const info = Object.fromEntries(all.map((m) => [m.name, { name: m.name, who: m.who, tool: m.tool, does: m.does }]));
   const data = { works: works.map((w) => ({ id: w.id, title: w.title, url: w.url, icon: w.icon.replace(SITE, '') })), info, sheets: { indoor: '/team/indoor.png', chars: '/team/chars.png' } };
   const card = (m) => `<li><b>${esc(m.name)}</b><span>${esc(m.who)} · ${esc(m.tool)}</span><p>${esc(m.does)}</p></li>`;
-  const logRows = LOG.map(([d, who, t]) => `<li><time>${esc(d)}</time><b>${esc(who)}</b><span>${esc(t)}</span></li>`).join('');
 
   return `<!doctype html>
 <html lang="ko">
@@ -139,11 +128,8 @@ body.shorts #caption { top: 57%; bottom: auto; font-size: 22px; }
     <div id="caption" aria-live="polite"></div>
     <div class="tip" id="tip" hidden></div>
   </div>
-  <div class="cols">
-    <div class="box"><h2>업무일지</h2><ul class="log">${logRows}</ul></div>
-    <div class="box"><h2>일하는 법</h2>
+  <div class="box"><h2>일하는 법</h2>
       <p class="note">· 대표가 주제를 고르면 기획실(Gemini)이 기획안을 내고, 제작본부 담당(Claude)이 계획을 다시 짜서 확인받은 뒤 만든다.<br>· 글은 중학생이 혼자 읽고 이해할 수 있게, 숫자는 계산하거나 출처가 있는 것만.<br>· 사이트에 올리는 건 하루 한 번, 대표가 허락할 때만.<br>· 블로그·쇼츠는 자동으로 올리고, 네이버·X·스레드는 대표가 올릴 원고를 미리 만든다.</p></div>
-  </div>
   <div class="box">
     <h2>팀원</h2>
     <p class="note">사람은 대표 한 명. 나머지는 실제로 쓰는 AI와 도구입니다. 제작본부는 작품 하나에 Claude 하나씩 ${works.length}명.</p>
