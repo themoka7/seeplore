@@ -196,6 +196,19 @@
       "descEn": "The wave moves on, the water stays — how ocean waves work, from wind to beach, in 3D · narrated",
       "urlEn": "https://wave.seeplore.com/en/",
       "field": "지구"
+    },
+    {
+      "id": "stars",
+      "label": "별의\n운명",
+      "title": "별의 운명",
+      "url": "https://destinyofstars.seeplore.com/",
+      "icon": "https://seeplore.com/icons/series/stars.png",
+      "desc": "태어날 때의 질량이 정하는 세 가지 죽음 — 블랙홀, 중성자별, 백색왜성을 3D로 · 음성 해설",
+      "titleEn": "The Fate of the Stars",
+      "labelEn": "Fate of\nthe Stars",
+      "descEn": "Three deaths decided by mass at birth — a black hole, a neutron star and a white dwarf in 3D · narrated",
+      "urlEn": "https://destinyofstars.seeplore.com/en/",
+      "field": "우주"
     }
   ]
 }
