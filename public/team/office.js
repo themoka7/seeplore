@@ -31,6 +31,7 @@
     day:   { name: '낮', bg: '#6e5338', corridor: '#cdb48e', wall: '#8a6a4a', label: '#5c4630', line: 'rgba(120,90,50,.07)', tagBg: 'rgba(40,30,20,.78)', floors: ['#ead6b4', '#dbe8f3', '#f4e0dc', '#e8e0f3', '#efe3c8', '#dcefe0', '#dfe4ea', '#e8efdc'], furn: 'normal', people: 'normal' },
     night: { name: '밤', bg: '#050608', corridor: '#161b22', wall: '#2b323b', label: '#8b95a1', line: 'rgba(255,255,255,.025)', tagBg: 'rgba(0,0,0,.7)', floors: ['#1d1913', '#121a23', '#201719', '#1b1724', '#1a170f', '#111d16', '#13171c', '#151b12'], furn: 'dark', people: 'dim', glow: true },
     line:  { name: '도면', bg: '#050608', corridor: '#050608', wall: '#3b4450', label: '#6f7a86', line: null, tagBg: 'rgba(5,6,8,.85)', floors: Array(8).fill('#080a0d'), furn: 'ghost', people: 'normal', glow: true, outline: true },
+    chip:  { name: '컴퓨터 속', bg: '#020605', corridor: '#020605', wall: '#1f6f52', label: '#3ddc97', line: null, tagBg: 'rgba(2,10,8,.88)', floors: Array(8).fill('#04100c'), furn: 'teal', people: 'normal', glow: true, chip: true, outline: true },
     mono:  { name: '흑백', bg: '#050608', corridor: '#101317', wall: '#2a2f36', label: '#8b95a1', line: 'rgba(255,255,255,.02)', tagBg: 'rgba(0,0,0,.75)', floors: ['#17191c', '#15171a', '#17191c', '#15171a', '#131518', '#15171a', '#131518', '#15171a'], furn: 'gray', people: 'gray', accent: '#ffd24a' },
   };
   let TH = THEMES[new URLSearchParams(location.search).get('theme')] ?? THEMES.day;
@@ -211,7 +212,8 @@
     const x = r.x * T, y = r.y * T, w = r.w * T, h = r.h * T;
     R(x, y, w, h, r.floor);
     if (TH.line) for (let yy = y + 6; yy < y + h; yy += 8) R(x, yy, w, 1, TH.line);
-    if (TH.outline) { for (let gx = x + 8; gx < x + w; gx += 16) for (let gy = y + 8; gy < y + h; gy += 16) R(gx, gy, 1, 1, '#1a2028'); R(x, y, w, 1, TH.wall); R(x, y, 1, h, TH.wall); R(x + w - 1, y, 1, h, TH.wall); R(x, y + h - 1, w, 1, TH.wall); }
+    if (TH.chip) { for (let gx = x + 8; gx < x + w; gx += 16) for (let gy = y + 8; gy < y + h; gy += 16) R(gx, gy, 1, 1, '#0d3b2b'); for (let px = x + 6; px < x + w - 4; px += 6) { R(px, y - 2, 2, 2, '#b08d3c'); R(px, y + h, 2, 2, '#b08d3c'); } for (let py = y + 6; py < y + h - 4; py += 6) { R(x - 2, py, 2, 2, '#b08d3c'); R(x + w, py, 2, 2, '#b08d3c'); } }
+    if (TH.outline) { if (!TH.chip) for (let gx = x + 8; gx < x + w; gx += 16) for (let gy = y + 8; gy < y + h; gy += 16) R(gx, gy, 1, 1, '#1a2028'); R(x, y, w, 1, TH.wall); R(x, y, 1, h, TH.wall); R(x + w - 1, y, 1, h, TH.wall); R(x, y + h - 1, w, 1, TH.wall); }
     else { R(x, y, w, 3, TH.wall); R(x, y, 2, h, TH.wall); R(x + w - 2, y, 2, h, TH.wall); R(x, y + h - 2, w, 2, TH.wall); }
     // 문(벽 틈)
     const dx = r.door * T - 10;
@@ -225,7 +227,7 @@
   }
   function deskAt(x, y, icon, typing, t) {
     tile(indoor, 0, 0, x - 16, y); tile(indoor, 2, 0, x, y);
-    monitor(x, y + 6, typing && (t >> 3) % 2 ? '#a9e3ff' : '#8fd2f7', icon);
+    monitor(x, y + 6, TH.chip ? (typing && (t >> 3) % 2 ? '#9dffd8' : '#3ddc97') : typing && (t >> 3) % 2 ? '#a9e3ff' : '#8fd2f7', icon);
   }
   function drawPerson(p, t) {
     const moving = p.path.length > 0;
@@ -234,7 +236,8 @@
     if (p.flip) g.scale(-1, 1);
     tile(TH.people === 'gray' && (moving || p.say) ? SHEETS.ch_normal : chars, p.ch[0], p.ch[1], -8, -8);
     g.restore();
-    if (p.carry) { R(p.x - 4, p.y - 18 - bob, 8, 9, '#ffffff'); R(p.x - 3, p.y - 16 - bob, 6, 1, '#9aa3ab'); R(p.x - 3, p.y - 13 - bob, 5, 1, '#9aa3ab'); }
+    if (p.carry && TH.chip) { g.fillStyle = (t >> 2) % 2 ? '#7dffcf' : '#3ddc97'; g.fillRect(p.x - 4, p.y - 18 - bob, 8, 8); }
+    else if (p.carry) { R(p.x - 4, p.y - 18 - bob, 8, 9, '#ffffff'); R(p.x - 3, p.y - 16 - bob, 6, 1, '#9aa3ab'); R(p.x - 3, p.y - 13 - bob, 5, 1, '#9aa3ab'); }
   }
   function tag(s, cx, y) {
     g.font = `700 6.5px ${FONT}`; const w = g.measureText(s).width + 7;
@@ -277,6 +280,12 @@
     g.setTransform(cam.z, 0, 0, cam.z, canvas.width / 2 - cam.x * cam.z, canvas.height / 2 - cam.y * cam.z);
     R(0, 7 * T, WW, 1 * T, TH.corridor);                      // 복도
     if (!TH.outline) R(0, 19.5 * T - 1, WW, 1, TH.wall);
+    if (TH.chip) {
+      for (const yy of [7.2 * T, 7.5 * T, 7.8 * T]) R(0, yy, WW, 1, '#0f4a35');
+      R(11.5 * T, 6.5 * T, 1, 13 * T, '#0f4a35'); R(27.5 * T, 6.5 * T, 1, 13 * T, '#0f4a35');
+      for (let k = 0; k < 9; k++) { const px = ((t * (1.2 + (k % 3) * 0.5) + k * 61) % (WW + 40)) - 20, yy = [7.2, 7.5, 7.8][k % 3] * T; g.fillStyle = 'rgba(61,220,151,.9)'; g.fillRect(px, yy - 1, 6, 3); g.fillStyle = 'rgba(61,220,151,.25)'; g.fillRect(px - 10, yy, 10, 1); }
+      for (let k = 0; k < 3; k++) { const py = 6.5 * T + ((t * 0.9 + k * 70) % (13 * T)); R(11.5 * T - 1, py, 3, 5, '#7dffcf'); R(27.5 * T - 1, (py + 90) % (13 * T) + 6.5 * T, 3, 5, '#7dffcf'); }
+    }
     // 테마에 맞는 그림 시트
     indoor = SHEETS['in_' + TH.furn] ?? SHEETS.in_normal; chars = SHEETS['ch_' + TH.people] ?? SHEETS.ch_normal;
     for (const r of ROOMS) drawRoom(r);
@@ -304,7 +313,7 @@
       for (const p of all) if (!p.work) tag(p.label, p.homeX, p.homeY + 10);
       const now = performance.now();
       for (const p of all) if (p.say && p.sayUntil > now) bubble(p.say, p.x, p.y - 4);
-      if (TH.glow) { g.globalCompositeOperation = 'lighter'; for (const p of all) { const gr = g.createRadialGradient(p.deskX, p.deskY + 2, 0, p.deskX, p.deskY + 2, 26); gr.addColorStop(0, 'rgba(120,200,255,.18)'); gr.addColorStop(1, 'rgba(120,200,255,0)'); g.fillStyle = gr; g.fillRect(p.deskX - 26, p.deskY - 24, 52, 52); } g.globalCompositeOperation = 'source-over'; }
+      if (TH.glow) { g.globalCompositeOperation = 'lighter'; for (const p of all) { const gr = g.createRadialGradient(p.deskX, p.deskY + 2, 0, p.deskX, p.deskY + 2, 26); const gc = TH.chip ? '61,220,151' : '120,200,255'; gr.addColorStop(0, `rgba(${gc},.2)`); gr.addColorStop(1, `rgba(${gc},0)`); g.fillStyle = gr; g.fillRect(p.deskX - 26, p.deskY - 24, 52, 52); } g.globalCompositeOperation = 'source-over'; }
     } else text('불러오는 중…', WW / 2, WH / 2, 12, TH.label);
     if (flash > 0) flash--;
     requestAnimationFrame(frame);
@@ -346,6 +355,7 @@
     SHEETS.in_dark = variant(a, (d, i) => { d[i] *= 0.55; d[i + 1] *= 0.55; d[i + 2] *= 0.6; });
     SHEETS.in_gray = variant(a, (d, i) => { gray(d, i); d[i] *= 0.6; d[i + 1] *= 0.6; d[i + 2] *= 0.6; });
     SHEETS.in_ghost = variant(a, (d, i) => { gray(d, i); d[i + 3] *= 0.35; });
+    SHEETS.in_teal = variant(a, (d, i) => { const v = 0.3 * d[i] + 0.59 * d[i + 1] + 0.11 * d[i + 2]; d[i] = v * 0.15; d[i + 1] = v * 0.75; d[i + 2] = v * 0.55; d[i + 3] *= 0.7; });
     SHEETS.ch_dim = variant(b, (d, i) => { d[i] *= 0.85; d[i + 1] *= 0.85; d[i + 2] *= 0.85; });
     SHEETS.ch_gray = variant(b, (d, i) => { gray(d, i); d[i] *= 0.8; d[i + 1] *= 0.8; d[i + 2] *= 0.8; });
     indoor = a; chars = b;
