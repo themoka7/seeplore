@@ -20,7 +20,7 @@ export function teamHtml({ works, esc, SITE, BLOG }) {
     },
     {
       name: '제작본부',
-      note: `작품 하나에 담당 하나. 각자 자기 작품의 3D 화면·장면 글·다큐 원고를 만든다. 모두 AI이고, 일하는 법은 공통 지침서 한 권을 따른다.`,
+      note: `늘 앉아 있지 않는다. 일이 있을 때 담당 AI가 들어와 작품 하나를 맡아 3D 화면·장면 글·다큐 원고를 만들고, 끝나면 나간다. 일하는 법은 공통 지침서 한 권을 따른다.`,
       works: true,
     },
     {
@@ -49,7 +49,7 @@ export function teamHtml({ works, esc, SITE, BLOG }) {
     },
   ];
   const all = DEPTS.flatMap((d) => d.members ?? []);
-  const memberCount = all.length + works.length;
+  const memberCount = all.length + 4; // 제작 담당 4자리
   const info = Object.fromEntries(all.map((m) => [m.name, { name: m.name, who: m.who, tool: m.tool, does: m.does }]));
   const data = { works: works.map((w) => ({ id: w.id, title: w.title, url: w.url, icon: w.icon.replace(SITE, '') })), info, sheets: { indoor: '/team/indoor.png', chars: '/team/chars.png' } };
   const card = (m) => `<li><b>${esc(m.name)}</b><span>${esc(m.who)} · ${esc(m.tool)}</span><p>${esc(m.does)}</p></li>`;
@@ -120,7 +120,7 @@ body.shorts #caption { top: 5%; bottom: auto; font-size: 20px; }
   </div>
   <div class="bar"><button id="play" type="button">▶ 작품 하나가 나오기까지 보기</button><div class="themes" role="group" aria-label="시안"><button type="button" data-t="day">낮</button><button type="button" data-t="night">밤</button><button type="button" data-t="line">도면</button><button type="button" data-t="mono">흑백</button><button type="button" data-t="chip">컴퓨터 속</button></div><p class="hint">팀원을 누르면 하는 일과 지금 상태가 보입니다. 제작본부 책상을 누르면 그 작품으로.</p></div>
   <div class="stage">
-    <canvas id="office" width="1024" height="800" role="img" aria-label="위에서 내려다본 seeplore 스튜디오. 대표실, 기획실, 홍보팀, 음성 부스, 작품 ${works.length}개를 맡은 제작본부, 품질관리, 서버실, 휴게실."></canvas>
+    <canvas id="office" width="1024" height="800" role="img" aria-label="위에서 내려다본 seeplore 스튜디오. 대표실, 기획실, 홍보팀, 음성 부스, 작품 진열장과 책상 4자리가 있는 제작본부, 품질관리, 서버실, 휴게실."></canvas>
     <div id="caption" aria-live="polite"></div>
     <div class="tip" id="tip" hidden></div>
   </div>
@@ -128,7 +128,7 @@ body.shorts #caption { top: 5%; bottom: auto; font-size: 20px; }
       <p class="note">· 대표가 주제를 고르면 기획실 AI가 기획안을 내고, 제작본부 담당 AI가 계획을 다시 짜서 확인받은 뒤 만든다.<br>· 글은 중학생이 혼자 읽고 이해할 수 있게, 숫자는 계산하거나 출처가 있는 것만.<br>· 사이트에 올리는 건 하루 한 번, 대표가 허락할 때만.<br>· 블로그·쇼츠는 자동으로 올리고, 네이버·X·스레드는 대표가 올릴 원고를 미리 만든다.</p></div>
   <div class="box">
     <h2>팀원</h2>
-    <p class="note">사람은 대표 한 명. 나머지는 실제로 쓰는 AI와 도구입니다. 제작본부는 작품 하나에 AI 하나씩 ${works.length}명.</p>
+    <p class="note">사람은 대표 한 명. 나머지는 실제로 쓰는 AI와 도구입니다. 제작본부는 일이 있을 때만 담당 AI가 들어와 작품을 맡습니다(책상 4자리). 출시 작품 ${works.length}편은 진열장에 있습니다.</p>
     <ul class="team">${all.map(card).join('')}</ul>
   </div>
   <footer>가구·사람 그림: Kenney Roguelike Indoor · Roguelike Characters (CC0) · <a href="/about">seeplore 소개</a> · <a href="${BLOG}">블로그</a> · <a href="https://www.youtube.com/@seeplore">YouTube</a></footer>

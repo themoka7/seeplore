@@ -14,7 +14,7 @@
   const T = 16;                         // 타일
   // 화면 모양: 넓으면 가로 배치(32×25 타일), 휴대폰·쇼츠는 세로 배치(16×34 타일) — 휴대폰에서 글자가 너무 작아지지 않게
   const PORTRAIT = SHORTS || window.innerWidth < 700;
-  const WW = (PORTRAIT ? 16 : 32) * T, WH = (PORTRAIT ? 34 : 25) * T;
+  const WW = (PORTRAIT ? 16 : 32) * T, WH = (PORTRAIT ? 26.5 : 20.5) * T;
   if (SHORTS) { canvas.width = 720; canvas.height = 1280; } else if (PORTRAIT) { canvas.width = WW * 3; canvas.height = WH * 3; } else { canvas.width = WW * 2; canvas.height = WH * 2; }
   const cap = document.getElementById('caption');
   const tip = document.getElementById('tip');
@@ -56,10 +56,10 @@
     { name: '기획실', x: 6, y: 0, w: 6, h: 6.5, floor: '#dbe8f3', door: 9 },
     { name: '홍보팀', x: 12, y: 0, w: 13, h: 6.5, floor: '#f4e0dc', door: 18.5 },
     { name: '음성 부스', x: 25, y: 0, w: 7, h: 6.5, floor: '#e8e0f3', door: 28.5 },
-    { name: '제작본부', x: 0, y: 8, w: 23, h: 11.5, floor: '#efe3c8', door: 11.5, top: true },
-    { name: '품질관리', x: 23, y: 8, w: 9, h: 5.5, floor: '#dcefe0', door: 27.5, top: true },
-    { name: '서버실', x: 23, y: 13.5, w: 9, h: 6, floor: '#dfe4ea', door: 27.5 },
-    { name: '휴게실', x: 0, y: 19.5, w: 32, h: 5.5, floor: '#e8efdc', door: 16 },
+    { name: '제작본부', x: 0, y: 8, w: 23, h: 7, floor: '#efe3c8', door: 11.5, top: true },
+    { name: '품질관리', x: 23, y: 8, w: 9, h: 3.5, floor: '#dcefe0', door: 27.5, top: true },
+    { name: '서버실', x: 23, y: 11.5, w: 9, h: 3.5, floor: '#dfe4ea', door: 27.5 },
+    { name: '휴게실', x: 0, y: 15, w: 32, h: 5.5, floor: '#e8efdc', door: 16 },
   ];
   // 세로 배치: 가운데 세로 복도(x 7.5~8.5)를 두고 왼쪽·오른쪽 방, 제작본부는 복도가 지나가는 넓은 방
   const SPINE = 8 * T;
@@ -68,10 +68,10 @@
     { name: '기획실', x: 8.5, y: 0, w: 7.5, h: 6, side: 'l', doorY: 3 },
     { name: '홍보팀', x: 0, y: 6.5, w: 7.5, h: 7, side: 'r', doorY: 10 },
     { name: '음성 부스', x: 8.5, y: 6.5, w: 7.5, h: 3.5, side: 'l', doorY: 8.25 },
-    { name: '제작본부', x: 0, y: 14, w: 16, h: 15, open: true },
+    { name: '제작본부', x: 0, y: 14, w: 16, h: 7.5, open: true },
     { name: '품질관리', x: 8.5, y: 10, w: 7.5, h: 3.5, side: 'l', doorY: 11.75 },
-    { name: '서버실', x: 0, y: 29.5, w: 7.5, h: 4.5, side: 'r', doorY: 31.75 },
-    { name: '휴게실', x: 8.5, y: 29.5, w: 7.5, h: 4.5, side: 'l', doorY: 31.75 },
+    { name: '서버실', x: 0, y: 22, w: 7.5, h: 4.5, side: 'r', doorY: 24.25 },
+    { name: '휴게실', x: 8.5, y: 22, w: 7.5, h: 4.5, side: 'l', doorY: 24.25 },
   ];
   const ROOMS = (PORTRAIT ? ROOMS_PORT : ROOMS_LAND).map((r, i) => ({ ...r, floor: TH.floors[i] }));
 
@@ -82,7 +82,7 @@
   };
   const SEAT = PORTRAIT
     ? { 대표: [3.7, 2.4], '기획 담당': [12.2, 2.4], 홍보팀장: [2.2, 8.6], '블로그 작가': [5.6, 8.6], '쇼츠 PD': [2.2, 11.2], '업로드 봇': [5.6, 11.2], 내레이터: [12.2, 7.2], '점검 로봇': [12.2, 10.7] }
-    : { 대표: [3, 2.4], '기획 담당': [9, 2.4], 홍보팀장: [14, 2.4], '블로그 작가': [17, 2.4], '쇼츠 PD': [20, 2.4], '업로드 봇': [23, 2.4], 내레이터: [28.5, 2.4], '점검 로봇': [27.5, 10] };
+    : { 대표: [3, 2.4], '기획 담당': [9, 2.4], 홍보팀장: [14, 2.4], '블로그 작가': [17, 2.4], '쇼츠 PD': [20, 2.4], '업로드 봇': [23, 2.4], 내레이터: [28.5, 2.4], '점검 로봇': [27.5, 9.1] };
   const seat = (k, label, ch, o) => addPerson(k, label, ch, SEAT[k][0] * T, SEAT[k][1] * T, o);
   seat('대표', '대표', [0, 9]);
   seat('기획 담당', '기획', [1, 6]);
@@ -92,13 +92,21 @@
   seat('업로드 봇', '업로드 봇', [1, 11], { speed: 1.9 });
   seat('내레이터', '내레이터', [1, 5]);
   seat('점검 로봇', '점검 로봇', [1, 11], { speed: 1.9 });
-  const WORK_CHARS = [[0, 5], [0, 6], [1, 6], [0, 7], [1, 7], [0, 8], [1, 8], [0, 9], [1, 9], [0, 10]];
-  const desks = DATA.works.map((w, i) => {
-    const dx = PORTRAIT ? [2, 5.6, 10.4, 14][i % 4] * T : (1.7 + (i % 5) * 4.4) * T;
-    const dy = PORTRAIT ? (15.4 + Math.floor(i / 4) * 2.7) * T : (9.6 + Math.floor(i / 5) * 2.45) * T;
-    addPerson('work:' + w.id, w.title, WORK_CHARS[i % WORK_CHARS.length], dx, dy, { work: w });
-    return { w, x: dx, y: dy };
+  // 제작본부: 늘 앉아 있는 건 아니다 — 담당 넷이 일이 있을 때 휴게실에서 들어와 작품 하나를 맡는다
+  const MAKER_CHARS = [[0, 6], [1, 8], [0, 10], [1, 9]];
+  const MAKER_DESK = PORTRAIT ? [[10.4, 15.4], [14, 15.4], [10.4, 18.4], [14, 18.4]] : [[11.5, 9.6], [15, 9.6], [18.5, 9.6], [11.5, 12.4]];
+  const MAKER_REST = PORTRAIT ? [[9.6, 25.6], [11, 25.6], [12.4, 25.6], [15, 24.8]] : [[13, 18.6], [15, 19.6], [17, 18.6], [24, 18.8]];
+  const makers = MAKER_DESK.map(([dx, dy], i) => {
+    const key = 'maker:' + (i + 1);
+    addPerson(key, '제작 ' + (i + 1), MAKER_CHARS[i], dx * T, dy * T, { maker: true, on: i < 2, work: i < 2 ? DATA.works[i * 7 % DATA.works.length] : null, restX: MAKER_REST[i][0] * T, restY: MAKER_REST[i][1] * T });
+    const p = people[key]; if (!p.on) { p.x = p.restX; p.y = p.restY; p.homeX = p.restX; p.homeY = p.restY; p.typing = false; }
+    DATA.info[key] = { name: '제작 담당', who: 'AI', tool: '코딩 AI', does: '일이 있을 때 들어와 작품 하나를 맡는다. 3D 화면·장면 글·다큐 원고를 만들고 고친다.' };
+    return p;
   });
+  const desks = makers.map((p) => ({ x: p.deskX, y: p.deskY }));
+  // 작품 진열장: 출시한 작품 아이콘 — 누르면 그 작품으로
+  const SHELF = PORTRAIT ? { x: 0.7 * T, y: 15.6 * T, cols: 5, gap: 22, size: 16 } : { x: 1 * T, y: 9.6 * T, cols: 5, gap: 24, size: 18 };
+  const shelfAt = (i) => [SHELF.x + (i % SHELF.cols) * SHELF.gap, SHELF.y + Math.floor(i / SHELF.cols) * (SHELF.gap - 2)];
   const roomOf = (p) => ROOMS.find((r) => p.homeX >= r.x * T && p.homeX < (r.x + r.w) * T && p.homeY >= r.y * T && p.homeY < (r.y + r.h) * T);
 
   // ---------------------------------------------------------------- 길 찾기: 내 방 문 → 복도 → 상대 방 문 → 목적지
@@ -120,7 +128,7 @@
     const from = ROOMS.find((r) => p.x >= r.x * T && p.x < (r.x + r.w) * T && p.y >= r.y * T && p.y < (r.y + r.h) * T) ?? roomOf(p);
     const to = ROOMS.find((r) => tx >= r.x * T && tx < (r.x + r.w) * T && ty >= r.y * T && ty < (r.y + r.h) * T);
     const pts = [];
-    const via = (room) => (room.name === '휴게실' || room.name === '서버실' ? 19.5 * T : CORRIDOR_Y);
+    const via = (room) => (room.name === '휴게실' ? 15 * T : CORRIDOR_Y);
     if (from && to && from !== to) {
       const fy = via(from), ty2 = via(to);
       pts.push([from.door * T, p.y], [from.door * T, fy]);
@@ -132,13 +140,14 @@
   }
   const walkTo = (key, tx, ty) => new Promise((done) => { const p = people[key]; p.path = route(p, tx, ty); p.typing = false; p.onArrive = done; });
   const walkToPerson = (key, other) => { const o = people[other]; return walkTo(key, o.homeX + 14, o.homeY + 2); };
-  const goHome = (key) => walkTo(key, people[key].homeX, people[key].homeY).then(() => { people[key].typing = true; });
+  const goHome = (key) => { const p = people[key]; if (p.maker) { p.homeX = p.on ? p.deskX : p.restX; p.homeY = p.on ? p.deskY + 14 : p.restY; } return walkTo(key, p.homeX, p.homeY).then(() => { p.typing = !p.maker || p.on; }); };
   const say = (key, s, ms = 2200) => { const p = people[key]; p.say = s; p.sayUntil = performance.now() + ms; return wait(ms).then(() => { if (p.sayUntil <= performance.now()) p.say = ''; }); };
   const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
   // ---------------------------------------------------------------- 하루 보기 (새 작품 하나가 나오기까지 — 실제 만드는 순서)
-  const STAR = desks.find((d) => d.w.id === 'rainbow') ?? desks[desks.length - 1];
-  const SK = 'work:' + STAR.w.id;
+  const STAR_W = DATA.works.find((w) => w.id === 'rainbow') ?? DATA.works[DATA.works.length - 1];
+  const SK = 'maker:1';
+  const STAR = { w: STAR_W, get x() { return people[SK].deskX; }, get y() { return people[SK].deskY; } };
   let focusKey = null, flash = 0, playing = false;
   const busy = new Set();            // 하루 보기에 나오는 사람 — 돌아다니기에서 뺀다
   const setCap = (s) => { if (cap) cap.textContent = s; };
@@ -153,7 +162,7 @@
     people['기획 담당'].carry = true; await walkTo('기획 담당', STAR.x + 14, STAR.y + 16); await say('기획 담당', '기획안 전달!');
     people['기획 담당'].carry = false; goHome('기획 담당');
     setCap(`담당 AI가 「${STAR.w.title}」를 3D로 만듭니다`);
-    st(SK); people[SK].typing = true; await say(SK, '장면 만드는 중…', 2600); await say(SK, '계획부터 확인받을게요', 1800);
+    st(SK); people[SK].on = true; people[SK].work = STAR.w; await goHome(SK); people[SK].typing = true; await say(SK, '장면 만드는 중…', 2600); await say(SK, '계획부터 확인받을게요', 1800);
     setCap('다큐 원고는 음성 부스에서 녹음');
     people[SK].carry = true; await walkToPerson(SK, '내레이터'); people[SK].carry = false; await say(SK, '원고 녹음 부탁해요');
     st('내레이터'); await say('내레이터', '● 녹음 중 — 쉼표에서 0.25초', 2600);
@@ -182,7 +191,7 @@
   const hm = (x) => `${String(x.getUTCHours()).padStart(2, '0')}:${String(x.getUTCMinutes()).padStart(2, '0')}`;
   function status(key) {
     const n = kst(), h = n.getUTCHours(), dow = n.getUTCDay();
-    if (key.startsWith('work:')) return pick(['출시 · 대기', '장면 다시 보는 중', '숫자 출처 확인 중']);
+    if (key.startsWith('maker:')) { const p = people[key]; return p.on && p.work ? `「${p.work.title}」 맡는 중` : '휴게실 대기'; }
     switch (key) {
       case '업로드 봇': return `${hm(nextAt([0, 1, 2, 3, 4, 5, 6], 8, 47))} 실행 대기`;
       case '블로그 작가': return dow === 0 && h >= 21 ? '다음 주 글 쓰는 중' : `${md(nextAt([2, 5], 8, 47))} 글 공개 대기`;
@@ -201,14 +210,14 @@
   const at = (key) => [people[key].homeX + 14, people[key].homeY + 2];
   const near = (k) => [SEAT[k][0] * T + 16, SEAT[k][1] * T + 18];
   const spot = PORTRAIT
-    ? { 음성: near('내레이터'), 점검: near('점검 로봇'), 서버: [2.6 * T, 32.6 * T], 서버2: [5.2 * T, 32.6 * T], 커피: [10.2 * T, 32.2 * T], 탁자: [13.4 * T, 32.8 * T], 기획: near('기획 담당'), 대표: near('대표'), 홍보: [4 * T, 10.2 * T] }
-    : { 음성: near('내레이터'), 점검: near('점검 로봇'), 서버: [26.4 * T, 16.6 * T], 서버2: [30 * T, 16.6 * T], 커피: [4 * T, 22.4 * T], 탁자: [10 * T, 23 * T], 기획: near('기획 담당'), 대표: near('대표'), 홍보: [17 * T + 16, 2.4 * T + 18] };
+    ? { 음성: near('내레이터'), 점검: near('점검 로봇'), 서버: [2.6 * T, 25.1 * T], 서버2: [5.2 * T, 25.1 * T], 커피: [10.2 * T, 24.7 * T], 탁자: [13.4 * T, 25.3 * T], 기획: near('기획 담당'), 대표: near('대표'), 홍보: [4 * T, 10.2 * T] }
+    : { 음성: near('내레이터'), 점검: near('점검 로봇'), 서버: [26.4 * T, 14.2 * T], 서버2: [30 * T, 14.2 * T], 커피: [4 * T, 17.9 * T], 탁자: [10 * T, 18.5 * T], 기획: near('기획 담당'), 대표: near('대표'), 홍보: [17 * T + 16, 2.4 * T + 18] };
   const pick = (a) => a[Math.floor(Math.random() * a.length)];
   const randomDesk = () => pick(desks);
   function errands(key) {
     const d = randomDesk(), dp = [d.x + 14, d.y + 16];
-    if (key.startsWith('work:')) return pick([
-      [spot.음성, '원고 녹음 부탁해요', true], [spot.점검, '점검 부탁해요'], [spot.서버, '배포 준비'], [spot.커피, '커피 한 잔'], [spot.탁자, '잠깐 회의'], [spot.기획, '기획안 질문 있어요', true], [dp, '이 장면 어때요?'],
+    if (key.startsWith('maker:')) return pick([
+      [spot.음성, '원고 녹음 부탁해요', true], [spot.점검, '점검 부탁해요'], [spot.서버, '배포 준비'], [spot.기획, '기획안 질문 있어요', true], [dp, '이 장면 어때요?'],
     ]);
     switch (key) {
       case '대표': return pick([[spot.홍보, '조회수 어때요?'], [dp, '잘 돼 가요?'], [spot.커피, '커피 한 잔'], [spot.서버, '오늘 배포 몇 번?']]);
@@ -223,12 +232,26 @@
     }
   }
   async function errand(key) {
+    const p0 = people[key];
+    if (p0.maker) {                                               // 제작 담당: 들어오기 / 일하기 / 나가기
+      out.add(key);
+      if (!p0.on) {
+        if (makers.filter((m) => m.on).length >= 3) { out.delete(key); return; }
+        p0.on = true; p0.work = pick(DATA.works); await goHome(key); await say(key, `「${p0.work.title}」 맡았어요`, 2200);
+      } else if (Math.random() < 0.35) {
+        await say(key, '끝! 휴게실로', 1500); p0.on = false; p0.work = null; await goHome(key);
+      } else {
+        const job = errands(key); const [[x, y], line, paper] = job; p0.carry = !!paper;
+        await walkTo(key, x, y); p0.carry = false; await say(key, line, 2000); await goHome(key);
+      }
+      out.delete(key); return;
+    }
     const job = errands(key); if (!job) return;
     const [[x, y], line, paper] = job; const p = people[key];
     out.add(key); p.carry = !!paper;
     await walkTo(key, x, y); p.carry = false;
     await say(key, line, 1800 + Math.random() * 900);
-    if (key.startsWith('work:') && Math.random() < 0.5) {         // 상대가 대답
+    if (Math.random() < 0.5) {                                    // 상대가 대답
       const near = Object.values(people).find((q) => q.key !== key && Math.hypot(q.x - p.x, q.y - p.y) < 40 && !q.path.length);
       if (near) await say(near.key, pick(['좋아요!', '바로 할게요', '확인!', '잠깐만요']), 1300);
     }
@@ -335,29 +358,33 @@
         tile(indoor, 23, 0, 0.4 * T, 1 * T); tile(indoor, 16, 0, 6.2 * T, 4.4 * T);
         tile(indoor, 19, 12, 9 * T, 4.2 * T); tile(indoor, 20, 12, 10 * T, 4.2 * T); tile(indoor, 17, 0, 14.6 * T, 4.4 * T);
         tile(indoor, 23, 8, 9 * T, 8.4 * T, 2, 1); tile(indoor, 16, 0, 6.3 * T, 12.2 * T);
-        for (let k = 0; k < 3; k++) rack((1 + k * 2.1) * T, 30.4 * T, k);
-        tag('서버', 3.7 * T, 33 * T);
-        tile(indoor, 0, 12, 9 * T, 30.2 * T, 2, 1); tile(indoor, 5, 12, 11 * T, 30.2 * T);
-        tile(indoor, 3, 0, 13.6 * T, 31.8 * T); tile(indoor, 1, 2, 12.6 * T, 31.8 * T); tile(indoor, 3, 2, 14.6 * T, 31.8 * T);
-        text('커피', 10.4 * T, 32.4 * T, 6, TH.label);
+        for (let k = 0; k < 3; k++) rack((1 + k * 2.1) * T, 22.9 * T, k);
+        tag('서버', 3.7 * T, 25.5 * T);
+        tile(indoor, 0, 12, 9 * T, 22.7 * T, 2, 1); tile(indoor, 5, 12, 11 * T, 22.7 * T);
+        tile(indoor, 3, 0, 13.6 * T, 23.6 * T); tile(indoor, 3, 2, 14.6 * T, 23.6 * T);
+        text('커피', 10.4 * T, 24.9 * T, 6, TH.label);
       } else {
         tile(indoor, 23, 0, 0.4 * T, 1 * T); tile(indoor, 24, 0, 1.4 * T, 1 * T);
         tile(indoor, 16, 0, 4.7 * T, 4.9 * T); tile(indoor, 17, 0, 10.7 * T, 4.9 * T); tile(indoor, 16, 0, 23.7 * T, 4.9 * T);
         tile(indoor, 19, 12, 6.5 * T, 3.9 * T); tile(indoor, 20, 12, 7.5 * T, 3.9 * T);
         tile(indoor, 23, 8, 25.6 * T, 4.4 * T, 2, 1);
-        for (let k = 0; k < 3; k++) rack((24.2 + k * 2.6) * T, 15.1 * T, k);
-        tag('서버', 27.6 * T, 18.4 * T);
-        tile(indoor, 0, 12, 2 * T, 20.8 * T, 3, 1); tile(indoor, 5, 12, 5 * T, 20.8 * T);
-        for (const bx of [10, 15]) { tile(indoor, 3, 0, bx * T, 21.6 * T); tile(indoor, 1, 2, (bx - 1) * T, 21.6 * T); tile(indoor, 3, 2, (bx + 1) * T, 21.6 * T); }
-        tile(indoor, 16, 0, 20 * T, 22 * T); tile(indoor, 17, 0, 30.4 * T, 22 * T);
-        text('커피', 3.5 * T, 22.8 * T, 6, TH.label);
+        for (let k = 0; k < 3; k++) rack((24.2 + k * 2.6) * T, 12.3 * T, k);
+        tag('서버', 30.8 * T, 12.6 * T);
+        tile(indoor, 0, 12, 2 * T, 16.3 * T, 3, 1); tile(indoor, 5, 12, 5 * T, 16.3 * T);
+        for (const bx of [10, 20]) { tile(indoor, 3, 0, bx * T, 17.4 * T); tile(indoor, 1, 2, (bx - 1) * T, 17.4 * T); tile(indoor, 3, 2, (bx + 1) * T, 17.4 * T); }
+        tile(indoor, 16, 0, 27 * T, 17.6 * T); tile(indoor, 17, 0, 30.4 * T, 17.6 * T);
+        text('커피', 3.5 * T, 18.3 * T, 6, TH.label);
       }
+      // 작품 진열장
+      text(PORTRAIT ? '출시 작품' : '출시 작품 ' + DATA.works.length, SHELF.x, SHELF.y - 4, 6, TH.label, 'left', 800);
+      DATA.works.forEach((w, i) => { const [x, y] = shelfAt(i); R(x - 1, y - 1, SHELF.size + 2, SHELF.size + 2, TH.chip ? '#0f4a35' : 'rgba(0,0,0,.35)'); if (icons[w.id]) g.drawImage(icons[w.id], x, y, SHELF.size, SHELF.size); });
       // 책상과 사람 (위에서 아래 순서로)
       const all = Object.values(people);
-      for (const p of all) deskAt(p.deskX, p.deskY, p.work ? icons[p.work.id] : null, p.typing && !p.path.length && Math.abs(p.x - p.homeX) < 1, t);
+      for (const p of all) { const here = Math.abs(p.x - p.deskX) < 2 && Math.abs(p.y - p.deskY - 14) < 2; deskAt(p.deskX, p.deskY, p.maker && p.on && here && p.work ? icons[p.work.id] : null, p.typing && here, t); }
       if (focusKey && people[focusKey]) { const f = people[focusKey]; g.fillStyle = 'rgba(255,200,40,.45)'; g.beginPath(); g.ellipse(f.x, f.y + 7, 10, 4, 0, 0, 7); g.fill(); }
       for (const p of [...all].sort((a, b) => a.y - b.y)) drawPerson(p, t);
-      for (const p of all) if (!p.work) tag(p.label, p.homeX, p.homeY + 10);
+      for (const p of all) if (!p.maker) tag(p.label, p.homeX, p.homeY + 10);
+      for (const p of makers) tag(p.label, p.x, p.y + 10);
       const now = performance.now();
       for (const p of all) if (p.say && p.sayUntil > now) bubble(p.say, p.x, p.y - 4);
       if (TH.glow) { g.globalCompositeOperation = 'lighter'; for (const p of all) { const gr = g.createRadialGradient(p.deskX, p.deskY + 2, 0, p.deskX, p.deskY + 2, 26); const gc = TH.chip ? '61,220,151' : '120,200,255'; gr.addColorStop(0, `rgba(${gc},.2)`); gr.addColorStop(1, `rgba(${gc},0)`); g.fillStyle = gr; g.fillRect(p.deskX - 26, p.deskY - 24, 52, 52); } g.globalCompositeOperation = 'source-over'; }
@@ -374,6 +401,7 @@
   }
   function hit(ev) {
     const [x, y] = worldAt(ev);
+    for (let i = 0; i < DATA.works.length; i++) { const [sx, sy] = shelfAt(i); if (x >= sx - 2 && x <= sx + SHELF.size + 2 && y >= sy - 2 && y <= sy + SHELF.size + 2) return { shelf: DATA.works[i], x: sx, y: sy }; }
     for (const p of Object.values(people)) if (Math.abs(x - p.x) < 14 && y > p.y - 26 && y < p.y + 12) return p;
     return null;
   }
@@ -381,10 +409,10 @@
     if (!tip) return;
     if (!p) { tip.hidden = true; canvas.style.cursor = 'default'; return; }
     const info = DATA.info[p.key];
-    tip.innerHTML = p.work
-      ? `<b>${p.work.title} 담당</b><span class="t">AI · 출시 · 누르면 작품으로</span>`
+    tip.innerHTML = p.shelf
+      ? `<b>${p.shelf.title}</b><span class="t">출시 작품 · 누르면 열기</span>`
       : `<b>${info.name}</b><span class="t">${info.who} · ${info.tool}</span><p>${info.does}</p><p class="t">지금: ${status(p.key)}</p>`;
-    canvas.style.cursor = p.work ? 'pointer' : 'default';
+    canvas.style.cursor = p.shelf ? 'pointer' : 'default';
     tip.hidden = false;
     const [, , r] = worldAt(ev), box = canvas.parentElement.getBoundingClientRect();
     const left = ev.clientX - box.left - tip.offsetWidth / 2, top = ev.clientY - box.top - tip.offsetHeight - 18;
@@ -393,7 +421,7 @@
   }
   canvas.addEventListener('pointermove', (e) => showTip(hit(e), e));
   canvas.addEventListener('pointerleave', () => showTip(null));
-  canvas.addEventListener('click', (e) => { const p = hit(e); if (p && p.work) location.href = p.work.url; else { showTip(p, e); if (p && !playing) say(p.key, status(p.key), 2600); } });
+  canvas.addEventListener('click', (e) => { const p = hit(e); if (p && p.shelf) location.href = p.shelf.url; else { showTip(p, e); if (p && !playing) say(p.key, status(p.key), 2600); } });
   playBtn && playBtn.addEventListener('click', story);
 
   // ---------------------------------------------------------------- 시작
