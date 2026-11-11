@@ -118,14 +118,11 @@ body.shorts #caption { top: 5%; bottom: auto; font-size: 20px; }
     <h1>seeplore 스튜디오</h1>
     <p class="lead">seeplore를 실제로 이렇게 나눠서 만들고 있어서 회사처럼 꾸며 봤습니다. 대표 한 명이 정하고, 나머지는 AI와 자동화 도구가 맡습니다.</p>
   </div>
-  <div class="bar"><button id="play" type="button">▶ 작품 하나가 나오기까지 보기</button><p class="hint">팀원을 누르면 하는 일과 지금 상태가 보입니다. 제작본부 책상을 누르면 그 작품으로.</p></div>
   <div class="stage">
     <canvas id="office" width="1024" height="800" role="img" aria-label="위에서 내려다본 seeplore 스튜디오. 대표실, 기획실, 홍보팀, 음성 부스, 작품 진열장과 책상 4자리가 있는 제작본부, 품질관리, 서버실, 휴게실."></canvas>
     <div id="caption" aria-live="polite"></div>
     <div class="tip" id="tip" hidden></div>
   </div>
-  <div class="box"><h2>일하는 법</h2>
-      <p class="note">· 대표가 주제를 고르면 기획실 AI가 기획안을 내고, 제작본부 담당 AI가 계획을 다시 짜서 확인받은 뒤 만든다.<br>· 글은 중학생이 혼자 읽고 이해할 수 있게, 숫자는 계산하거나 출처가 있는 것만.<br>· 사이트에 올리는 건 하루 한 번, 대표가 허락할 때만.<br>· 블로그·쇼츠는 자동으로 올리고, 네이버·X·스레드는 대표가 올릴 원고를 미리 만든다.</p></div>
   <div class="box">
     <h2>팀원</h2>
     <p class="note">사람은 대표 한 명. 나머지는 실제로 쓰는 AI와 도구입니다. 제작본부는 일이 있을 때만 담당 AI가 들어와 작품을 맡습니다(책상 4자리). 출시 작품 ${works.length}편은 진열장에 있습니다.</p>
