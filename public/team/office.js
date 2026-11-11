@@ -35,6 +35,9 @@
     night: { name: '밤', bg: '#050608', corridor: '#161b22', wall: '#2b323b', label: '#8b95a1', line: 'rgba(255,255,255,.025)', tagBg: 'rgba(0,0,0,.7)', floors: ['#1d1913', '#121a23', '#201719', '#1b1724', '#1a170f', '#111d16', '#13171c', '#151b12'], furn: 'dark', people: 'dim', glow: true },
     line:  { name: '도면', bg: '#050608', corridor: '#050608', wall: '#3b4450', label: '#6f7a86', line: null, tagBg: 'rgba(5,6,8,.85)', floors: Array(8).fill('#080a0d'), furn: 'ghost', people: 'normal', glow: true, outline: true },
     chip:  { name: '컴퓨터 속', bg: '#020605', corridor: '#020605', wall: '#1f6f52', label: '#3ddc97', line: null, tagBg: 'rgba(2,10,8,.88)', floors: Array(8).fill('#04100c'), furn: 'teal', people: 'normal', glow: true, chip: true, outline: true },
+    space: { name: '관제실', bg: '#03050b', corridor: '#060a16', wall: '#22355c', label: '#7fa6e8', line: null, tagBg: 'rgba(3,6,14,.85)', floors: Array(8).fill('#070c1a'), furn: 'blue', people: 'normal', glow: true, glowC: '110,160,255', stars: true, outline: true },
+    neon:  { name: '네온', bg: '#040306', corridor: '#040306', wall: '#ff3ea5', wall2: '#2ee6ff', label: '#ff7cc4', line: null, tagBg: 'rgba(8,4,12,.85)', floors: Array(8).fill('#08060d'), furn: 'violet', people: 'normal', glow: true, glowC: '255,62,165', neon: true, outline: true },
+    gold:  { name: '블랙 골드', bg: '#050505', corridor: '#0b0a08', wall: '#a8873f', label: '#c9a45c', line: 'rgba(201,164,92,.04)', tagBg: 'rgba(0,0,0,.8)', floors: ['#100e0b', '#0d0c0a', '#100e0b', '#0d0c0a', '#0e0d0a', '#0d0c0a', '#0e0d0a', '#0d0c0a'], furn: 'sepia', people: 'gray', glow: true, glowC: '232,190,110', outline: true },
     mono:  { name: '흑백', bg: '#050608', corridor: '#101317', wall: '#2a2f36', label: '#8b95a1', line: 'rgba(255,255,255,.02)', tagBg: 'rgba(0,0,0,.75)', floors: ['#17191c', '#15171a', '#17191c', '#15171a', '#131518', '#15171a', '#131518', '#15171a'], furn: 'gray', people: 'gray', accent: '#ffd24a' },
   };
   let TH = THEMES[new URLSearchParams(location.search).get('theme')] ?? THEMES.day;
@@ -273,7 +276,10 @@
     R(x, y, w, h, r.floor);
     if (TH.line) for (let yy = y + 6; yy < y + h; yy += 8) R(x, yy, w, 1, TH.line);
     if (TH.chip) { for (let gx = x + 8; gx < x + w; gx += 16) for (let gy = y + 8; gy < y + h; gy += 16) R(gx, gy, 1, 1, '#0d3b2b'); for (let px = x + 6; px < x + w - 4; px += 6) { R(px, y - 2, 2, 2, '#b08d3c'); R(px, y + h, 2, 2, '#b08d3c'); } for (let py = y + 6; py < y + h - 4; py += 6) { R(x - 2, py, 2, 2, '#b08d3c'); R(x + w, py, 2, 2, '#b08d3c'); } }
-    if (TH.outline) { if (!TH.chip) for (let gx = x + 8; gx < x + w; gx += 16) for (let gy = y + 8; gy < y + h; gy += 16) R(gx, gy, 1, 1, '#1a2028'); R(x, y, w, 1, TH.wall); R(x, y, 1, h, TH.wall); R(x + w - 1, y, 1, h, TH.wall); R(x, y + h - 1, w, 1, TH.wall); }
+    if (TH.stars) for (let k = 0; k < (w * h) / 900; k++) { const sx = x + ((k * 97 + r.x * 13) % w), sy = y + ((k * 57 + r.y * 29) % h), tw = (t / 6 + k) % 7 < 1; R(sx, sy, tw ? 2 : 1, tw ? 2 : 1, tw ? '#cfe0ff' : 'rgba(150,180,255,.45)'); }
+    if (TH.neon) { g.save(); g.shadowColor = TH.wall; g.shadowBlur = 8; g.strokeStyle = TH.wall; g.lineWidth = 1.2; g.strokeRect(x + 2, y + 2, w - 4, h - 4); g.restore(); }
+    if (TH.outline && !TH.stars && !TH.neon) { if (!TH.chip) for (let gx = x + 8; gx < x + w; gx += 16) for (let gy = y + 8; gy < y + h; gy += 16) R(gx, gy, 1, 1, '#1a2028'); R(x, y, w, 1, TH.wall); R(x, y, 1, h, TH.wall); R(x + w - 1, y, 1, h, TH.wall); R(x, y + h - 1, w, 1, TH.wall); }
+    else if (TH.stars) { R(x, y, w, 1, TH.wall); R(x, y, 1, h, TH.wall); R(x + w - 1, y, 1, h, TH.wall); R(x, y + h - 1, w, 1, TH.wall); }
     else { R(x, y, w, 3, TH.wall); R(x, y, 2, h, TH.wall); R(x + w - 2, y, 2, h, TH.wall); R(x, y + h - 2, w, 2, TH.wall); }
     // 문(벽 틈)
     if (r.open) { R(SPINE - 10, y, 20, 3, r.floor); R(SPINE - 10, y + h - 3, 20, 3, r.floor); }
@@ -334,12 +340,14 @@
     g.setTransform(cam.z, 0, 0, cam.z, canvas.width / 2 - cam.x * cam.z, canvas.height / 2 - cam.y * cam.z);
     if (PORTRAIT) {
       R(7.5 * T, 0, T, WH, TH.corridor);                       // 세로 복도
+      if (TH.neon) { g.save(); g.shadowColor = TH.wall2; g.shadowBlur = 10; R(8 * T - 0.5, 0, 1, WH, TH.wall2); g.restore(); }
       if (TH.chip) {
         for (const xx of [7.7 * T, 8 * T, 8.3 * T]) R(xx, 0, 1, WH, '#0f4a35');
         for (let k = 0; k < 7; k++) { const py = ((t * (1.1 + (k % 3) * 0.5) + k * 77) % (WH + 40)) - 20, xx = [7.7, 8, 8.3][k % 3] * T; g.fillStyle = 'rgba(61,220,151,.9)'; g.fillRect(xx - 1, py, 3, 6); g.fillStyle = 'rgba(61,220,151,.25)'; g.fillRect(xx, py - 10, 1, 10); }
       }
     } else {
       R(0, 7 * T, WW, 1 * T, TH.corridor);                    // 복도
+      if (TH.neon) { g.save(); g.shadowColor = TH.wall2; g.shadowBlur = 10; R(0, 7.5 * T - 0.5, WW, 1, TH.wall2); g.restore(); }
       if (!TH.outline) R(0, 19.5 * T - 1, WW, 1, TH.wall);
       if (TH.chip) {
         for (const yy of [7.2 * T, 7.5 * T, 7.8 * T]) R(0, yy, WW, 1, '#0f4a35');
@@ -387,7 +395,7 @@
       for (const p of makers) tag(p.label, p.x, p.y + 10);
       const now = performance.now();
       for (const p of all) if (p.say && p.sayUntil > now) bubble(p.say, p.x, p.y - 4);
-      if (TH.glow) { g.globalCompositeOperation = 'lighter'; for (const p of all) { const gr = g.createRadialGradient(p.deskX, p.deskY + 2, 0, p.deskX, p.deskY + 2, 26); const gc = TH.chip ? '61,220,151' : '120,200,255'; gr.addColorStop(0, `rgba(${gc},.2)`); gr.addColorStop(1, `rgba(${gc},0)`); g.fillStyle = gr; g.fillRect(p.deskX - 26, p.deskY - 24, 52, 52); } g.globalCompositeOperation = 'source-over'; }
+      if (TH.glow) { g.globalCompositeOperation = 'lighter'; for (const p of all) { const gr = g.createRadialGradient(p.deskX, p.deskY + 2, 0, p.deskX, p.deskY + 2, 26); const gc = TH.glowC ?? (TH.chip ? '61,220,151' : '120,200,255'); gr.addColorStop(0, `rgba(${gc},.2)`); gr.addColorStop(1, `rgba(${gc},0)`); g.fillStyle = gr; g.fillRect(p.deskX - 26, p.deskY - 24, 52, 52); } g.globalCompositeOperation = 'source-over'; }
     } else text('불러오는 중…', WW / 2, WH / 2, 12, TH.label);
     if (flash > 0) flash--;
     requestAnimationFrame(frame);
@@ -431,6 +439,9 @@
     SHEETS.in_gray = variant(a, (d, i) => { gray(d, i); d[i] *= 0.6; d[i + 1] *= 0.6; d[i + 2] *= 0.6; });
     SHEETS.in_ghost = variant(a, (d, i) => { gray(d, i); d[i + 3] *= 0.35; });
     SHEETS.in_teal = variant(a, (d, i) => { const v = 0.3 * d[i] + 0.59 * d[i + 1] + 0.11 * d[i + 2]; d[i] = v * 0.15; d[i + 1] = v * 0.75; d[i + 2] = v * 0.55; d[i + 3] *= 0.7; });
+    SHEETS.in_blue = variant(a, (d, i) => { const v = 0.3 * d[i] + 0.59 * d[i + 1] + 0.11 * d[i + 2]; d[i] = v * 0.35; d[i + 1] = v * 0.5; d[i + 2] = v * 0.95; d[i + 3] *= 0.75; });
+    SHEETS.in_violet = variant(a, (d, i) => { const v = 0.3 * d[i] + 0.59 * d[i + 1] + 0.11 * d[i + 2]; d[i] = v * 0.7; d[i + 1] = v * 0.3; d[i + 2] = v * 0.85; d[i + 3] *= 0.7; });
+    SHEETS.in_sepia = variant(a, (d, i) => { const v = 0.3 * d[i] + 0.59 * d[i + 1] + 0.11 * d[i + 2]; d[i] = v * 0.62; d[i + 1] = v * 0.5; d[i + 2] = v * 0.3; });
     SHEETS.ch_dim = variant(b, (d, i) => { d[i] *= 0.85; d[i + 1] *= 0.85; d[i + 2] *= 0.85; });
     SHEETS.ch_gray = variant(b, (d, i) => { gray(d, i); d[i] *= 0.8; d[i + 1] *= 0.8; d[i + 2] *= 0.8; });
     indoor = a; chars = b;
