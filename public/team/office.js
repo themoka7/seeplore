@@ -44,12 +44,12 @@
     people[key] = { key, label, ch, deskX, deskY, x: deskX, y: deskY + 14, homeX: deskX, homeY: deskY + 14, path: [], speed: 1.4, say: '', sayUntil: 0, carry: false, flip: false, typing: true, ...opts };
   };
   addPerson('대표', '대표', [0, 9], 3 * T, 2.4 * T);
-  addPerson('기획 담당', 'Gemini', [1, 6], 9 * T, 2.4 * T);
+  addPerson('기획 담당', '기획', [1, 6], 9 * T, 2.4 * T);
   addPerson('홍보팀장', '홍보팀장', [0, 5], 14 * T, 2.4 * T);
   addPerson('블로그 작가', '블로그', [0, 7], 17 * T, 2.4 * T);
   addPerson('쇼츠 PD', '쇼츠 PD', [1, 7], 20 * T, 2.4 * T);
   addPerson('업로드 봇', '업로드 봇', [1, 11], 23 * T, 2.4 * T, { speed: 1.9 });
-  addPerson('내레이터', 'Aoede', [1, 5], 28.5 * T, 2.4 * T);
+  addPerson('내레이터', '내레이터', [1, 5], 28.5 * T, 2.4 * T);
   addPerson('점검 로봇', '점검 로봇', [1, 11], 27.5 * T, 10 * T, { speed: 1.9 });
   const WORK_CHARS = [[0, 5], [0, 6], [1, 6], [0, 7], [1, 7], [0, 8], [1, 8], [0, 9], [1, 9], [0, 10]];
   const desks = DATA.works.map((w, i) => {
@@ -93,12 +93,12 @@
     st('대표'); await walkToPerson('대표', '기획 담당'); await say('대표', '다음은 무지개 어때요?');
     st('기획 담당'); await say('기획 담당', '기획안 정리할게요');
     goHome('대표');
-    setCap('기획실(Gemini)이 기획안을 써서 제작본부로');
+    setCap('기획실이 기획안을 써서 제작본부로');
     people['기획 담당'].carry = true; await walkTo('기획 담당', STAR.x + 14, STAR.y + 16); await say('기획 담당', '기획안 전달!');
     people['기획 담당'].carry = false; goHome('기획 담당');
-    setCap(`담당 Claude가 「${STAR.w.title}」를 3D로 만듭니다`);
+    setCap(`담당 AI가 「${STAR.w.title}」를 3D로 만듭니다`);
     st(SK); people[SK].typing = true; await say(SK, '장면 만드는 중…', 2600); await say(SK, '계획부터 확인받을게요', 1800);
-    setCap('다큐 원고는 음성 부스(Aoede)에서 녹음');
+    setCap('다큐 원고는 음성 부스에서 녹음');
     people[SK].carry = true; await walkToPerson(SK, '내레이터'); people[SK].carry = false; await say(SK, '원고 녹음 부탁해요');
     st('내레이터'); await say('내레이터', '● 녹음 중 — 쉼표에서 0.25초', 2600);
     st(SK); goHome(SK);
@@ -267,7 +267,7 @@
         tile(indoor, 25 + (k % 2), 8, sx, sy, 1, 2);
         for (let j = 0; j < 4; j++) R(sx + 5, sy + 6 + j * 6, 3, 2, flash > 0 ? (t % 4 < 2 ? '#fff36b' : '#4cd17a') : (t / 4 + j + k) % 5 < 3 ? '#4cd17a' : '#1f6b3b');
       }
-      tag('GitHub · Vercel', 27.6 * T, 18.4 * T);
+      tag('서버', 27.6 * T, 18.4 * T);
       tile(indoor, 0, 12, 2 * T, 20.8 * T, 3, 1); tile(indoor, 5, 12, 5 * T, 20.8 * T);
       for (const bx of [10, 15]) { tile(indoor, 3, 0, bx * T, 21.6 * T); tile(indoor, 1, 2, (bx - 1) * T, 21.6 * T); tile(indoor, 3, 2, (bx + 1) * T, 21.6 * T); }
       tile(indoor, 16, 0, 20 * T, 22 * T); tile(indoor, 17, 0, 30.4 * T, 22 * T);
@@ -301,7 +301,7 @@
     if (!p) { tip.hidden = true; canvas.style.cursor = 'default'; return; }
     const info = DATA.info[p.key];
     tip.innerHTML = p.work
-      ? `<b>${p.work.title} 담당</b><span class="t">Claude · 출시 · 누르면 작품으로</span>`
+      ? `<b>${p.work.title} 담당</b><span class="t">AI · 출시 · 누르면 작품으로</span>`
       : `<b>${info.name}</b><span class="t">${info.who} · ${info.tool}</span><p>${info.does}</p><p class="t">지금: ${status(p.key)}</p>`;
     canvas.style.cursor = p.work ? 'pointer' : 'default';
     tip.hidden = false;

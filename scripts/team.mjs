@@ -16,35 +16,35 @@ export function teamHtml({ works, esc, SITE, BLOG }) {
     },
     {
       name: '기획실',
-      members: [role('기획 담당', 'Gemini', 'Google Gemini', '새 작품 아이디어와 기획안 초안을 낸다. 사실과 다른 곳은 제작본부가 계획 단계에서 짚는다.', '다음 주제 뭐 하지')],
+      members: [role('기획 담당', 'AI', '기획 AI', '새 작품 아이디어와 기획안 초안을 낸다. 사실과 다른 곳은 제작본부가 계획 단계에서 짚는다.', '다음 주제 뭐 하지')],
     },
     {
       name: '제작본부',
-      note: `작품 하나에 담당 하나. 각자 자기 작품의 3D 화면·장면 글·다큐 원고를 만든다. 모두 Claude(Claude Code)이고, 일하는 법은 공통 지침서 한 권(series-web-doc)을 따른다.`,
+      note: `작품 하나에 담당 하나. 각자 자기 작품의 3D 화면·장면 글·다큐 원고를 만든다. 모두 AI이고, 일하는 법은 공통 지침서 한 권을 따른다.`,
       works: true,
     },
     {
       name: '다큐 음성팀',
-      members: [role('내레이터', 'Aoede', 'Google Cloud TTS · Chirp 3 HD', '모든 작품의 다큐멘터리 해설과 쇼츠를 읽는다. 0.95배 속도, 쉼표에서 0.25초 쉰다.', '목 관리 중')],
+      members: [role('내레이터', 'AI', '음성 합성 AI', '모든 작품의 다큐멘터리 해설과 쇼츠를 읽는다. 0.95배 속도, 쉼표에서 0.25초 쉰다.', '목 관리 중')],
     },
     {
       name: '홍보팀',
       members: [
-        role('홍보팀장', 'Claude', 'Claude Code', '블로그·쇼츠·검색 등록을 맡고, 다른 팀원이 매주 따를 지침을 쓴다.', '조회수 1 올라갈 때마다 기쁨'),
-        role('블로그 작가', 'Claude', 'Claude Code (매주 일요일 밤 예약)', '화·금 글을 미리 써 둔다. 중학생 눈높이, 숫자는 작품에 적힌 것만.', '이번 주 글감 고르는 중'),
-        role('쇼츠 PD', 'Claude', 'Claude Code + 렌더링 스크립트', '작품 장면을 골라 50초 쇼츠로 만든다. 첫 2초는 질문과 화려한 장면.', '편집은 프레임 단위로'),
-        role('업로드 봇', '봇', 'GitHub Actions (매일 08:47)', '날짜가 된 글을 공개하고, 쇼츠를 @seeplore 채널에 올린다.', '알람 없이 일어남'),
+        role('홍보팀장', 'AI', '코딩 AI', '블로그·쇼츠·검색 등록을 맡고, 다른 팀원이 매주 따를 지침을 쓴다.', '조회수 1 올라갈 때마다 기쁨'),
+        role('블로그 작가', 'AI', '코딩 AI (매주 일요일 밤 예약)', '화·금 글을 미리 써 둔다. 중학생 눈높이, 숫자는 작품에 적힌 것만.', '이번 주 글감 고르는 중'),
+        role('쇼츠 PD', 'AI', '코딩 AI + 렌더링 스크립트', '작품 장면을 골라 50초 쇼츠로 만든다. 첫 2초는 질문과 화려한 장면.', '편집은 프레임 단위로'),
+        role('업로드 봇', '봇', '자동 실행 (매일 08:47)', '날짜가 된 글을 공개하고, 쇼츠를 @seeplore 채널에 올린다.', '알람 없이 일어남'),
       ],
     },
     {
       name: '품질관리',
-      members: [role('점검 로봇', '봇', 'Playwright', '모든 장면을 넘기며 휴대폰·PC 화면을 찍고 오류를 모은다. 이름표가 잘리면 바로 이른다.', '스크린샷 1,000장째')],
+      members: [role('점검 로봇', '봇', '브라우저 자동 점검', '모든 장면을 넘기며 휴대폰·PC 화면을 찍고 오류를 모은다. 이름표가 잘리면 바로 이른다.', '스크린샷 1,000장째')],
     },
     {
       name: '총무·시설',
       members: [
-        role('서류함', 'GitHub', 'GitHub', '모든 작품의 코드와 글을 보관한다.', '정리 정돈'),
-        role('건물 관리', 'Vercel', 'Vercel', '사이트를 세상에 띄운다. 하루 100번까지만 문을 여닫을 수 있어서 대표가 아껴 쓴다.', '오늘 남은 배포 횟수 확인'),
+        role('서류함', '도구', '코드 저장소', '모든 작품의 코드와 글을 보관한다.', '정리 정돈'),
+        role('건물 관리', '도구', '웹 호스팅', '사이트를 세상에 띄운다. 하루 100번까지만 문을 여닫을 수 있어서 대표가 아껴 쓴다.', '오늘 남은 배포 횟수 확인'),
       ],
     },
   ];
@@ -62,7 +62,7 @@ export function teamHtml({ works, esc, SITE, BLOG }) {
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-TBYJ6JBLYF',{content_group:'hub'});</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>seeplore 스튜디오</title>
-<meta name="description" content="seeplore를 만드는 가상의 회사. 대표 한 명과 AI 팀원들(Claude, Gemini, Google TTS 등)이 새 작품 하나를 어떻게 만드는지 사무실에서 보여 줍니다.">
+<meta name="description" content="seeplore를 만드는 가상의 회사. 대표 한 명과 AI 팀원들이 새 작품 하나를 어떻게 만드는지 사무실에서 보여 줍니다.">
 <link rel="canonical" href="${SITE}/team">
 <meta property="og:title" content="seeplore 스튜디오 — 대표 1명과 AI 팀원들">
 <meta property="og:description" content="새 작품 하나가 나오기까지, AI 팀원들이 사무실을 오가며 일하는 모습.">
@@ -124,18 +124,18 @@ body.shorts #caption { top: 57%; bottom: auto; font-size: 22px; }
   </div>
   <div class="bar"><button id="play" type="button">▶ 작품 하나가 나오기까지 보기</button><p class="hint">팀원을 누르면 하는 일과 지금 상태가 보입니다. 제작본부 책상을 누르면 그 작품으로.</p></div>
   <div class="stage">
-    <canvas id="office" width="1024" height="800" role="img" aria-label="위에서 내려다본 seeplore 스튜디오. 대표실, 기획실(Gemini), 홍보팀, 음성 부스(Aoede), 작품 ${works.length}개를 맡은 제작본부, 품질관리, 서버실, 휴게실."></canvas>
+    <canvas id="office" width="1024" height="800" role="img" aria-label="위에서 내려다본 seeplore 스튜디오. 대표실, 기획실, 홍보팀, 음성 부스, 작품 ${works.length}개를 맡은 제작본부, 품질관리, 서버실, 휴게실."></canvas>
     <div id="caption" aria-live="polite"></div>
     <div class="tip" id="tip" hidden></div>
   </div>
   <div class="box"><h2>일하는 법</h2>
-      <p class="note">· 대표가 주제를 고르면 기획실(Gemini)이 기획안을 내고, 제작본부 담당(Claude)이 계획을 다시 짜서 확인받은 뒤 만든다.<br>· 글은 중학생이 혼자 읽고 이해할 수 있게, 숫자는 계산하거나 출처가 있는 것만.<br>· 사이트에 올리는 건 하루 한 번, 대표가 허락할 때만.<br>· 블로그·쇼츠는 자동으로 올리고, 네이버·X·스레드는 대표가 올릴 원고를 미리 만든다.</p></div>
+      <p class="note">· 대표가 주제를 고르면 기획실 AI가 기획안을 내고, 제작본부 담당 AI가 계획을 다시 짜서 확인받은 뒤 만든다.<br>· 글은 중학생이 혼자 읽고 이해할 수 있게, 숫자는 계산하거나 출처가 있는 것만.<br>· 사이트에 올리는 건 하루 한 번, 대표가 허락할 때만.<br>· 블로그·쇼츠는 자동으로 올리고, 네이버·X·스레드는 대표가 올릴 원고를 미리 만든다.</p></div>
   <div class="box">
     <h2>팀원</h2>
-    <p class="note">사람은 대표 한 명. 나머지는 실제로 쓰는 AI와 도구입니다. 제작본부는 작품 하나에 Claude 하나씩 ${works.length}명.</p>
+    <p class="note">사람은 대표 한 명. 나머지는 실제로 쓰는 AI와 도구입니다. 제작본부는 작품 하나에 AI 하나씩 ${works.length}명.</p>
     <ul class="team">${all.map(card).join('')}</ul>
   </div>
-  <footer>가구·사람 그림: Kenney Roguelike Indoor · Roguelike Characters (CC0) · <a href="/about">seeplore 소개</a> · <a href="${BLOG}">블로그</a> · <a href="https://www.youtube.com/@seeplore">YouTube</a> · AI 도구 이름은 각 회사의 상표입니다</footer>
+  <footer>가구·사람 그림: Kenney Roguelike Indoor · Roguelike Characters (CC0) · <a href="/about">seeplore 소개</a> · <a href="${BLOG}">블로그</a> · <a href="https://www.youtube.com/@seeplore">YouTube</a></footer>
 </div>
 <script>if (document.body.classList.contains('shorts')) { const c = document.getElementById('office'); c.width = 720; c.height = 1280; }</script>
 <script id="office-data" type="application/json">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>
