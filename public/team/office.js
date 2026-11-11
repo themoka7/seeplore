@@ -41,7 +41,7 @@
     gold:  { name: '블랙 골드', bg: '#050505', corridor: '#0b0a08', wall: '#a8873f', label: '#c9a45c', line: 'rgba(201,164,92,.04)', tagBg: 'rgba(0,0,0,.8)', floors: ['#100e0b', '#0d0c0a', '#100e0b', '#0d0c0a', '#0e0d0a', '#0d0c0a', '#0e0d0a', '#0d0c0a'], furn: 'sepia', people: 'gray', glow: true, glowC: '232,190,110', outline: true },
     mono:  { name: '흑백', bg: '#050608', corridor: '#101317', wall: '#2a2f36', label: '#8b95a1', line: 'rgba(255,255,255,.02)', tagBg: 'rgba(0,0,0,.75)', floors: ['#17191c', '#15171a', '#17191c', '#15171a', '#131518', '#15171a', '#131518', '#15171a'], furn: 'gray', people: 'gray', accent: '#ffd24a' },
   };
-  let TH = THEMES[new URLSearchParams(location.search).get('theme')] ?? THEMES.base;
+  let TH = THEMES[new URLSearchParams(location.search).get('theme')] ?? THEMES.chip; // 정한 시안: 컴퓨터 속 (2026-11-11). 다른 시안은 ?theme= 로만
   window.__setTheme = (k) => { if (THEMES[k]) { TH = THEMES[k]; ROOMS.forEach((r, i) => (r.floor = TH.floors[i])); } };
   // 그림 시트 보정본(어둡게·흑백·흐리게) — 픽셀을 직접 바꿔 캔버스로 만든다(모든 브라우저에서 같게)
   function variant(img, fn) {

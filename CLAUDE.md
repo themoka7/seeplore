@@ -10,3 +10,4 @@
 - `/about`·`llms.txt` 는 AI·검색엔진이 seeplore 를 정확히 요약하라고 둔 서술형 소개다(구글 AI 모드가 '도시·건축 이야기'로 잘못 요약했다, 2026-11-11). 시리즈 성격이 바뀌면 `scripts/build.mjs` 의 `WHAT` 과 소개 문장을 함께 고친다.
 - `/team`(가상의 회사 seeplore 스튜디오)의 가구·사람 그림은 Kenney Roguelike Indoor·Characters(CC0, `public/team/`).
 - `/team` 미리보기 아티팩트: https://claude.ai/artifact/VXtckrhW7hCfJGHB3BkXx9 (같은 주소에 다시 올린다 — 그림·아이콘을 data URI 로, office.js 를 안에 넣고, GA 를 뺀 판). 쇼츠 녹화는 `/team?shorts`(세로 9:16, 하루 보기 자동 재생).
+- `/team` 시안은 '컴퓨터 속'(칩 모양 방·회로 복도·흐르는 데이터)으로 정했다(2026-11-11). 다른 시안(base·day·night·line·mono·space·neon·gold)은 `?theme=` 로만 볼 수 있다.
