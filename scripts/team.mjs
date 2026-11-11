@@ -7,7 +7,8 @@
  * 누가 어떤 도구이고 무슨 일을 하는지 그대로 적는다(지어낸 직원·숫자 없음).
  */
 
-export function teamHtml({ works, esc, SITE, BLOG }) {
+export function teamHtml({ works, esc, SITE, BLOG, lang = 'ko' }) {
+  const en = lang === 'en';
   const role = (name, who, tool, does, mood) => ({ name, who, tool, does, mood });
   const DEPTS = [
     {
@@ -51,25 +52,43 @@ export function teamHtml({ works, esc, SITE, BLOG }) {
       ],
     },
   ];
+  // 영어판: 키(office.js 의 이름)는 한국어 그대로, 보이는 글만 바꾼다
+  const EN = {
+    아빠: ['Dad', 'Human', '', 'Decides what to make, looks at every finished title himself and asks for fixes. Only Dad presses the deploy button.'],
+    아들: ['Son', 'Human', '', 'Picks the next topic, and watches each finished title to point out parts that are hard or confusing.'],
+    '기획 담당': ['Planner', 'AI', 'Planning AI', 'Pitches new title ideas and drafts the plan. Production checks the facts at the planning stage.'],
+    내레이터: ['Narrator', 'AI', 'Text-to-speech AI', 'Reads the documentary narration and the Shorts for every title — 0.95× speed, a 0.25 s pause at each comma.'],
+    홍보팀장: ['PR Lead', 'AI', 'Coding AI', 'Runs the blog, Shorts and search registration, and writes the guide the others follow each week.'],
+    '블로그 작가': ['Blog Writer', 'AI', 'Coding AI (scheduled Sunday nights)', 'Writes the Tuesday and Friday posts ahead of time. Only uses numbers shown in the titles.'],
+    '쇼츠 PD': ['Shorts PD', 'AI', 'Coding AI + render script', 'Picks scenes from a title and cuts a 50-second Short. The first 2 seconds are a question and a striking scene.'],
+    '업로드 봇': ['Upload Bot', 'Bot', 'Scheduled job (daily 08:47 KST)', 'Publishes posts whose date has come and uploads Shorts to the @seeplore channel.'],
+    '점검 로봇': ['Test Robot', 'Bot', 'Automated browser testing', 'Steps through every scene, takes phone and PC screenshots and collects errors. Reports clipped labels right away.'],
+    서류함: ['File Cabinet', 'Tool', 'Code repository', 'Keeps the code and text of every title.'],
+    '건물 관리': ['Building Manager', 'Tool', 'Web hosting', 'Puts the sites online. It can open the doors only 100 times a day, so Dad uses them sparingly.'],
+  };
+  if (en) for (const d of DEPTS) for (const m of d.members ?? []) { const e = EN[m.name]; m.key = m.name; [m.name, m.who, m.tool, m.does] = e; }
+  for (const d of DEPTS) for (const m of d.members ?? []) m.key ??= m.name;
   const all = DEPTS.flatMap((d) => d.members ?? []);
   const memberCount = all.length + 4; // 제작 담당 4자리
-  const info = Object.fromEntries(all.map((m) => [m.name, { name: m.name, who: m.who, tool: m.tool, does: m.does }]));
-  const data = { works: works.map((w) => ({ id: w.id, title: w.title, url: w.url, icon: w.icon.replace(SITE, '') })), info, sheets: { indoor: '/team/indoor.png', chars: '/team/chars.png' } };
+  const info = Object.fromEntries(all.map((m) => [m.key, { name: m.name, who: m.who, tool: m.tool, does: m.does }]));
+  const data = { works: works.map((w) => ({ id: w.id, title: en ? w.titleEn : w.title, url: en ? w.urlEn ?? w.url : w.url, icon: w.icon.replace(SITE, '') })), info, sheets: { indoor: '/team/indoor.png', chars: '/team/chars.png' } };
   const card = (m) => `<li><b>${esc(m.name)}</b><span>${esc(m.who)}${m.tool ? ' · ' + esc(m.tool) : ''}</span><p>${esc(m.does)}</p></li>`;
 
   return `<!doctype html>
-<html lang="ko">
+<html lang="${en ? 'en' : 'ko'}">
 <head>
 <meta charset="UTF-8">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-TBYJ6JBLYF"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-TBYJ6JBLYF',{content_group:'hub'});</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>seeplore 스튜디오</title>
-<meta name="description" content="seeplore를 만드는 가상의 회사. 아빠와 아들, AI 팀원들이 새 작품 하나를 어떻게 만드는지 사무실에서 보여 줍니다.">
-<link rel="canonical" href="${SITE}/team">
-<meta property="og:title" content="seeplore 스튜디오 — 아빠와 아들, 그리고 AI 팀원들">
-<meta property="og:description" content="새 작품 하나가 나오기까지, AI 팀원들이 사무실을 오가며 일하는 모습.">
-<meta property="og:url" content="${SITE}/team">
+<title>${en ? 'seeplore Studio' : 'seeplore 스튜디오'}</title>
+<meta name="description" content="${en ? 'The make-believe company behind seeplore. A dad, his son and their AI teammates show, office-style, how one new title gets made.' : 'seeplore를 만드는 가상의 회사. 아빠와 아들, AI 팀원들이 새 작품 하나를 어떻게 만드는지 사무실에서 보여 줍니다.'}">
+<link rel="canonical" href="${SITE}${en ? '/en' : ''}/team">
+<link rel="alternate" hreflang="ko" href="${SITE}/team">
+<link rel="alternate" hreflang="en" href="${SITE}/en/team">
+<meta property="og:title" content="${en ? 'seeplore Studio — a dad, his son and their AI teammates' : 'seeplore 스튜디오 — 아빠와 아들, 그리고 AI 팀원들'}">
+<meta property="og:description" content="${en ? 'How one new title gets made — AI teammates at work around the office.' : '새 작품 하나가 나오기까지, AI 팀원들이 사무실을 오가며 일하는 모습.'}">
+<meta property="og:url" content="${SITE}${en ? '/en' : ''}/team">
 <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-32.png">
 <style>
 /* 허브(seeplore.com)와 같은 검정 페이지 + 그 안에 불 켜진 사무실 그림 */
@@ -115,23 +134,23 @@ body.shorts #caption { top: 5%; bottom: auto; font-size: 20px; }
 <body>
 <script>if (new URLSearchParams(location.search).has('shorts')) document.body.classList.add('shorts');</script>
 <div class="wrap">
-  <a class="back" href="/">← seeplore</a>
+  <a class="back" href="${en ? '/en' : '/'}">← seeplore</a>
   <div>
-    <p class="kicker">가상의 회사 · 사람 2명, AI 팀원 ${memberCount - 2}</p>
-    <h1>seeplore 스튜디오</h1>
-    <p class="lead">seeplore를 실제로 이렇게 나눠서 만들고 있어서 회사처럼 꾸며 봤습니다. 아빠와 아들이 정하고, 나머지는 AI와 자동화 도구가 맡습니다.</p>
+    <p class="kicker">${en ? `A make-believe company · 2 humans, ${memberCount - 2} AI teammates` : `가상의 회사 · 사람 2명, AI 팀원 ${memberCount - 2}`}</p>
+    <h1>${en ? 'seeplore Studio' : 'seeplore 스튜디오'}</h1>
+    <p class="lead">${en ? 'This is really how seeplore is made, so we dressed it up as a company. A dad and his son decide; AI and automation tools do the rest.' : 'seeplore를 실제로 이렇게 나눠서 만들고 있어서 회사처럼 꾸며 봤습니다. 아빠와 아들이 정하고, 나머지는 AI와 자동화 도구가 맡습니다.'}</p>
   </div>
   <div class="stage">
-    <canvas id="office" width="1024" height="800" role="img" aria-label="위에서 내려다본 seeplore 스튜디오. 아빠 방, 기획실, 홍보팀, 음성 부스, 작품 진열장과 책상 4자리가 있는 제작본부, 품질관리, 서버실, 휴게실."></canvas>
+    <canvas id="office" width="1024" height="800" role="img" aria-label="${en ? 'seeplore Studio seen from above: Dad’s room, planning, PR team, voice booth, production with the title shelf and four desks, QA, server room and lounge.' : '위에서 내려다본 seeplore 스튜디오. 아빠 방, 기획실, 홍보팀, 음성 부스, 작품 진열장과 책상 4자리가 있는 제작본부, 품질관리, 서버실, 휴게실.'}"></canvas>
     <div id="caption" aria-live="polite"></div>
     <div class="tip" id="tip" hidden></div>
   </div>
   <div class="box">
-    <h2>팀원</h2>
-    <p class="note">사람은 아빠와 아들 두 명. 나머지는 실제로 쓰는 AI와 도구입니다. 제작본부는 일이 있을 때만 담당 AI가 들어와 작품을 맡습니다.</p>
+    <h2>${en ? 'Team' : '팀원'}</h2>
+    <p class="note">${en ? 'Two humans: a dad and his son. Everyone else is an AI or tool we actually use. In Production, a maker AI comes in only when there is a title to work on.' : '사람은 아빠와 아들 두 명. 나머지는 실제로 쓰는 AI와 도구입니다. 제작본부는 일이 있을 때만 담당 AI가 들어와 작품을 맡습니다.'}</p>
     <ul class="team">${all.map(card).join('')}</ul>
   </div>
-  <footer>가구·사람 그림: Kenney Roguelike Indoor · Roguelike Characters (CC0) · <a href="/about">seeplore 소개</a> · <a href="${BLOG}">블로그</a> · <a href="https://www.youtube.com/@seeplore">YouTube</a></footer>
+  <footer>${en ? 'Furniture and character art' : '가구·사람 그림'}: Kenney Roguelike Indoor · Roguelike Characters (CC0) · <a href="${en ? '/en/about' : '/about'}">${en ? 'About seeplore' : 'seeplore 소개'}</a> · <a href="${BLOG}${en ? 'en/' : ''}">${en ? 'Blog' : '블로그'}</a> · <a href="https://www.youtube.com/@seeplore">YouTube</a> · <a href="${en ? '/team' : '/en/team'}">${en ? '한국어' : 'English'}</a></footer>
 </div>
 <script id="office-data" type="application/json">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>
 <script src="/team/office.js"></script>

@@ -17,6 +17,10 @@
       "url": "https://danger-space.seeplore.com/",
       "icon": "https://seeplore.com/icons/series/space.png",
       "desc": "소행성부터 블랙홀까지, 지구를 위협하는 천체 순위와 거리 — 3D · 음성 해설",
+      "titleEn": "Dangerous Space",
+      "labelEn": "Dangerous\nSpace",
+      "descEn": "From asteroids to black holes — space threats to Earth, ranked by distance · 3D · narrated",
+      "urlEn": "https://danger-space.seeplore.com/en/",
       "field": "우주"
     },
     {

@@ -11,3 +11,5 @@
 - `/team`(가상의 회사 seeplore 스튜디오)의 가구·사람 그림은 Kenney Roguelike Indoor·Characters(CC0, `public/team/`).
 - `/team` 미리보기 아티팩트: https://claude.ai/artifact/VXtckrhW7hCfJGHB3BkXx9 (같은 주소에 다시 올린다 — 그림·아이콘을 data URI 로, office.js 를 안에 넣고, GA 를 뺀 판). 쇼츠 녹화는 `/team?shorts`(세로 9:16, 하루 보기 자동 재생).
 - `/team` 시안은 '컴퓨터 속'(칩 모양 방·회로 복도·흐르는 데이터)으로 정했다(2026-11-11). 다른 시안(base·day·night·line·mono·space·neon·gold)은 `?theme=` 로만 볼 수 있다.
+- **영어판** `/en`·`/en/about`·`/en/team` 은 `scripts/en.mjs` 가 만든다(2026-11-11). **영어판이 있는 작품(`urlEn`)만** 싣고, 영어 페이지 안에서는 한국어가 나오지 않는다(한국어로 가는 곳은 `한국어` 링크 하나). `urlEn` 이 있으면 `titleEn`·`labelEn`·`descEn` 도 필수(빌드가 막는다).
+- 한국어 문장(`WHAT`·`/about`·`team.mjs` 의 팀원 설명·`office.js` 의 말풍선·자막·방 이름)을 고치면 **영어 문장도 같은 커밋에서** 고친다 — `en.mjs`, `team.mjs` 의 `EN` 표, `office.js` 의 `DICT`·`PAT`. 사무실 영어 확인: Playwright 로 `/en/team` 에서 `fillText` 를 가로채 한글이 그려지는지 본다.
