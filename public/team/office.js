@@ -85,11 +85,12 @@
     people[key] = { key, label, ch, deskX, deskY, x: deskX, y: deskY + 14, homeX: deskX, homeY: deskY + 14, path: [], speed: 1.4, say: '', sayUntil: 0, carry: false, flip: false, typing: true, ...opts };
   };
   const SEAT = PORTRAIT
-    ? { 대표: [3.7, 2.4], '기획 담당': [12.2, 2.4], 홍보팀장: [2.2, 8.6], '블로그 작가': [5.6, 8.6], '쇼츠 PD': [2.2, 11.2], '업로드 봇': [5.6, 11.2], 내레이터: [12.2, 7.2], '점검 로봇': [12.2, 10.7] }
-    : { 대표: [3, 2.4], '기획 담당': [9, 2.4], 홍보팀장: [14, 2.4], '블로그 작가': [17, 2.4], '쇼츠 PD': [20, 2.4], '업로드 봇': [23, 2.4], 내레이터: [28.5, 2.4], '점검 로봇': [27.5, 9.1] };
+    ? { 대표: [3.7, 2.4], '기획·검토': [10.6, 2.4], '기획 담당': [14, 2.4], 홍보팀장: [2.2, 8.6], '블로그 작가': [5.6, 8.6], '쇼츠 PD': [2.2, 11.2], '업로드 봇': [5.6, 11.2], 내레이터: [12.2, 7.2], '점검 로봇': [12.2, 10.7] }
+    : { 대표: [3, 2.4], '기획·검토': [7.8, 2.4], '기획 담당': [10.4, 2.4], 홍보팀장: [14, 2.4], '블로그 작가': [17, 2.4], '쇼츠 PD': [20, 2.4], '업로드 봇': [23, 2.4], 내레이터: [28.5, 2.4], '점검 로봇': [27.5, 9.1] };
   const seat = (k, label, ch, o) => addPerson(k, label, ch, SEAT[k][0] * T, SEAT[k][1] * T, o);
   seat('대표', '대표', [0, 9]);
-  seat('기획 담당', '기획', [1, 6]);
+  seat('기획·검토', '아들', [0, 8]);
+  seat('기획 담당', '기획 AI', [1, 6]);
   seat('홍보팀장', '홍보팀장', [0, 5]);
   seat('블로그 작가', '블로그', [0, 7]);
   seat('쇼츠 PD', '쇼츠 PD', [1, 7]);
@@ -158,10 +159,11 @@
   async function story() {
     if (playing) return; playing = true; playBtn && (playBtn.disabled = true);
     const st = (k) => { focusKey = k; busy.add(k); };
-    setCap('대표가 다음 작품 주제를 정합니다');
-    st('대표'); await walkToPerson('대표', '기획 담당'); await say('대표', '다음은 무지개 어때요?');
+    setCap('아들이 다음 작품 주제를 고릅니다');
+    st('기획·검토'); await walkToPerson('기획·검토', '대표'); await say('기획·검토', '아빠, 다음은 무지개 어때?');
+    st('대표'); await say('대표', '좋아, 기획해 보자', 1800);
+    goHome('기획·검토');
     st('기획 담당'); await say('기획 담당', '기획안 정리할게요');
-    goHome('대표');
     setCap('기획실이 기획안을 써서 제작본부로');
     people['기획 담당'].carry = true; await walkTo('기획 담당', STAR.x + 14, STAR.y + 16); await say('기획 담당', '기획안 전달!');
     people['기획 담당'].carry = false; goHome('기획 담당');
@@ -173,6 +175,9 @@
     st(SK); goHome(SK);
     setCap('점검 로봇이 장면을 하나씩 넘기며 확인');
     st('점검 로봇'); await walkTo('점검 로봇', STAR.x + 16, STAR.y + 18); await say('점검 로봇', '휴대폰·PC 화면 점검 중…', 2200); await say('점검 로봇', '통과!', 1400); goHome('점검 로봇');
+    setCap('아들이 직접 보며 어려운 곳을 짚습니다');
+    st('기획·검토'); await walkTo('기획·검토', STAR.x + 14, STAR.y + 16); await say('기획·검토', '여기 무슨 말인지 모르겠어', 2200);
+    st(SK); await say(SK, '쉬운 말로 고칠게요', 1600); goHome('기획·검토');
     setCap('출시는 대표가 허락할 때만, 하루 한 번');
     st(SK); await walkToPerson(SK, '대표'); await say(SK, '출시해도 될까요?');
     st('대표'); await say('대표', '올려!', 1600);
@@ -203,6 +208,7 @@
       case '홍보팀장': return h < 9 ? '오늘 공개분 확인 중' : '검색 색인 확인 중';
       case '대표': return '결재 대기 중';
       case '기획 담당': return '다음 주제 검토 중';
+      case '기획·검토': return pick(['다음 주제 고르는 중', '작품 보며 검토 중']);
       case '내레이터': return '다음 원고 대기';
       case '점검 로봇': return '장면 점검 대기';
       default: return '';
@@ -225,6 +231,7 @@
     ]);
     switch (key) {
       case '대표': return pick([[spot.홍보, '조회수 어때요?'], [dp, '잘 돼 가요?'], [spot.커피, '커피 한 잔'], [spot.서버, '오늘 배포 몇 번?']]);
+      case '기획·검토': return pick([[dp, '여기 어려워요'], [dp, '이 장면 재밌다!'], [spot.대표, '다음 주제 생각났어', true], [spot.기획, '이것도 만들자']]);
       case '기획 담당': return pick([[dp, '다음 기획안이에요', true], [spot.대표, '주제 후보 셋', true], [spot.탁자, '아이디어 회의']]);
       case '홍보팀장': return pick([[spot.대표, '이번 주 글 2편', true], [dp, '쇼츠 장면 골라요'], [spot.커피, '커피 한 잔']]);
       case '블로그 작가': return pick([[dp, '숫자 확인할게요'], [at('업로드 봇'), '글 예약 부탁', true], [spot.탁자, '글감 고르는 중']]);
@@ -389,7 +396,7 @@
       const rack = (sx, sy, k) => { tile(indoor, 25 + (k % 2), 8, sx, sy, 1, 2); for (let j = 0; j < 4; j++) R(sx + 5, sy + 6 + j * 6, 3, 2, flash > 0 ? (t % 4 < 2 ? '#fff36b' : '#4cd17a') : (t / 4 + j + k) % 5 < 3 ? '#4cd17a' : '#1f6b3b'); };
       if (PORTRAIT) {
         tile(indoor, 23, 0, 0.6 * T, 4.4 * T); tile(indoor, 16, 0, 6.2 * T, 4.4 * T);
-        tile(indoor, 19, 12, 9 * T, 4.2 * T); tile(indoor, 20, 12, 10 * T, 4.2 * T); tile(indoor, 17, 0, 14.6 * T, 4.4 * T);
+        tile(indoor, 19, 12, 9 * T, 4.4 * T); tile(indoor, 20, 12, 10 * T, 4.4 * T); tile(indoor, 17, 0, 14.8 * T, 4.6 * T);
         tile(indoor, 23, 8, 9 * T, 8.4 * T, 2, 1); tile(indoor, 16, 0, 6.3 * T, 12.2 * T);
         for (let k = 0; k < 3; k++) rack((1 + k * 2.1) * T, 22.9 * T, k);
         tag('서버', 3.7 * T, 25.5 * T);
