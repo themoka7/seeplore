@@ -35,12 +35,13 @@
     night: { name: '밤', bg: '#050608', corridor: '#161b22', wall: '#2b323b', label: '#8b95a1', line: 'rgba(255,255,255,.025)', tagBg: 'rgba(0,0,0,.7)', floors: ['#1d1913', '#121a23', '#201719', '#1b1724', '#1a170f', '#111d16', '#13171c', '#151b12'], furn: 'dark', people: 'dim', glow: true },
     line:  { name: '도면', bg: '#050608', corridor: '#050608', wall: '#3b4450', label: '#6f7a86', line: null, tagBg: 'rgba(5,6,8,.85)', floors: Array(8).fill('#080a0d'), furn: 'ghost', people: 'normal', glow: true, outline: true },
     chip:  { name: '컴퓨터 속', bg: '#020605', corridor: '#020605', wall: '#1f6f52', label: '#3ddc97', line: null, tagBg: 'rgba(2,10,8,.88)', floors: Array(8).fill('#04100c'), furn: 'teal', people: 'normal', glow: true, chip: true, outline: true },
+    base:  { name: '우주 기지', bg: '#02030a', corridor: '#1a2130', wall: '#7b8ba3', label: '#a9c4e8', line: null, tagBg: 'rgba(4,8,18,.85)', floors: ['#1c2331', '#1a2232', '#1d2230', '#1c2133', '#1b2230', '#1a2331', '#1c2130', '#1b2331'], furn: 'steel', people: 'normal', glow: true, glowC: '120,220,255', base: true },
     space: { name: '관제실', bg: '#03050b', corridor: '#060a16', wall: '#22355c', label: '#7fa6e8', line: null, tagBg: 'rgba(3,6,14,.85)', floors: Array(8).fill('#070c1a'), furn: 'blue', people: 'normal', glow: true, glowC: '110,160,255', stars: true, outline: true },
     neon:  { name: '네온', bg: '#040306', corridor: '#040306', wall: '#ff3ea5', wall2: '#2ee6ff', label: '#ff7cc4', line: null, tagBg: 'rgba(8,4,12,.85)', floors: Array(8).fill('#08060d'), furn: 'violet', people: 'normal', glow: true, glowC: '255,62,165', neon: true, outline: true },
     gold:  { name: '블랙 골드', bg: '#050505', corridor: '#0b0a08', wall: '#a8873f', label: '#c9a45c', line: 'rgba(201,164,92,.04)', tagBg: 'rgba(0,0,0,.8)', floors: ['#100e0b', '#0d0c0a', '#100e0b', '#0d0c0a', '#0e0d0a', '#0d0c0a', '#0e0d0a', '#0d0c0a'], furn: 'sepia', people: 'gray', glow: true, glowC: '232,190,110', outline: true },
     mono:  { name: '흑백', bg: '#050608', corridor: '#101317', wall: '#2a2f36', label: '#8b95a1', line: 'rgba(255,255,255,.02)', tagBg: 'rgba(0,0,0,.75)', floors: ['#17191c', '#15171a', '#17191c', '#15171a', '#131518', '#15171a', '#131518', '#15171a'], furn: 'gray', people: 'gray', accent: '#ffd24a' },
   };
-  let TH = THEMES[new URLSearchParams(location.search).get('theme')] ?? THEMES.day;
+  let TH = THEMES[new URLSearchParams(location.search).get('theme')] ?? THEMES.base;
   window.__setTheme = (k) => { if (THEMES[k]) { TH = THEMES[k]; ROOMS.forEach((r, i) => (r.floor = TH.floors[i])); } };
   // 그림 시트 보정본(어둡게·흑백·흐리게) — 픽셀을 직접 바꿔 캔버스로 만든다(모든 브라우저에서 같게)
   function variant(img, fn) {
@@ -108,7 +109,7 @@
   });
   const desks = makers.map((p) => ({ x: p.deskX, y: p.deskY }));
   // 작품 진열장: 출시한 작품 아이콘 — 누르면 그 작품으로
-  const SHELF = PORTRAIT ? { x: 0.7 * T, y: 15.6 * T, cols: 5, gap: 22, size: 16 } : { x: 1 * T, y: 9.6 * T, cols: 5, gap: 24, size: 18 };
+  const SHELF = PORTRAIT ? { x: 0.8 * T, y: 16 * T, cols: 5, gap: 22, size: 16 } : { x: 1 * T, y: 10 * T, cols: 5, gap: 23, size: 17 };
   const shelfAt = (i) => [SHELF.x + (i % SHELF.cols) * SHELF.gap, SHELF.y + Math.floor(i / SHELF.cols) * (SHELF.gap - 2)];
   const roomOf = (p) => ROOMS.find((r) => p.homeX >= r.x * T && p.homeX < (r.x + r.w) * T && p.homeY >= r.y * T && p.homeY < (r.y + r.h) * T);
 
@@ -271,7 +272,21 @@
   }, 900);
 
   // ---------------------------------------------------------------- 그리기
+  function drawModule(r) {
+    const x = r.x * T + 4, y = r.y * T + 4, w = r.w * T - 8, h = r.h * T - 8;
+    g.fillStyle = '#3a4659'; g.beginPath(); g.roundRect(x - 2, y - 2, w + 4, h + 4, 10); g.fill();            // 선체
+    g.fillStyle = r.floor; g.beginPath(); g.roundRect(x, y, w, h, 8); g.fill();
+    g.save(); g.beginPath(); g.roundRect(x, y, w, h, 8); g.clip();
+    for (let gx = x; gx < x + w; gx += 16) R(gx, y, 1, h, 'rgba(255,255,255,.05)');                         // 바닥 철판
+    for (let gy = y; gy < y + h; gy += 16) R(x, gy, w, 1, 'rgba(255,255,255,.05)');
+    R(x, y, w, 2, 'rgba(120,220,255,.35)');                                                                // 천장 조명 띠
+    g.restore();
+    g.strokeStyle = TH.wall; g.lineWidth = 1.2; g.beginPath(); g.roundRect(x - 2, y - 2, w + 4, h + 4, 10); g.stroke();
+    for (let k = 0; k < Math.floor(w / 40); k++) { const cx = x + 24 + k * 40; g.fillStyle = '#0a1020'; g.beginPath(); g.arc(cx, y - 1, 3.2, 0, 7); g.fill(); g.strokeStyle = '#9fb2cc'; g.lineWidth = 0.8; g.stroke(); g.fillStyle = 'rgba(200,220,255,.8)'; g.fillRect(cx - 1, y - 2, 1, 1); } // 둥근 창
+    text(r.name, x + 8, y + 13, 7.5, TH.label, 'left', 800);
+  }
   function drawRoom(r) {
+    if (TH.base) return drawModule(r);
     const x = r.x * T, y = r.y * T, w = r.w * T, h = r.h * T;
     R(x, y, w, h, r.floor);
     if (TH.line) for (let yy = y + 6; yy < y + h; yy += 8) R(x, yy, w, 1, TH.line);
@@ -337,18 +352,28 @@
     updateCam();
     g.setTransform(1, 0, 0, 1, 0, 0); g.imageSmoothingEnabled = false;
     R(0, 0, canvas.width, canvas.height, TH.bg);
+    if (TH.base) {                                            // 기지 바깥 우주 (화면 좌표)
+      for (let k = 0; k < 140; k++) { const sx = (k * 137.5) % canvas.width, sy = (k * 89.3 + k * k * 0.7) % canvas.height, tw = (t / 8 + k) % 11 < 1; g.fillStyle = tw ? '#ffffff' : `rgba(180,200,255,${0.25 + (k % 5) * 0.12})`; g.fillRect(sx, sy, tw ? 3 : 1.5, tw ? 3 : 1.5); }
+      const px = canvas.width * (PORTRAIT ? 1.05 : 1.02), py = canvas.height * (PORTRAIT ? 0.62 : 0.95), pr = Math.min(canvas.width, canvas.height) * (PORTRAIT ? 0.5 : 0.42);
+      const pg = g.createRadialGradient(px - pr * 0.35, py - pr * 0.35, pr * 0.1, px, py, pr);
+      pg.addColorStop(0, '#5b8fd6'); pg.addColorStop(0.55, '#1f4f8f'); pg.addColorStop(1, '#06142c');
+      g.fillStyle = pg; g.beginPath(); g.arc(px, py, pr, 0, 7); g.fill();
+      g.strokeStyle = 'rgba(120,180,255,.35)'; g.lineWidth = 6; g.beginPath(); g.arc(px, py, pr + 4, 0, 7); g.stroke();
+    }
     g.setTransform(cam.z, 0, 0, cam.z, canvas.width / 2 - cam.x * cam.z, canvas.height / 2 - cam.y * cam.z);
     if (PORTRAIT) {
-      R(7.5 * T, 0, T, WH, TH.corridor);                       // 세로 복도
+      if (TH.base) { g.fillStyle = '#3a4659'; g.beginPath(); g.roundRect(7.45 * T, 0, 1.1 * T, WH, 6); g.fill(); R(7.6 * T, 0, 0.8 * T, WH, TH.corridor); for (let k = 0; k < 12; k++) { const py = ((t * 1.3 + k * 40) % WH); R(8 * T - 1, py, 2, 2, (k % 3) ? 'rgba(120,220,255,.7)' : '#ffd24a'); } }
+      else R(7.5 * T, 0, T, WH, TH.corridor);                  // 세로 복도
       if (TH.neon) { g.save(); g.shadowColor = TH.wall2; g.shadowBlur = 10; R(8 * T - 0.5, 0, 1, WH, TH.wall2); g.restore(); }
       if (TH.chip) {
         for (const xx of [7.7 * T, 8 * T, 8.3 * T]) R(xx, 0, 1, WH, '#0f4a35');
         for (let k = 0; k < 7; k++) { const py = ((t * (1.1 + (k % 3) * 0.5) + k * 77) % (WH + 40)) - 20, xx = [7.7, 8, 8.3][k % 3] * T; g.fillStyle = 'rgba(61,220,151,.9)'; g.fillRect(xx - 1, py, 3, 6); g.fillStyle = 'rgba(61,220,151,.25)'; g.fillRect(xx, py - 10, 1, 10); }
       }
     } else {
-      R(0, 7 * T, WW, 1 * T, TH.corridor);                    // 복도
+      if (TH.base) { g.fillStyle = '#3a4659'; g.beginPath(); g.roundRect(0, 6.95 * T, WW, 1.1 * T, 6); g.fill(); R(0, 7.1 * T, WW, 0.8 * T, TH.corridor); for (let k = 0; k < 16; k++) { const px = ((t * 1.3 + k * 40) % WW); R(px, 7.5 * T - 1, 2, 2, (k % 3) ? 'rgba(120,220,255,.7)' : '#ffd24a'); } R(11.2 * T, 14.6 * T, 0.6 * T, 0.8 * T, '#3a4659'); R(27.2 * T, 10.8 * T, 0.6 * T, 1.4 * T, '#3a4659'); }
+      else R(0, 7 * T, WW, 1 * T, TH.corridor);               // 복도
       if (TH.neon) { g.save(); g.shadowColor = TH.wall2; g.shadowBlur = 10; R(0, 7.5 * T - 0.5, WW, 1, TH.wall2); g.restore(); }
-      if (!TH.outline) R(0, 19.5 * T - 1, WW, 1, TH.wall);
+      if (!TH.outline && !TH.base) R(0, 19.5 * T - 1, WW, 1, TH.wall);
       if (TH.chip) {
         for (const yy of [7.2 * T, 7.5 * T, 7.8 * T]) R(0, yy, WW, 1, '#0f4a35');
         R(11.5 * T, 6.5 * T, 1, 13 * T, '#0f4a35'); R(27.5 * T, 6.5 * T, 1, 13 * T, '#0f4a35');
@@ -363,7 +388,7 @@
       // 소품
       const rack = (sx, sy, k) => { tile(indoor, 25 + (k % 2), 8, sx, sy, 1, 2); for (let j = 0; j < 4; j++) R(sx + 5, sy + 6 + j * 6, 3, 2, flash > 0 ? (t % 4 < 2 ? '#fff36b' : '#4cd17a') : (t / 4 + j + k) % 5 < 3 ? '#4cd17a' : '#1f6b3b'); };
       if (PORTRAIT) {
-        tile(indoor, 23, 0, 0.4 * T, 1 * T); tile(indoor, 16, 0, 6.2 * T, 4.4 * T);
+        tile(indoor, 23, 0, 0.6 * T, 4.4 * T); tile(indoor, 16, 0, 6.2 * T, 4.4 * T);
         tile(indoor, 19, 12, 9 * T, 4.2 * T); tile(indoor, 20, 12, 10 * T, 4.2 * T); tile(indoor, 17, 0, 14.6 * T, 4.4 * T);
         tile(indoor, 23, 8, 9 * T, 8.4 * T, 2, 1); tile(indoor, 16, 0, 6.3 * T, 12.2 * T);
         for (let k = 0; k < 3; k++) rack((1 + k * 2.1) * T, 22.9 * T, k);
@@ -372,12 +397,12 @@
         tile(indoor, 3, 0, 13.6 * T, 23.6 * T); tile(indoor, 3, 2, 14.6 * T, 23.6 * T);
         text('커피', 10.4 * T, 24.9 * T, 6, TH.label);
       } else {
-        tile(indoor, 23, 0, 0.4 * T, 1 * T); tile(indoor, 24, 0, 1.4 * T, 1 * T);
+        tile(indoor, 23, 0, 0.6 * T, 4.4 * T); tile(indoor, 24, 0, 1.6 * T, 4.4 * T);
         tile(indoor, 16, 0, 4.7 * T, 4.9 * T); tile(indoor, 17, 0, 10.7 * T, 4.9 * T); tile(indoor, 16, 0, 23.7 * T, 4.9 * T);
         tile(indoor, 19, 12, 6.5 * T, 3.9 * T); tile(indoor, 20, 12, 7.5 * T, 3.9 * T);
         tile(indoor, 23, 8, 25.6 * T, 4.4 * T, 2, 1);
-        for (let k = 0; k < 3; k++) rack((24.2 + k * 2.6) * T, 12.3 * T, k);
-        tag('서버', 30.8 * T, 12.6 * T);
+        for (let k = 0; k < 3; k++) rack((26 + k * 2) * T, 12.4 * T, k);
+        tag('서버', 24.6 * T, 14 * T);
         tile(indoor, 0, 12, 2 * T, 16.3 * T, 3, 1); tile(indoor, 5, 12, 5 * T, 16.3 * T);
         for (const bx of [10, 20]) { tile(indoor, 3, 0, bx * T, 17.4 * T); tile(indoor, 1, 2, (bx - 1) * T, 17.4 * T); tile(indoor, 3, 2, (bx + 1) * T, 17.4 * T); }
         tile(indoor, 16, 0, 27 * T, 17.6 * T); tile(indoor, 17, 0, 30.4 * T, 17.6 * T);
@@ -442,6 +467,7 @@
     SHEETS.in_blue = variant(a, (d, i) => { const v = 0.3 * d[i] + 0.59 * d[i + 1] + 0.11 * d[i + 2]; d[i] = v * 0.35; d[i + 1] = v * 0.5; d[i + 2] = v * 0.95; d[i + 3] *= 0.75; });
     SHEETS.in_violet = variant(a, (d, i) => { const v = 0.3 * d[i] + 0.59 * d[i + 1] + 0.11 * d[i + 2]; d[i] = v * 0.7; d[i + 1] = v * 0.3; d[i + 2] = v * 0.85; d[i + 3] *= 0.7; });
     SHEETS.in_sepia = variant(a, (d, i) => { const v = 0.3 * d[i] + 0.59 * d[i + 1] + 0.11 * d[i + 2]; d[i] = v * 0.62; d[i + 1] = v * 0.5; d[i + 2] = v * 0.3; });
+    SHEETS.in_steel = variant(a, (d, i) => { const v = 0.3 * d[i] + 0.59 * d[i + 1] + 0.11 * d[i + 2]; d[i] = v * 0.62; d[i + 1] = v * 0.72; d[i + 2] = v * 0.88; });
     SHEETS.ch_dim = variant(b, (d, i) => { d[i] *= 0.85; d[i + 1] *= 0.85; d[i + 2] *= 0.85; });
     SHEETS.ch_gray = variant(b, (d, i) => { gray(d, i); d[i] *= 0.8; d[i + 1] *= 0.8; d[i + 2] *= 0.8; });
     indoor = a; chars = b;

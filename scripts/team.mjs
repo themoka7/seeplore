@@ -118,7 +118,7 @@ body.shorts #caption { top: 5%; bottom: auto; font-size: 20px; }
     <h1>seeplore 스튜디오</h1>
     <p class="lead">seeplore를 실제로 이렇게 나눠서 만들고 있어서 회사처럼 꾸며 봤습니다. 대표 한 명이 정하고, 나머지는 AI와 자동화 도구가 맡습니다.</p>
   </div>
-  <div class="bar"><button id="play" type="button">▶ 작품 하나가 나오기까지 보기</button><div class="themes" role="group" aria-label="시안"><button type="button" data-t="day">낮</button><button type="button" data-t="night">밤</button><button type="button" data-t="line">도면</button><button type="button" data-t="mono">흑백</button><button type="button" data-t="chip">컴퓨터 속</button><button type="button" data-t="space">관제실</button><button type="button" data-t="neon">네온</button><button type="button" data-t="gold">블랙 골드</button></div><p class="hint">팀원을 누르면 하는 일과 지금 상태가 보입니다. 제작본부 책상을 누르면 그 작품으로.</p></div>
+  <div class="bar"><button id="play" type="button">▶ 작품 하나가 나오기까지 보기</button><div class="themes" role="group" aria-label="시안"><button type="button" data-t="base">우주 기지</button><button type="button" data-t="day">낮</button><button type="button" data-t="night">밤</button><button type="button" data-t="line">도면</button><button type="button" data-t="mono">흑백</button><button type="button" data-t="chip">컴퓨터 속</button><button type="button" data-t="space">관제실</button><button type="button" data-t="neon">네온</button><button type="button" data-t="gold">블랙 골드</button></div><p class="hint">팀원을 누르면 하는 일과 지금 상태가 보입니다. 제작본부 책상을 누르면 그 작품으로.</p></div>
   <div class="stage">
     <canvas id="office" width="1024" height="800" role="img" aria-label="위에서 내려다본 seeplore 스튜디오. 대표실, 기획실, 홍보팀, 음성 부스, 작품 진열장과 책상 4자리가 있는 제작본부, 품질관리, 서버실, 휴게실."></canvas>
     <div id="caption" aria-live="polite"></div>
