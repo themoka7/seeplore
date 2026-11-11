@@ -7,7 +7,8 @@
       "title": "지도로 보는 한국사",
       "url": "https://koreamap.seeplore.com/",
       "icon": "https://seeplore.com/icons/series/korea.png",
-      "desc": "고조선에서 판문점까지, 지도 위에서 펼쳐지는 우리 역사 — 음성 해설 · 3D 지형"
+      "desc": "고조선에서 판문점까지, 지도 위에서 펼쳐지는 우리 역사 — 음성 해설 · 3D 지형",
+      "field": "역사"
     },
     {
       "id": "space",
@@ -15,7 +16,8 @@
       "title": "위험한 우주",
       "url": "https://danger-space.seeplore.com/",
       "icon": "https://seeplore.com/icons/series/space.png",
-      "desc": "소행성부터 블랙홀까지, 지구를 위협하는 천체 순위와 거리 — 3D · 음성 해설"
+      "desc": "소행성부터 블랙홀까지, 지구를 위협하는 천체 순위와 거리 — 3D · 음성 해설",
+      "field": "우주"
     },
     {
       "id": "sea",
@@ -23,7 +25,8 @@
       "title": "깊이로 보는 바다",
       "url": "https://deepsea.seeplore.com/",
       "icon": "https://seeplore.com/icons/series/sea.png",
-      "desc": "수면에서 챌린저 해연(약 10,900 m)까지, 바닷속을 깊이 순서로 — 3D · 음성 해설"
+      "desc": "수면에서 챌린저 해연(약 10,900 m)까지, 바닷속을 깊이 순서로 — 3D · 음성 해설",
+      "field": "지구"
     },
     {
       "id": "build",
@@ -31,7 +34,8 @@
       "title": "아파트가 올라가는 시간",
       "url": "https://build.seeplore.com/",
       "icon": "https://seeplore.com/icons/series/build.png",
-      "desc": "땅속 25 m 말뚝부터 20층 꼭대기까지 — 아파트 한 동이 지어지는 30개월을 3D 타임랩스로"
+      "desc": "땅속 25 m 말뚝부터 20층 꼭대기까지 — 아파트 한 동이 지어지는 30개월을 3D 타임랩스로",
+      "field": "공학"
     },
     {
       "id": "ai",
@@ -39,7 +43,8 @@
       "title": "신호로 보는 AI",
       "url": "https://ai-neural.seeplore.com/",
       "icon": "https://seeplore.com/icons/series/ai.png",
-      "desc": "손글씨 숫자부터 고양이·강아지 낙서까지 — 작은 AI가 답을 내고, 틀리고, 배우는 과정을 3D로 · 음성 해설"
+      "desc": "손글씨 숫자부터 고양이·강아지 낙서까지 — 작은 AI가 답을 내고, 틀리고, 배우는 과정을 3D로 · 음성 해설",
+      "field": "AI·컴퓨터"
     },
     {
       "id": "slot",
@@ -47,7 +52,8 @@
       "title": "한 글자씩 쓰는 AI",
       "url": "https://ai-slot.seeplore.com/",
       "icon": "https://seeplore.com/icons/series/slot.png",
-      "desc": "다음 글자마다 퍼센트를 매기고, 레버를 당겨 하나를 뽑는다 — 동화를 읽은 작은 AI가 글을 쓰는 과정을 3D 슬롯머신으로"
+      "desc": "다음 글자마다 퍼센트를 매기고, 레버를 당겨 하나를 뽑는다 — 동화를 읽은 작은 AI가 글을 쓰는 과정을 3D 슬롯머신으로",
+      "field": "AI·컴퓨터"
     },
     {
       "id": "fly",
@@ -55,7 +61,8 @@
       "title": "250톤이 뜨는 원리",
       "url": "https://fly.seeplore.com/",
       "icon": "https://seeplore.com/icons/series/fly.png",
-      "desc": "승용차 170대 무게의 여객기가 뜨는 순간까지 — 날개 둘레 공기를 계산해 3D로 · 직접 해 보기"
+      "desc": "승용차 170대 무게의 여객기가 뜨는 순간까지 — 날개 둘레 공기를 계산해 3D로 · 직접 해 보기",
+      "field": "물리"
     },
     {
       "id": "bridge",
@@ -63,7 +70,8 @@
       "title": "다리가 이어지는 시간",
       "url": "https://bridge.seeplore.com/",
       "icon": "https://seeplore.com/icons/series/bridge.png",
-      "desc": "바닷속 기초부터 150 m 주탑, 1 km 케이블까지 — 바다 위 현수교가 지어지는 5년을 3D 타임랩스로 · 음성 해설"
+      "desc": "바닷속 기초부터 150 m 주탑, 1 km 케이블까지 — 바다 위 현수교가 지어지는 5년을 3D 타임랩스로 · 음성 해설",
+      "field": "공학"
     },
     {
       "id": "earth",
@@ -71,7 +79,8 @@
       "title": "그림으로 보는 지구 환경",
       "url": "https://earth.seeplore.com/",
       "icon": "https://seeplore.com/icons/series/earth.png",
-      "desc": "태양에서 빗방울까지 — 햇빛이 바람과 구름과 비가 되는 과정을 10배씩 다가가며 3D로"
+      "desc": "태양에서 빗방울까지 — 햇빛이 바람과 구름과 비가 되는 과정을 10배씩 다가가며 3D로",
+      "field": "지구"
     },
     {
       "id": "money",
@@ -79,7 +88,8 @@
       "title": "노동과 자본",
       "url": "https://money.seeplore.com/",
       "icon": "https://seeplore.com/icons/series/money.png",
-      "desc": "누를 때만 나오는 돈과, 내가 자는 동안에도 도는 기계 — 평균 월급의 한 사람, 28세부터 노후와 부의 대물림까지 3D로"
+      "desc": "누를 때만 나오는 돈과, 내가 자는 동안에도 도는 기계 — 평균 월급의 한 사람, 28세부터 노후와 부의 대물림까지 3D로",
+      "field": "사회·경제"
     },
     {
       "id": "class",
@@ -87,7 +97,8 @@
       "title": "통계로 보는 우리 반",
       "url": "https://class.seeplore.com/",
       "icon": "https://seeplore.com/icons/series/class.png",
-      "desc": "15세 교실에서 80세 동창회까지 — 공식 통계를 한 반 25명으로 줄여 진학·직업·소득·은퇴를 3D로 · 내 구슬 고르기"
+      "desc": "15세 교실에서 80세 동창회까지 — 공식 통계를 한 반 25명으로 줄여 진학·직업·소득·은퇴를 3D로 · 내 구슬 고르기",
+      "field": "사회·경제"
     },
     {
       "id": "pc",
@@ -95,7 +106,8 @@
       "title": "0.05초 안의 컴퓨터",
       "url": "https://computer.seeplore.com/",
       "icon": "https://seeplore.com/icons/series/pc.png",
-      "desc": "W 키 하나가 화면 속 한 걸음이 되기까지 — 컴퓨터 안의 0.05초를 3D 슬로모션으로"
+      "desc": "W 키 하나가 화면 속 한 걸음이 되기까지 — 컴퓨터 안의 0.05초를 3D 슬로모션으로",
+      "field": "AI·컴퓨터"
     },
     {
       "id": "germ",
@@ -103,7 +115,8 @@
       "title": "위험한 병원체",
       "url": "https://danger-germ.seeplore.com/",
       "icon": "https://seeplore.com/icons/series/germ.png",
-      "desc": "인간에게 위험한 병원체 순위 — 감염 경로와 몸에서 일어나는 일을 3D 로"
+      "desc": "인간에게 위험한 병원체 순위 — 감염 경로와 몸에서 일어나는 일을 3D 로",
+      "field": "생명·건강"
     },
     {
       "id": "nuke",
@@ -111,7 +124,8 @@
       "title": "원자에서 핵폭발로",
       "url": "https://nucleus.seeplore.com/",
       "icon": "https://seeplore.com/icons/series/nuke.png",
-      "desc": "연필심 속 원자에서 버섯구름까지 — 원자핵이 쪼개지는 원리를 3D로 · 음성 해설 · 부산에서 직접 해 보기"
+      "desc": "연필심 속 원자에서 버섯구름까지 — 원자핵이 쪼개지는 원리를 3D로 · 음성 해설 · 부산에서 직접 해 보기",
+      "field": "물리"
     },
     {
       "id": "ground",
@@ -119,7 +133,8 @@
       "title": "깊이로 보는 땅속",
       "url": "https://underground.seeplore.com/",
       "icon": "https://seeplore.com/icons/series/ground.png",
-      "desc": "발밑의 흙에서 지구 중심(약 6,371 km)까지, 땅속을 깊이 순서로 — 3D · 음성 해설"
+      "desc": "발밑의 흙에서 지구 중심(약 6,371 km)까지, 땅속을 깊이 순서로 — 3D · 음성 해설",
+      "field": "지구"
     },
     {
       "id": "life",
@@ -127,7 +142,8 @@
       "title": "생명이 이어 온 시간",
       "url": "https://earthhistory.seeplore.com/",
       "icon": "https://seeplore.com/icons/series/life.png",
-      "desc": "바닷속 첫 세포에서 공룡과 소행성, 불을 든 사람까지 — 약 38억 년 생명의 역사를 3D로 · 음성 해설"
+      "desc": "바닷속 첫 세포에서 공룡과 소행성, 불을 든 사람까지 — 약 38억 년 생명의 역사를 3D로 · 음성 해설",
+      "field": "역사"
     },
     {
       "id": "exo",
@@ -139,7 +155,8 @@
       "titleEn": "Weird Exoplanets",
       "labelEn": "Weird\nExoplanets",
       "descEn": "Glass rain, iron rain and a “diamond planet” — ten of the strangest exoplanets on a distance map and in 3D · narrated",
-      "urlEn": "https://exo.seeplore.com/en/"
+      "urlEn": "https://exo.seeplore.com/en/",
+      "field": "우주"
     },
     {
       "id": "bh",
@@ -151,7 +168,8 @@
       "titleEn": "Secrets of Spacetime and Black Holes",
       "labelEn": "Spacetime and\nBlack Holes",
       "descEn": "How curved spacetime slows time — follow the clock from Earth to a black hole in 3D · narrated",
-      "urlEn": "https://blackhole.seeplore.com/en/"
+      "urlEn": "https://blackhole.seeplore.com/en/",
+      "field": "우주"
     },
     {
       "id": "rainbow",
@@ -163,7 +181,8 @@
       "titleEn": "The 42° Rainbow",
       "labelEn": "The 42°\nRainbow",
       "descEn": "Why does sunlight make a rainbow at 42°? Follow light through a raindrop in 3D · narrated",
-      "urlEn": "https://rainbow.seeplore.com/en/"
+      "urlEn": "https://rainbow.seeplore.com/en/",
+      "field": "물리"
     },
     {
       "id": "wave",
@@ -175,7 +194,8 @@
       "titleEn": "The Long Journey of a Wave",
       "labelEn": "Journey\nof a Wave",
       "descEn": "The wave moves on, the water stays — how ocean waves work, from wind to beach, in 3D · narrated",
-      "urlEn": "https://wave.seeplore.com/en/"
+      "urlEn": "https://wave.seeplore.com/en/",
+      "field": "지구"
     }
   ]
 }
