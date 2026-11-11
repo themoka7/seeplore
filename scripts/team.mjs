@@ -125,7 +125,7 @@ body.shorts #caption { top: 5%; bottom: auto; font-size: 20px; }
   </div>
   <div class="box">
     <h2>팀원</h2>
-    <p class="note">사람은 대표 한 명. 나머지는 실제로 쓰는 AI와 도구입니다. 제작본부는 일이 있을 때만 담당 AI가 들어와 작품을 맡습니다(책상 4자리). 출시 작품 ${works.length}편은 진열장에 있습니다.</p>
+    <p class="note">사람은 대표 한 명. 나머지는 실제로 쓰는 AI와 도구입니다. 제작본부는 일이 있을 때만 담당 AI가 들어와 작품을 맡습니다.</p>
     <ul class="team">${all.map(card).join('')}</ul>
   </div>
   <footer>가구·사람 그림: Kenney Roguelike Indoor · Roguelike Characters (CC0) · <a href="/about">seeplore 소개</a> · <a href="${BLOG}">블로그</a> · <a href="https://www.youtube.com/@seeplore">YouTube</a></footer>
