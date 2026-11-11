@@ -8,6 +8,7 @@
  * 실행: node scripts/build.mjs   (Vercel 빌드 명령도 이것)
  */
 import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync, existsSync } from 'node:fs';
+import { teamHtml } from './team.mjs';
 
 const SITE = 'https://seeplore.com';
 const data = JSON.parse(readFileSync('series.json', 'utf8'));
@@ -182,7 +183,7 @@ footer { margin-top: 40px; font-size: 12px; line-height: 1.6; color: #6f777e; }
   </ul>
   <p class="soon">+ 다음 작품 준비 중</p>
   <p class="blog"><a href="${BLOG}">seeplore 블로그 — 작품 뒤의 원리와 만든 이야기 →</a></p>
-  <footer>작품 ${works.length}편 · 무료 · 회원 가입 없음</footer>
+  <footer>작품 ${works.length}편 · 무료 · 회원 가입 없음 · <a href="/team" style="color:inherit">만드는 사람들</a></footer>
 </main>
 </body>
 </html>
@@ -260,6 +261,7 @@ ${byField.map(({ f, ws }) => `<p class="f">${esc(f)}</p>\n<ul>\n${ws.map((w) => 
 <ul>
 <li><a href="${BLOG}">seeplore 블로그</a> — 작품 뒤의 원리와 만든 과정을 글로 정리합니다.</li>
 <li><a href="https://www.youtube.com/@seeplore">YouTube @seeplore</a> — 작품의 한 장면을 1분 안쪽 쇼츠로 요약합니다.</li>
+<li><a href="/team">만드는 사람들</a> — 대표 한 명과 AI 팀원들이 일하는 사무실(가상)</li>
 </ul>
 </main>
 </body>
@@ -289,10 +291,13 @@ ${byField.map(({ f, ws }) => `## ${f}\n\n${ws.map((w) => `- [${w.title}](${w.url
 `,
 );
 
+mkdirSync('dist/team', { recursive: true });
+writeFileSync('dist/team/index.html', teamHtml({ works, esc, SITE, BLOG }));
+
 const today = new Date().toISOString().slice(0, 10);
 writeFileSync(
   'dist/sitemap.xml',
-  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <url><loc>${SITE}/</loc><lastmod>${today}</lastmod></url>\n  <url><loc>${SITE}/about</loc><lastmod>${today}</lastmod></url>\n</urlset>\n`,
+  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <url><loc>${SITE}/</loc><lastmod>${today}</lastmod></url>\n  <url><loc>${SITE}/about</loc><lastmod>${today}</lastmod></url>\n  <url><loc>${SITE}/team</loc><lastmod>${today}</lastmod></url>\n</urlset>\n`,
 );
 writeFileSync('dist/robots.txt', `User-agent: *\nAllow: /\nSitemap: ${SITE}/sitemap.xml\n`);
 console.log(`[seeplore] 작품 ${works.length}편 → dist/`);
