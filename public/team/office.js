@@ -53,7 +53,7 @@
   };
   const PAT = [
     [/^제작 (\d)$/, 'Maker $1'], [/^「(.+)」 맡는 중$/, 'Working on “$1”'], [/^「(.+)」 맡았어요$/, 'I’ll take “$1”'],
-    [/^담당 AI가 「(.+)」를 3D로 만듭니다$/, 'A maker AI builds “$1” in 3D'], [/^(\d\d:\d\d) 실행 대기$/, 'Next run $1'], [/^(.+) 글 공개 대기$/, 'Next post $1'], [/^출시 작품 (\d+)$/, 'Released $1'],
+    [/^담당 AI가 「(.+)」를 3D로 만듭니다$/, 'A maker AI builds “$1” in 3D'], [/^(\d\d:\d\d) 실행 대기$/, 'Next run $1'], [/^(.+) 글 공개 대기$/, 'Next post $1'], [/^출시 작품 (\d+)$/, 'Released $1'], [/^외 (\d+)편 · 누르면 전체 목록$/, '$1 more · tap to see all'],
   ];
   const L = (s) => { if (!EN || !s) return s; if (DICT[s] != null) return DICT[s]; for (const [re, to] of PAT) if (re.test(s)) return s.replace(re, to); return s; };
   // ---------------------------------------------------------------- 그림 불러오기
@@ -148,6 +148,11 @@
   // 작품 진열장: 출시한 작품 아이콘 — 누르면 그 작품으로
   const SHELF = PORTRAIT ? { x: 0.8 * T, y: 16 * T, cols: 5, gap: 22, size: 16 } : { x: 1 * T, y: 10 * T, cols: 5, gap: 23, size: 17 };
   const shelfAt = (i) => [SHELF.x + (i % SHELF.cols) * SHELF.gap, SHELF.y + Math.floor(i / SHELF.cols) * (SHELF.gap - 2)];
+  // 진열장은 3줄까지 — 넘치면 최신 작품만 놓고 마지막 칸에 '+N'(누르면 전체 목록). 작품이 늘어도 방 밖으로 넘치지 않게
+  const SHELF_MAX = SHELF.cols * 3;
+  const SHOWN = DATA.works.length > SHELF_MAX ? DATA.works.slice(-(SHELF_MAX - 1)) : DATA.works;
+  const MORE = DATA.works.length - SHOWN.length;
+  const ALL_URL = document.documentElement.lang === 'en' ? '/en' : '/';
   const roomOf = (p) => ROOMS.find((r) => p.homeX >= r.x * T && p.homeX < (r.x + r.w) * T && p.homeY >= r.y * T && p.homeY < (r.y + r.h) * T);
 
   // ---------------------------------------------------------------- 길 찾기: 내 방 문 → 복도 → 상대 방 문 → 목적지
@@ -454,8 +459,9 @@
         text('커피', 3.5 * T, 18.3 * T, 6, TH.label);
       }
       // 작품 진열장
-      text(PORTRAIT ? '출시 작품' : '출시 작품 ' + DATA.works.length, SHELF.x, SHELF.y - 4, 6, TH.label, 'left', 800);
-      DATA.works.forEach((w, i) => { const [x, y] = shelfAt(i); R(x - 1, y - 1, SHELF.size + 2, SHELF.size + 2, TH.chip ? '#0f4a35' : 'rgba(0,0,0,.35)'); if (icons[w.id]) g.drawImage(icons[w.id], x, y, SHELF.size, SHELF.size); });
+      text('출시 작품 ' + DATA.works.length, SHELF.x, SHELF.y - 4, 6, TH.label, 'left', 800);
+      if (MORE) { const [x, y] = shelfAt(SHOWN.length); R(x - 1, y - 1, SHELF.size + 2, SHELF.size + 2, TH.chip ? '#0f4a35' : 'rgba(0,0,0,.35)'); text('+' + MORE, x + SHELF.size / 2, y + SHELF.size / 2 + 2.5, 7, TH.label, 'center', 800); }
+      SHOWN.forEach((w, i) => { const [x, y] = shelfAt(i); R(x - 1, y - 1, SHELF.size + 2, SHELF.size + 2, TH.chip ? '#0f4a35' : 'rgba(0,0,0,.35)'); if (icons[w.id]) g.drawImage(icons[w.id], x, y, SHELF.size, SHELF.size); });
       // 책상과 사람 (위에서 아래 순서로)
       const all = Object.values(people);
       for (const p of all) { const here = Math.abs(p.x - p.deskX) < 2 && Math.abs(p.y - p.deskY - 14) < 2; deskAt(p.deskX, p.deskY, p.maker && p.on && here && p.work ? icons[p.work.id] : null, p.typing && here, t); }
@@ -479,7 +485,7 @@
   }
   function hit(ev) {
     const [x, y] = worldAt(ev);
-    for (let i = 0; i < DATA.works.length; i++) { const [sx, sy] = shelfAt(i); if (x >= sx - 2 && x <= sx + SHELF.size + 2 && y >= sy - 2 && y <= sy + SHELF.size + 2) return { shelf: DATA.works[i], x: sx, y: sy }; }
+    for (let i = 0; i < SHOWN.length + (MORE ? 1 : 0); i++) { const [sx, sy] = shelfAt(i); if (x >= sx - 2 && x <= sx + SHELF.size + 2 && y >= sy - 2 && y <= sy + SHELF.size + 2) return { shelf: SHOWN[i] ?? { title: L('출시 작품 ') + DATA.works.length, url: ALL_URL, more: true }, x: sx, y: sy }; }
     for (const p of Object.values(people)) if (Math.abs(x - p.x) < 14 && y > p.y - 26 && y < p.y + 12) return p;
     return null;
   }
@@ -488,7 +494,7 @@
     if (!p) { tip.hidden = true; canvas.style.cursor = 'default'; return; }
     const info = DATA.info[p.key];
     tip.innerHTML = p.shelf
-      ? `<b>${p.shelf.title}</b><span class="t">${L('출시 작품 · 누르면 열기')}</span>`
+      ? `<b>${p.shelf.more ? L(`출시 작품 ${DATA.works.length}`) : p.shelf.title}</b><span class="t">${p.shelf.more ? L(`외 ${MORE}편 · 누르면 전체 목록`) : L('출시 작품 · 누르면 열기')}</span>`
       : `<b>${L(info.name)}</b><span class="t">${info.who}${info.tool ? ' · ' + L(info.tool) : ''}</span><p>${L(info.does)}</p><p class="t">${L('지금: ')}${L(status(p.key))}</p>`;
     canvas.style.cursor = p.shelf ? 'pointer' : 'default';
     tip.hidden = false;
