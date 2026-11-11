@@ -213,6 +213,19 @@
       "descEn": "Three deaths decided by mass at birth — a black hole, a neutron star and a white dwarf in 3D · narrated",
       "urlEn": "https://destinyofstars.seeplore.com/en/",
       "field": "우주"
+    },
+    {
+      "id": "value",
+      "label": "라면값으로 보는\n돈의 값",
+      "title": "라면값으로 보는 돈의 값",
+      "url": "https://valueofmoney.seeplore.com/",
+      "icon": "https://seeplore.com/icons/series/value.png",
+      "desc": "월급은 그대로인데 물가만 오른다? 1963년 10원 라면에서 시작해, 한국은행 통계로 돈의 값을 따라가는 3D · 음성 해설",
+      "titleEn": "The Value of Money, in Ramen",
+      "labelEn": "Value of Money\nin Ramen",
+      "descEn": "Wages stay the same, but prices keep rising? From 10-won ramen in 1963, the value of money in 3D with Bank of Korea data · narrated",
+      "urlEn": "https://valueofmoney.seeplore.com/en/",
+      "field": "사회·경제"
     }
   ]
 }
