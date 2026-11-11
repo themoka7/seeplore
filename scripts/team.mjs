@@ -1,5 +1,5 @@
 /**
- * /team — 가상의 회사 "seeplore 스튜디오" 미니홈피 (2000년대 미니홈피 문법을 빌린 오리지널 디자인 — 특정 서비스의 이름·로고·화폐는 쓰지 않는다).
+ * /team — 가상의 회사 "seeplore 스튜디오"를 위에서 내려다본 픽셀 사무실(오리지널 그림, canvas). 방마다 팀, 책상마다 팀원.
  * 실제로는 사람 1명(대표) + AI 도구들이 일한다. 재미로 꾸몄지만 내용은 사실대로:
  * 누가 어떤 도구이고 무슨 일을 하는지 그대로 적는다(지어낸 직원·숫자 없음).
  * 업무일지(LOG)는 손으로 적는다 — 새 일이 있으면 맨 위에 한 줄.
@@ -56,18 +56,38 @@ export function teamHtml({ works, esc, SITE, BLOG }) {
     },
   ];
   const all = DEPTS.flatMap((d) => d.members ?? []);
+  const by = Object.fromEntries(all.map((m) => [m.name, m]));
   const memberCount = all.length + works.length;
-  const card = (m) => `<li class="m"><div class="av">${esc(m.who.slice(0, 2))}</div><div class="mi"><p class="mn"><b>${esc(m.name)}</b> <span>${esc(m.who)}</span></p><p class="mt">${esc(m.tool)}</p><p class="md">${esc(m.does)}</p></div></li>`;
-  const workCard = (w) => `<li class="w"><a href="${esc(w.url)}"><img src="${esc(w.icon.replace(SITE, ''))}" alt="" width="40" height="40" loading="lazy"><span><b>${esc(w.title)}</b> 담당</span></a></li>`;
-  const depts = DEPTS.map(
-    (d) => `<section class="dept"><h3>${esc(d.name)}</h3>${d.note ? `<p class="note">${esc(d.note)}</p>` : ''}${d.works ? `<ul class="ws">${works.map(workCard).join('')}</ul>` : `<ul class="ms">${d.members.map(card).join('')}</ul>`}</section>`,
-  ).join('\n');
-  const logRows = (rows) => rows.map(([d, who, t]) => `<li><time>${esc(d)}</time><b>${esc(who)}</b><span>${esc(t)}</span></li>`).join('');
-  const album = works.map((w) => `<li><a href="${esc(w.url)}"><img src="${esc(w.icon.replace(SITE, ''))}" alt="" width="96" height="96" loading="lazy"><span>${esc(w.title)}</span></a></li>`).join('');
-  const guest = all.map((m) => `<li><div class="av sm">${esc(m.who.slice(0, 2))}</div><p><b>${esc(m.name)}</b> <span class="gw">(${esc(m.who)})</span><br>${esc(m.mood)}</p></li>`).join('');
-  const wave = all.map((m) => `<option>${esc(m.name)} · ${esc(m.who)}</option>`).join('') + works.map((w) => `<option value="${esc(w.url)}">${esc(w.title)} 담당</option>`).join('');
-  // 미니룸 사람들: [이름표, 몸 색, x 위치(0~200)]
-  const ROOM = [['대표', '#ff7a3d', 28], ['Gemini', '#5b8def', 62], ['Claude', '#d97757', 98], ['Aoede', '#b06ad9', 132], ['봇', '#4caf7a', 166]];
+  // 사무실 배치 (논리 좌표 320×210, 화면에서 4배로 그림)
+  const ROOMS = [
+    ['대표실', 0, 0, 56, 70, '#ecd2a8'],
+    ['기획실', 56, 0, 56, 70, '#d3e6f6'],
+    ['홍보팀', 112, 0, 128, 70, '#f6dcdc'],
+    ['음성 부스', 240, 0, 80, 70, '#e6daf4'],
+    [`제작본부 · 작품 ${works.length}편`, 0, 70, 240, 92, '#f4e6c8'],
+    ['품질관리', 240, 70, 80, 46, '#d9efdd'],
+    ['서버실', 240, 116, 80, 46, '#d8dee6'],
+    ['휴게실', 0, 162, 320, 48, '#e6f0dc'],
+  ];
+  const PEOPLE = [
+    // [팀원 이름, 이름표, 옷 색, x, y]
+    ['대표', '대표', '#ff7a3d', 26, 34],
+    ['기획 담당', 'Gemini', '#4f86e8', 82, 34],
+    ['홍보팀장', '홍보팀장', '#d97757', 128, 34],
+    ['블로그 작가', '블로그', '#d97757', 158, 34],
+    ['쇼츠 PD', '쇼츠 PD', '#d97757', 188, 34],
+    ['업로드 봇', '업로드 봇', '#4caf7a', 218, 34],
+    ['내레이터', 'Aoede', '#a865d8', 278, 34],
+    ['점검 로봇', '점검 로봇', '#4caf7a', 278, 96],
+  ];
+  const OBJECTS = [
+    ['서류함', 'GitHub', 258, 128],
+    ['건물 관리', 'Vercel', 290, 128],
+  ];
+  const WORKS = works.map((w, i) => ({ id: w.id, title: w.title, url: w.url, icon: w.icon.replace(SITE, ''), x: 26 + (i % 5) * 46, y: 84 + Math.floor(i / 5) * 19.5 })); // x = 책상 가운데
+  const INFO = Object.fromEntries(all.map((m) => [m.name, { name: m.name, who: m.who, tool: m.tool, does: m.does, mood: m.mood }]));
+  const card = (m) => `<li class="m"><b>${esc(m.name)}</b> <span>${esc(m.who)} · ${esc(m.tool)}</span><p>${esc(m.does)}</p></li>`;
+  const logRows = LOG.map(([d, who, t]) => `<li><time>${esc(d)}</time><b>${esc(who)}</b><span>${esc(t)}</span></li>`).join('');
 
   return `<!doctype html>
 <html lang="ko">
@@ -76,173 +96,177 @@ export function teamHtml({ works, esc, SITE, BLOG }) {
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-TBYJ6JBLYF"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-TBYJ6JBLYF',{content_group:'hub'});</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>seeplore 스튜디오 미니홈피</title>
-<meta name="description" content="seeplore를 만드는 가상의 회사. 대표 한 명과 AI 팀원들(Claude, Gemini, Google TTS 등)이 어떤 일을 나눠 맡는지 미니홈피로 꾸몄습니다.">
+<title>seeplore 스튜디오</title>
+<meta name="description" content="seeplore를 만드는 가상의 회사를 위에서 내려다본 픽셀 사무실. 대표 한 명과 AI 팀원들(Claude, Gemini, Google TTS 등)이 방마다 맡은 일을 합니다.">
 <link rel="canonical" href="${SITE}/team">
-<meta property="og:title" content="seeplore 스튜디오 미니홈피 — 대표 1명과 AI 팀원들">
-<meta property="og:description" content="seeplore 웹 다큐 시리즈를 만드는 가상의 회사의 미니룸·조직도·다이어리.">
+<meta property="og:title" content="seeplore 스튜디오 — 대표 1명과 AI 팀원들의 사무실">
+<meta property="og:description" content="seeplore 웹 다큐 시리즈를 만드는 가상의 회사. 작품마다 담당 AI가 한 명씩.">
 <meta property="og:url" content="${SITE}/team">
 <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-32.png">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gaegu:wght@700&family=Nanum+Gothic:wght@400;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap">
 <style>
-/* 미니홈피 문법: 점무늬 바깥 · 스프링 철한 다이어리 판 · 왼쪽 프로필 · 가운데 내용 · 오른쪽 세로 탭 · 미니룸 · 오늘의 BGM */
-:root { --out: #e9eef3; --dot: #d5dee6; --cover: #ff8a3d; --cover-dk: #e86f22; --paper: #fff; --line: #c8d3dc; --ink: #3a3f44; --soft: #7b8792; --hl: #ff7a1a; --blue: #2a73b8; --tab: #f2f6f9;
-  --hand: 'Gaegu', 'Nanum Gothic', cursive; --body: 'Nanum Gothic', 'Apple SD Gothic Neo', sans-serif; color-scheme: light; }
+/* 위에서 내려다본 픽셀 사무실 + 아래 상태판. 따뜻한 나무색 바탕 */
+:root { --bg: #f7efe2; --panel: #fffaf2; --line: #e2cfb1; --ink: #3d3328; --soft: #8a7a66; --accent: #e8752a; --ok: #3f9a5e; --body: 'Nanum Gothic', 'Apple SD Gothic Neo', sans-serif; color-scheme: light; }
 * { box-sizing: border-box; }
 html, body { margin: 0; }
-body { background: var(--out) radial-gradient(var(--dot) 1.4px, transparent 1.5px) 0 0 / 12px 12px; color: var(--ink); font: 12.5px/1.6 var(--body); padding-block: 18px 40px; padding-left: max(10px, env(safe-area-inset-left, 0px)); padding-right: max(10px, env(safe-area-inset-right, 0px)); word-break: keep-all; }
-.wrap { max-width: 900px; margin: 0 auto; display: flex; gap: 0; align-items: flex-start; }
-.diary { flex: 1; min-width: 0; background: var(--cover); border-radius: 16px; padding: 12px 12px 14px; box-shadow: 0 3px 0 var(--cover-dk); position: relative; }
-.diary::before { content: ''; position: absolute; left: 50%; top: 40px; bottom: 30px; width: 14px; margin-left: -7px; background: repeating-linear-gradient(#fff 0 6px, transparent 6px 16px); opacity: .55; border-radius: 7px; }
-.bar { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; color: #fff; padding: 0 6px 8px; font-size: 11.5px; }
-.bar b { font: 800 14px var(--body); }
-.count { font-variant-numeric: tabular-nums; background: rgba(0,0,0,.12); border-radius: 10px; padding: 1px 8px; }
-.count i { font-style: normal; color: #fff4a8; font-weight: 800; }
-.pages { display: grid; grid-template-columns: 210px minmax(0, 1fr); gap: 10px; position: relative; }
-.page { background: var(--paper); border-radius: 10px; border: 1px solid #f0c3a3; padding: 12px; min-width: 0; }
-.photo { aspect-ratio: 1; border-radius: 6px; background: #050608; display: grid; place-items: center; }
-.photo img { width: 64%; height: auto; }
-.mood { font: 700 19px/1.25 var(--hand); color: var(--hl); margin: 10px 0 4px; }
-.page p { margin: 5px 0; }
-.soft { color: var(--soft); }
-.side dl { margin: 10px 0; display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; font-size: 11.5px; }
-.side dt { color: var(--soft); } .side dd { margin: 0; font-weight: 700; }
-.side select { width: 100%; font: 12px var(--body); padding: 4px; border: 1px solid var(--line); border-radius: 4px; background: #fff; color: var(--ink); }
-.wave { margin-top: 10px; font-size: 11px; color: var(--soft); }
-.bgm { margin-top: 12px; border: 1px solid var(--line); border-radius: 8px; padding: 8px; background: var(--tab); }
-.bgm b { font-size: 11px; color: var(--blue); }
-.bgm button { font: 700 12px var(--body); border: 1px solid var(--line); background: #fff; border-radius: 12px; padding: 2px 10px; cursor: pointer; color: var(--ink); }
-.bgm .t { font-size: 11.5px; margin: 4px 0; }
-.tabs { position: relative; display: flex; flex-direction: column; gap: 4px; margin-top: 48px; }
-.tabs a { writing-mode: vertical-rl; text-orientation: upright; padding: 10px 5px; background: var(--tab); border: 1px solid var(--line); border-left: 0; border-radius: 0 8px 8px 0; color: var(--ink); text-decoration: none; font-size: 11.5px; letter-spacing: 1px; }
-.tabs a[aria-current="page"] { background: #fff; color: var(--hl); font-weight: 800; }
-.tabs a:focus-visible { outline: 2px solid var(--blue); }
-h2 { font: 800 13px var(--body); color: var(--blue); margin: 0 0 8px; padding-bottom: 4px; border-bottom: 1px dotted var(--line); display: flex; justify-content: space-between; }
-h2 small { font-weight: 400; color: var(--soft); }
-h3 { margin: 14px 0 6px; font-size: 12.5px; color: var(--blue); }
-h3::before { content: '▸ '; }
-.room { width: 100%; height: auto; image-rendering: pixelated; border: 1px solid var(--line); border-radius: 6px; display: block; background: #f7efe4; }
-.roomcap { font-size: 11px; color: var(--soft); margin: 4px 0 12px !important; }
+body { background: var(--bg); color: var(--ink); font: 13px/1.6 var(--body); padding-block: 14px 40px; padding-left: max(12px, env(safe-area-inset-left, 0px)); padding-right: max(12px, env(safe-area-inset-right, 0px)); word-break: keep-all; }
+.wrap { max-width: 1000px; margin: 0 auto; display: grid; gap: 10px; }
+.head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 6px 12px; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px; }
+.head b { font-size: 14px; } .head span { color: var(--soft); font-size: 12px; } .head a { color: var(--accent); font-size: 12px; }
+.mapbox { position: relative; background: #8b5e3c; border-radius: 10px; padding: 6px; overflow-x: auto; }
+.mapin { position: relative; min-width: 640px; }
+#office { width: 100%; height: auto; display: block; image-rendering: pixelated; border-radius: 4px; cursor: default; }
+.tip { position: absolute; z-index: 2; max-width: 240px; background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; font-size: 12px; box-shadow: 0 4px 14px rgba(60,40,20,.18); pointer-events: none; }
+.tip b { display: block; } .tip .t { color: var(--soft); font-size: 11px; } .tip p { margin: 4px 0 0; }
+.status { display: flex; gap: 8px; align-items: center; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 6px 12px; font-size: 12px; }
+.status i { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); flex: none; }
+.grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; }
+.box { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; min-width: 0; }
+h2 { margin: 0 0 6px; font-size: 13px; }
 ul { list-style: none; margin: 0; padding: 0; }
-.news li { display: grid; grid-template-columns: 38px 64px minmax(0, 1fr); gap: 6px; padding: 4px 0; border-bottom: 1px dotted #e3e9ee; }
-.news time { color: var(--soft); font-variant-numeric: tabular-nums; } .news b { color: var(--blue); }
-.ilchon { margin-top: 14px; }
-.ilchon li { display: flex; gap: 8px; padding: 6px 0; border-bottom: 1px dotted #e3e9ee; align-items: flex-start; }
-.ilchon p { margin: 0; } .gw { color: var(--soft); font-size: 11px; }
-.ms { display: grid; gap: 6px; }
-.m { display: flex; gap: 10px; padding: 8px; border: 1px solid #e6edf2; border-radius: 8px; background: #fbfdff; }
-.av { flex: none; width: 40px; height: 40px; border-radius: 50%; background: var(--tab); border: 1px solid var(--line); display: grid; place-items: center; font-weight: 800; font-size: 11px; color: var(--blue); }
-.av.sm { width: 30px; height: 30px; font-size: 10px; }
-.mi { min-width: 0; } .mi p { margin: 0; }
-.mn span, .mt { color: var(--soft); font-size: 11px; }
-.md { margin-top: 3px !important; }
-.note { color: var(--soft); margin: 0 0 6px !important; }
-.ws { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 5px; }
-.w a { display: flex; align-items: center; gap: 8px; padding: 5px 7px; border: 1px solid #e6edf2; border-radius: 8px; color: var(--ink); text-decoration: none; background: #fbfdff; }
-.w img { width: 32px; height: 32px; border-radius: 50%; flex: none; }
-.album { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 8px; }
-.album a { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px; border: 1px solid #e6edf2; border-radius: 8px; color: var(--ink); text-decoration: none; text-align: center; font-size: 11.5px; }
-.album img { width: 72px; height: 72px; border-radius: 6px; }
-.how p { margin: 6px 0; }
-.foot { text-align: center; color: var(--soft); font-size: 11px; margin: 10px 0 0; }
-.foot a { color: var(--soft); }
-section[hidden] { display: none !important; }
-@media (max-width: 700px) {
-  .pages { grid-template-columns: 1fr; } .diary::before { display: none; }
-  .photo { max-width: 140px; margin: 0 auto; }
-  .wrap { flex-direction: column; }
-  .tabs { flex-direction: row; flex-wrap: wrap; margin: 0 0 6px; width: 100%; order: -1; }
-  .tabs a { writing-mode: horizontal-tb; border: 1px solid var(--line); border-radius: 8px; padding: 6px 12px; flex: 1; text-align: center; }
-}
+.next li { display: flex; justify-content: space-between; gap: 10px; padding: 5px 0; border-bottom: 1px dotted var(--line); }
+.next time { font-weight: 800; color: var(--accent); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.log li { display: grid; grid-template-columns: 40px 70px minmax(0, 1fr); gap: 6px; padding: 4px 0; border-bottom: 1px dotted var(--line); }
+.log time { color: var(--soft); font-variant-numeric: tabular-nums; } .log b { color: var(--accent); }
+.team { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; }
+.m { border: 1px solid var(--line); border-radius: 8px; padding: 8px; background: #fff; }
+.m span { color: var(--soft); font-size: 11px; } .m p { margin: 4px 0 0; }
+.note { color: var(--soft); font-size: 12px; margin: 0 0 8px; }
+.foot { text-align: center; color: var(--soft); font-size: 11px; } .foot a { color: var(--soft); }
+@media (max-width: 700px) { .grid { grid-template-columns: 1fr; } .log li { grid-template-columns: 36px minmax(0, 1fr); } .log li span { grid-column: 2; } }
 </style>
 </head>
 <body>
 <div class="wrap">
- <div class="diary">
-  <div class="bar"><span><b>seeplore 스튜디오</b>의 미니홈피 · 가상의 회사</span><span class="count">작품 <i>${works.length}</i> · 팀원 <i>${memberCount}</i> · 사람 <i>1</i></span></div>
-  <div class="pages">
-   <aside class="page side">
-    <div class="photo"><img src="/icons/icon-192.png" alt="seeplore 로고" width="192" height="192"></div>
-    <p class="mood">대표 1명, 나머지는 다 AI</p>
-    <p class="soft">보면서(see) 탐험하는(explore) 웹 다큐를 만드는 회사. 진짜 회사는 아니고, 실제로 이렇게 일을 나눠서 만들고 있어서 회사처럼 꾸며 봤어요.</p>
-    <dl><dt>설립</dt><dd>2026.11</dd><dt>본사</dt><dd>seeplore.com</dd><dt>사옥</dt><dd>클라우드 어딘가</dd></dl>
-    <p class="wave">팀원 찾아가기</p>
-    <select id="wave" aria-label="팀원 찾아가기"><option value="">팀원을 고르세요</option>${wave}</select>
-    <div class="bgm"><b>♪ 오늘의 BGM</b><p class="t">내레이터 Aoede — 「다음 글자 맞히기」</p><button type="button" id="bgm">▶ 듣기</button><audio id="bgm-a" preload="none" src="https://ai-slot.seeplore.com/narration/guess-1.mp3"></audio></div>
-   </aside>
-   <div class="page main">
-    <section id="home">
-     <h2>미니룸 <small>오늘도 출근</small></h2>
-     <canvas class="room" id="room" width="800" height="440" role="img" aria-label="작은 사무실에 대표, Gemini, Claude, Aoede, 봇이 책상에 앉아 일하는 그림"></canvas>
-     <p class="roomcap">왼쪽부터 대표 · 기획(Gemini) · 제작·홍보(Claude) · 목소리(Aoede) · 봇</p>
-     <h2>최근 소식 <small><a href="#diary">더 보기</a></small></h2>
-     <ul class="news">${logRows(LOG.slice(0, 4))}</ul>
-     <h2 class="ilchon">팀원 한마디 <small>${all.length}개</small></h2>
-     <ul class="ilchon">${guest}</ul>
-    </section>
-    <section id="profile" hidden>
-     <h2>조직도 <small>${memberCount}명(?)</small></h2>
-     ${depts}
-     <h3>일하는 법</h3>
-     <div class="how">
-      <p>· 대표가 주제를 고르면 기획실(Gemini)이 기획안을 내고, 제작본부(Claude)가 계획을 다시 짜서 대표에게 확인받은 뒤 만든다.</p>
-      <p>· 작품마다 공통 지침서를 따른다. 글은 중학생이 혼자 읽고 이해할 수 있게, 숫자는 계산하거나 출처가 있는 것만.</p>
-      <p>· 사이트에 올리는 건 하루 한 번, 대표가 허락할 때만.</p>
-      <p>· 블로그·쇼츠는 자동으로 올리고, 네이버·X·스레드는 대표가 복사해 올릴 원고를 미리 만들어 둔다.</p>
-     </div>
-    </section>
-    <section id="diary" hidden>
-     <h2>다이어리 <small>업무일지</small></h2>
-     <ul class="news">${logRows(LOG)}</ul>
-    </section>
-    <section id="album" hidden>
-     <h2>사진첩 <small>작품 ${works.length}편</small></h2>
-     <ul class="album">${album}</ul>
-    </section>
-   </div>
+  <div class="head"><div><b>seeplore 스튜디오</b> <span>가상의 회사 · 대표 1명, 나머지는 다 AI · 팀원 ${memberCount}</span></div><a href="/">seeplore.com →</a></div>
+  <div class="mapbox"><div class="mapin">
+    <canvas id="office" width="1280" height="840" role="img" aria-label="위에서 내려다본 seeplore 스튜디오 사무실. 대표실, 기획실(Gemini), 홍보팀(Claude 넷), 음성 부스(Aoede), 작품 ${works.length}개를 맡은 제작본부, 품질관리, 서버실, 휴게실이 있다."></canvas>
+    <div class="tip" id="tip" hidden></div>
+  </div></div>
+  <div class="status"><i></i><span id="st">팀원을 눌러 보세요(PC는 마우스를 올리면). 제작본부 책상을 누르면 그 작품으로 갑니다. 휴대폰에서는 지도를 옆으로 밀어 보세요.</span></div>
+  <div class="grid">
+    <div class="box"><h2>다음 일정</h2><ul class="next" id="next"></ul><p class="note" style="margin:6px 0 0">시간은 한국 시각. 실제로 예약돼 돌아가는 일정입니다.</p></div>
+    <div class="box"><h2>업무일지</h2><ul class="log">${logRows}</ul></div>
   </div>
-  <p class="foot" style="color:#fff">ⓒ seeplore · <a style="color:#fff" href="/about">회사 소개</a> · <a style="color:#fff" href="${BLOG}">블로그</a> · <a style="color:#fff" href="https://www.youtube.com/@seeplore">YouTube</a> · AI 도구 이름은 각 회사의 상표</p>
- </div>
- <nav class="tabs" aria-label="메뉴"><a href="#home">홈</a><a href="#profile">프로필</a><a href="#diary">다이어리</a><a href="#album">사진첩</a></nav>
+  <div class="box">
+    <h2>팀원</h2>
+    <p class="note">사람은 대표 한 명. 나머지는 실제로 쓰는 AI·도구입니다. 제작본부는 작품 하나에 Claude 하나씩 ${works.length}명.</p>
+    <ul class="team">${all.map(card).join('')}</ul>
+  </div>
+  <p class="foot">ⓒ seeplore · <a href="/about">회사 소개</a> · <a href="${BLOG}">블로그</a> · <a href="https://www.youtube.com/@seeplore">YouTube</a> · AI 도구 이름은 각 회사의 상표입니다</p>
 </div>
 <script>
-// 탭: 주소의 #이름으로 고른다
-const TABS = ['home', 'profile', 'diary', 'album'];
-function show() {
-  const id = TABS.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'home';
-  for (const t of TABS) document.getElementById(t).hidden = t !== id;
-  for (const a of document.querySelectorAll('.tabs a')) a.toggleAttribute('aria-current', a.getAttribute('href') === '#' + id), a.getAttribute('href') === '#' + id && a.setAttribute('aria-current', 'page');
-}
-addEventListener('hashchange', show); show();
-// 팀원 찾아가기: 작품 담당이면 그 작품으로, 나머지는 프로필 탭으로
-document.getElementById('wave').onchange = (e) => { const v = e.target.value; if (!v) return; if (v.startsWith('http')) location.href = v; else location.hash = 'profile'; };
-// 오늘의 BGM
-const au = document.getElementById('bgm-a'), bt = document.getElementById('bgm');
-bt.onclick = () => { if (au.paused) { au.play().then(() => (bt.textContent = '❚❚ 멈춤')).catch(() => (bt.textContent = '재생 못 함')); } else { au.pause(); bt.textContent = '▶ 듣기'; } };
-au.onended = () => (bt.textContent = '▶ 듣기');
-// 미니룸: 픽셀로 그린 작은 사무실 (200×110 을 화면 폭에 맞춰 키운다)
-const c = document.getElementById('room'), g = c.getContext('2d'); g.scale(4, 4); // 200×110 좌표로 그리고 4배로 — 글자가 또렷하게
+const ROOMS = ${JSON.stringify(ROOMS)};
+const PEOPLE = ${JSON.stringify(PEOPLE)};
+const OBJECTS = ${JSON.stringify(OBJECTS)};
+const WORKS = ${JSON.stringify(WORKS)};
+const INFO = ${JSON.stringify(INFO)};
+const c = document.getElementById('office'), g = c.getContext('2d');
+g.scale(4, 4); g.imageSmoothingEnabled = false;
 const R = (x, y, w, h, col) => { g.fillStyle = col; g.fillRect(x, y, w, h); };
-let t = 0;
+const txt = (s, x, y, size, col, align = 'center', weight = 700) => { g.font = weight + ' ' + size + 'px Nanum Gothic, sans-serif'; g.fillStyle = col; g.textAlign = align; g.fillText(s, x, y); };
+const tag = (s, x, y) => { g.font = '700 4.5px Nanum Gothic, sans-serif'; const w = g.measureText(s).width + 4; R(x - w / 2, y, w, 6.5, 'rgba(255,255,255,.92)'); R(x - w / 2, y + 6.5, w, 0.5, '#c9b08c'); txt(s, x, y + 4.8, 4.5, '#3d3328'); };
+const icons = {};
+for (const w of WORKS) { const im = new Image(); im.src = w.icon; im.onload = () => (icons[w.id] = im); }
+function desk(x, y, w = 18) { R(x - w / 2, y, w, 7, '#b07b4f'); R(x - w / 2, y + 7, w, 1, '#8a5a34'); R(x - 4, y - 5, 8, 6, '#2b2f36'); R(x - 3, y - 4, 6, 4, '#86d3f5'); }
+function person(x, y, col, t, i) {
+  const bob = Math.round(Math.sin(t / 6 + i) * 0.6);
+  R(x - 3, y + 6, 6, 3, '#6b4a2e');               // 의자
+  R(x - 3, y + 1 + bob, 6, 5, col);                // 몸
+  R(x - 2, y - 3 + bob, 4, 4, '#ffd9b8');           // 머리
+  R(x - 2, y - 4 + bob, 4, 1.5, '#3a2a20');         // 머리카락
+}
+function plant(x, y) { R(x - 2, y + 2, 4, 3, '#a05a2c'); R(x - 3, y - 2, 6, 4, '#4f9a5c'); R(x - 1, y - 4, 2, 2, '#6cc07a'); }
+let t = 0, bubble = null;
 function draw() {
-  R(0, 0, 200, 70, '#f6e7d4'); for (let x = 0; x < 200; x += 8) R(x, 0, 1, 70, '#efdcc5');   // 벽
-  R(0, 70, 200, 40, '#c99a6b'); for (let x = 0; x < 200; x += 16) R(x, 70, 1, 40, '#b88a5c'); // 마루
-  R(14, 10, 40, 26, '#8fc5ea'); R(14, 10, 40, 2, '#fff'); R(33, 10, 2, 26, '#fff'); R(14, 22, 40, 2, '#fff'); // 창문
-  R(150, 12, 34, 22, '#050608'); g.fillStyle = '#fff'; g.font = '900 15px Nanum Gothic, sans-serif'; g.textAlign = 'center'; g.fillText('S', 167, 29); g.textAlign = 'left'; // 로고 액자
-  R(72, 14, 60, 18, '#fffdf6'); R(72, 14, 60, 1, '#d9c9b0'); g.fillStyle = '#c0582a'; g.font = '700 7px Nanum Gothic, sans-serif'; g.textAlign = 'center'; g.fillText('오늘도 무사 배포', 102, 26); g.textAlign = 'left'; // 칠판
-  const PEOPLE = ${JSON.stringify(ROOM)};
-  PEOPLE.forEach(([name, col, x], i) => {
-    const bob = Math.round(Math.sin(t / 8 + i) * 0.8);
-    R(x - 9, 66, 22, 3, '#8a5a34'); R(x - 8, 69, 2, 12, '#6e4527'); R(x + 10, 69, 2, 12, '#6e4527'); // 책상
-    R(x - 4, 56, 12, 9, '#2b2f36'); R(x - 3, 57, 10, 7, (t + i * 5) % 20 < 10 ? '#7fd6ff' : '#9be7c4'); R(x + 1, 65, 2, 1, '#2b2f36'); // 모니터
-    R(x + 1, 74 + bob, 6, 6, '#ffd8b5'); R(x + 1, 73 + bob, 6, 2, '#3a2a20'); R(x + 2, 76 + bob, 1, 1, '#222'); R(x + 5, 76 + bob, 1, 1, '#222'); // 머리
-    R(x, 80 + bob, 8, 8, col); R(x + 1, 88, 2, 4, '#3b3f48'); R(x + 5, 88, 2, 4, '#3b3f48'); // 몸·다리
-    g.font = '700 6px Nanum Gothic, sans-serif'; const tw = g.measureText(name).width + 6; g.fillStyle = '#fff'; g.fillRect(x + 4 - tw / 2, 95, tw, 9); g.fillStyle = '#333'; g.textAlign = 'center'; g.fillText(name, x + 4, 101.5); g.textAlign = 'left';
+  R(0, 0, 320, 210, '#8b5e3c');
+  for (const [name, x, y, w, h, col] of ROOMS) {
+    R(x + 1, y + 1, w - 2, h - 2, col);
+    for (let yy = y + 1; yy < y + h - 1; yy += 6) R(x + 1, yy, w - 2, 0.4, 'rgba(0,0,0,.05)');
+    txt(name, x + 4, y + 7, 5, '#5a4632', 'left', 800);
+  }
+  // 대표실·기획실
+  desk(26, 22, 22); plant(48, 60); R(6, 50, 12, 14, '#c28b5a'); txt('결재', 12, 58, 3.5, '#fff');
+  desk(82, 22, 20); R(62, 12, 14, 9, '#fffdf6'); R(64, 14, 6, 1, '#4f86e8'); R(64, 17, 9, 1, '#4f86e8'); plant(104, 60);
+  // 홍보팀 책상 넷
+  for (const x of [128, 158, 188, 218]) desk(x, 22);
+  R(140, 54, 76, 11, '#fff'); txt('블로그 화·금 · 쇼츠 08:47', 178, 61.5, 4.5, '#e8752a'); tag('봇 자리', 218, 33);
+  // 음성 부스
+  R(262, 18, 32, 26, '#cbb8e6'); R(264, 20, 28, 22, '#efe6fb'); R(277, 22, 2, 8, '#555'); R(275, 20, 6, 3, '#333'); txt('ON AIR', 280, 56, 4.5, '#a865d8', 'center', 800);
+  // 제작본부 — 작품마다 책상 하나
+  WORKS.forEach((w, i) => {
+    R(w.x - 12, w.y + 2, 24, 7, '#b07b4f'); R(w.x - 12, w.y + 9, 24, 1, '#8a5a34');   // 책상
+    R(w.x - 6, w.y - 4, 12, 10, '#2b2f36');                                            // 모니터
+    const im = icons[w.id]; if (im) g.drawImage(im, w.x - 5, w.y - 3, 10, 8); else R(w.x - 5, w.y - 3, 10, 8, '#86d3f5');
+    person(w.x + 17, w.y + 4, '#d97757', t, i + 10);                                    // 담당(Claude) — 책상 옆
   });
-  R(186, 54, 8, 16, '#3f8a4f'); R(184, 48, 12, 8, '#56b06a'); R(187, 70, 6, 6, '#a0522d'); // 화분
+  // 품질관리
+  desk(278, 84, 22); R(300, 82, 12, 18, '#fff'); for (let k = 0; k < 4; k++) R(302, 84 + k * 4, 8, 2, k % 2 ? '#3f9a5e' : '#e8752a');
+  // 서버실
+  R(250, 126, 16, 22, '#6b7380'); for (let k = 0; k < 5; k++) R(252, 128 + k * 4, 12, 2, '#9aa4b2');
+  R(282, 124, 16, 26, '#2f343c'); for (let k = 0; k < 6; k++) R(284, 126 + k * 4, 12, 2, (t + k) % 6 < 3 ? '#4cd17a' : '#1c2026');
+  for (const [, label, x, y] of OBJECTS) tag(label, x, y + 24);
+  // 휴게실
+  R(14, 176, 40, 12, '#7aa7c7'); R(14, 172, 40, 5, '#5f8fb0'); R(70, 178, 18, 10, '#b07b4f'); R(76, 180, 5, 4, '#fff');
+  plant(110, 186); plant(304, 186); R(200, 172, 30, 22, '#ffffff'); txt('커피', 215, 186, 5, '#8b5e3c');
+  // 업로드 봇이 복도(휴게실)를 오간다
+  const bx = 130 + Math.sin(t / 30) * 50;
+  // 사람들
+  PEOPLE.forEach(([key, label, col, x, y], i) => {
+    if (key === '업로드 봇') { person(bx, 190, col, t, i); tag(label, bx, 196); return; }
+    person(x, y, col, t, i); tag(label, x, y + 10);
+  });
+  // 말풍선
+  if (bubble) {
+    const s = bubble.text; g.font = '700 5px Nanum Gothic, sans-serif'; const w = Math.min(g.measureText(s).width + 8, 120);
+    const x = Math.max(4, Math.min(316 - w, bubble.x - w / 2)), y = Math.max(2, bubble.y - 20);
+    R(x, y, w, 10, '#fff'); R(x, y + 10, w, 0.6, '#c9b08c'); R(bubble.x - 1, y + 10, 2, 3, '#fff');
+    txt(s, x + w / 2, y + 7, 5, '#3d3328');
+  }
+}
+// 말풍선: 몇 초마다 한 사람이 '오늘의 기분'을 말한다
+function nextBubble() {
+  const pool = PEOPLE.filter(([k]) => INFO[k]);
+  const [key, , , x, y] = pool[Math.floor(Math.random() * pool.length)];
+  bubble = { text: INFO[key].mood, x: key === '업로드 봇' ? 130 + Math.sin(t / 30) * 50 : x, y: key === '업로드 봇' ? 190 : y };
 }
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-document.fonts.ready.then(draw); draw(); if (!reduce) setInterval(() => { t++; draw(); }, 120);
+nextBubble(); document.fonts.ready.then(draw); draw();
+if (!reduce) { setInterval(() => { t++; draw(); }, 100); setInterval(nextBubble, 3500); }
+// 손가락·마우스: 팀원 설명, 작품 책상은 눌러서 이동
+const tip = document.getElementById('tip');
+function hit(ev) {
+  const r = c.getBoundingClientRect(), k = 320 / r.width;
+  const x = (ev.clientX - r.left) * k, y = (ev.clientY - r.top) * k;
+  for (const w of WORKS) if (x > w.x - 13 && x < w.x + 22 && y > w.y - 5 && y < w.y + 13) return { work: w, px: w.x, py: w.y };
+  for (const [key, , , px, py] of PEOPLE) { const X = key === '업로드 봇' ? 130 + Math.sin(t / 30) * 50 : px, Y = key === '업로드 봇' ? 190 : py; if (Math.abs(x - X) < 10 && Math.abs(y - Y) < 12) return { key, px: X, py: Y }; }
+  for (const [key, , px, py] of OBJECTS) if (x > px - 10 && x < px + 18 && y > py - 2 && y < py + 30) return { key, px, py };
+  return null;
+}
+function showTip(h) {
+  if (!h) { tip.hidden = true; c.style.cursor = 'default'; return; }
+  const r = c.getBoundingClientRect(), s = r.width / 320;
+  if (h.work) { tip.innerHTML = '<b>' + h.work.title + ' 담당</b><span class="t">Claude · 누르면 작품으로</span>'; c.style.cursor = 'pointer'; }
+  else { const m = INFO[h.key]; tip.innerHTML = '<b>' + m.name + '</b><span class="t">' + m.who + ' · ' + m.tool + '</span><p>' + m.does + '</p>'; c.style.cursor = 'default'; }
+  tip.hidden = false;
+  const left = Math.min(r.width - tip.offsetWidth - 4, Math.max(4, h.px * s - tip.offsetWidth / 2));
+  tip.style.left = left + 'px'; tip.style.top = Math.max(4, h.py * s - tip.offsetHeight - 14) + 'px';
+}
+c.addEventListener('pointermove', (e) => showTip(hit(e)));
+c.addEventListener('pointerleave', () => showTip(null));
+c.addEventListener('click', (e) => { const h = hit(e); if (h && h.work) location.href = h.work.url; else showTip(h); });
+// 다음 일정 (한국 시각): 블로그 공개 화·금 08:47, 쇼츠 업로드 매일 08:47, 주간 글쓰기 일 21:13
+function nextAt(days, hh, mm) {
+  const now = new Date(Date.now() + 9 * 3600e3); // KST 를 UTC 칸에
+  for (let d = 0; d < 8; d++) {
+    const x = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + d, hh, mm));
+    if (days.includes(x.getUTCDay()) && x > now) return x;
+  }
+}
+const W = '일월화수목금토';
+const fmt = (x) => (x.getUTCMonth() + 1) + '.' + x.getUTCDate() + '(' + W[x.getUTCDay()] + ') ' + String(x.getUTCHours()).padStart(2, '0') + ':' + String(x.getUTCMinutes()).padStart(2, '0');
+const NEXT = [['업로드 봇 · 날짜 된 글 공개, 쇼츠 업로드', [0, 1, 2, 3, 4, 5, 6], 8, 47], ['블로그 작가 · 블로그 글 공개일', [2, 5], 8, 47], ['블로그 작가 · 다음 주 글 2편 쓰기', [0], 21, 13]];
+document.getElementById('next').innerHTML = NEXT.map(([what, d, h, m]) => '<li><span>' + what + '</span><time>' + fmt(nextAt(d, h, m)) + '</time></li>').join('');
 </script>
 </body>
 </html>
