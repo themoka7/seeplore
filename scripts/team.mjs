@@ -3,7 +3,7 @@
  * ▶ 하루 보기: 새 작품 하나가 나오기까지를 팀원이 실제로 걸어 다니며 보여 준다. /team?shorts = 세로 9:16 쇼츠 녹화용.
  * 가구·사람 그림: Kenney Roguelike Indoor / Roguelike Characters (CC0, public/team/). 모니터·벽·바닥은 코드로 그린다.
  * 말풍선: 예약 일정에서 계산한 상태(업로드·글 공개) + 맡은 일. 지어낸 숫자는 쓰지 않는다.
- * 실제로는 사람 1명(대표) + AI 도구들이 일한다. 재미로 꾸몄지만 내용은 사실대로:
+ * 실제로는 사람 2명(아빠·아들) + AI 도구들이 일한다. 재미로 꾸몄지만 내용은 사실대로:
  * 누가 어떤 도구이고 무슨 일을 하는지 그대로 적는다(지어낸 직원·숫자 없음).
  */
 
@@ -11,12 +11,15 @@ export function teamHtml({ works, esc, SITE, BLOG }) {
   const role = (name, who, tool, does, mood) => ({ name, who, tool, does, mood });
   const DEPTS = [
     {
-      name: '대표실',
-      members: [role('대표', '사람', '사람 1명', '무엇을 만들지 정하고, 다 만든 것을 직접 보고 고치라고 한다. 배포 버튼은 대표만 누른다.', '오늘도 휴대폰으로 결재 중')],
+      name: '아빠 방',
+      members: [role('아빠', '사람', '', '무엇을 만들지 정하고, 다 만든 것을 직접 보고 고치라고 한다. 배포 버튼은 아빠만 누른다.', '오늘도 휴대폰으로 결재 중')],
     },
     {
       name: '기획실',
-      members: [role('기획 담당', 'AI', '기획 AI', '새 작품 아이디어와 기획안 초안을 낸다. 사실과 다른 곳은 제작본부가 계획 단계에서 짚는다.', '다음 주제 뭐 하지')],
+      members: [
+        role('아들', '사람', '', '다음 작품 주제를 고르고, 다 만든 작품을 직접 보며 어렵거나 헷갈리는 곳을 짚는다.', '이거 재밌겠다'),
+        role('기획 담당', 'AI', '기획 AI', '새 작품 아이디어와 기획안 초안을 낸다. 사실과 다른 곳은 제작본부가 계획 단계에서 짚는다.', '다음 주제 뭐 하지'),
+      ],
     },
     {
       name: '제작본부',
@@ -44,7 +47,7 @@ export function teamHtml({ works, esc, SITE, BLOG }) {
       name: '총무·시설',
       members: [
         role('서류함', '도구', '코드 저장소', '모든 작품의 코드와 글을 보관한다.', '정리 정돈'),
-        role('건물 관리', '도구', '웹 호스팅', '사이트를 세상에 띄운다. 하루 100번까지만 문을 여닫을 수 있어서 대표가 아껴 쓴다.', '오늘 남은 배포 횟수 확인'),
+        role('건물 관리', '도구', '웹 호스팅', '사이트를 세상에 띄운다. 하루 100번까지만 문을 여닫을 수 있어서 아빠가 아껴 쓴다.', '오늘 남은 배포 횟수 확인'),
       ],
     },
   ];
@@ -52,7 +55,7 @@ export function teamHtml({ works, esc, SITE, BLOG }) {
   const memberCount = all.length + 4; // 제작 담당 4자리
   const info = Object.fromEntries(all.map((m) => [m.name, { name: m.name, who: m.who, tool: m.tool, does: m.does }]));
   const data = { works: works.map((w) => ({ id: w.id, title: w.title, url: w.url, icon: w.icon.replace(SITE, '') })), info, sheets: { indoor: '/team/indoor.png', chars: '/team/chars.png' } };
-  const card = (m) => `<li><b>${esc(m.name)}</b><span>${esc(m.who)} · ${esc(m.tool)}</span><p>${esc(m.does)}</p></li>`;
+  const card = (m) => `<li><b>${esc(m.name)}</b><span>${esc(m.who)}${m.tool ? ' · ' + esc(m.tool) : ''}</span><p>${esc(m.does)}</p></li>`;
 
   return `<!doctype html>
 <html lang="ko">
@@ -62,9 +65,9 @@ export function teamHtml({ works, esc, SITE, BLOG }) {
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-TBYJ6JBLYF',{content_group:'hub'});</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>seeplore 스튜디오</title>
-<meta name="description" content="seeplore를 만드는 가상의 회사. 대표 한 명과 AI 팀원들이 새 작품 하나를 어떻게 만드는지 사무실에서 보여 줍니다.">
+<meta name="description" content="seeplore를 만드는 가상의 회사. 아빠와 아들, AI 팀원들이 새 작품 하나를 어떻게 만드는지 사무실에서 보여 줍니다.">
 <link rel="canonical" href="${SITE}/team">
-<meta property="og:title" content="seeplore 스튜디오 — 대표 1명과 AI 팀원들">
+<meta property="og:title" content="seeplore 스튜디오 — 아빠와 아들, 그리고 AI 팀원들">
 <meta property="og:description" content="새 작품 하나가 나오기까지, AI 팀원들이 사무실을 오가며 일하는 모습.">
 <meta property="og:url" content="${SITE}/team">
 <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-32.png">
@@ -114,18 +117,18 @@ body.shorts #caption { top: 5%; bottom: auto; font-size: 20px; }
 <div class="wrap">
   <a class="back" href="/">← seeplore</a>
   <div>
-    <p class="kicker">가상의 회사 · 사람 1명, AI 팀원 ${memberCount - 1}</p>
+    <p class="kicker">가상의 회사 · 사람 2명, AI 팀원 ${memberCount - 2}</p>
     <h1>seeplore 스튜디오</h1>
-    <p class="lead">seeplore를 실제로 이렇게 나눠서 만들고 있어서 회사처럼 꾸며 봤습니다. 대표 한 명이 정하고, 나머지는 AI와 자동화 도구가 맡습니다.</p>
+    <p class="lead">seeplore를 실제로 이렇게 나눠서 만들고 있어서 회사처럼 꾸며 봤습니다. 아빠와 아들이 정하고, 나머지는 AI와 자동화 도구가 맡습니다.</p>
   </div>
   <div class="stage">
-    <canvas id="office" width="1024" height="800" role="img" aria-label="위에서 내려다본 seeplore 스튜디오. 대표실, 기획실, 홍보팀, 음성 부스, 작품 진열장과 책상 4자리가 있는 제작본부, 품질관리, 서버실, 휴게실."></canvas>
+    <canvas id="office" width="1024" height="800" role="img" aria-label="위에서 내려다본 seeplore 스튜디오. 아빠 방, 기획실, 홍보팀, 음성 부스, 작품 진열장과 책상 4자리가 있는 제작본부, 품질관리, 서버실, 휴게실."></canvas>
     <div id="caption" aria-live="polite"></div>
     <div class="tip" id="tip" hidden></div>
   </div>
   <div class="box">
     <h2>팀원</h2>
-    <p class="note">사람은 대표 한 명. 나머지는 실제로 쓰는 AI와 도구입니다. 제작본부는 일이 있을 때만 담당 AI가 들어와 작품을 맡습니다.</p>
+    <p class="note">사람은 아빠와 아들 두 명. 나머지는 실제로 쓰는 AI와 도구입니다. 제작본부는 일이 있을 때만 담당 AI가 들어와 작품을 맡습니다.</p>
     <ul class="team">${all.map(card).join('')}</ul>
   </div>
   <footer>가구·사람 그림: Kenney Roguelike Indoor · Roguelike Characters (CC0) · <a href="/about">seeplore 소개</a> · <a href="${BLOG}">블로그</a> · <a href="https://www.youtube.com/@seeplore">YouTube</a></footer>

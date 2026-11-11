@@ -56,7 +56,7 @@
   const SHEETS = {};
   const CORRIDOR_Y = 7.25 * T;          // 위층 방들과 제작본부 사이 복도 가운데
   const ROOMS_LAND = [
-    { name: '대표실', x: 0, y: 0, w: 6, h: 6.5, floor: '#ead6b4', door: 3 },
+    { name: '아빠 방', x: 0, y: 0, w: 6, h: 6.5, floor: '#ead6b4', door: 3 },
     { name: '기획실', x: 6, y: 0, w: 6, h: 6.5, floor: '#dbe8f3', door: 9 },
     { name: '홍보팀', x: 12, y: 0, w: 13, h: 6.5, floor: '#f4e0dc', door: 18.5 },
     { name: '음성 부스', x: 25, y: 0, w: 7, h: 6.5, floor: '#e8e0f3', door: 28.5 },
@@ -68,7 +68,7 @@
   // 세로 배치: 가운데 세로 복도(x 7.5~8.5)를 두고 왼쪽·오른쪽 방, 제작본부는 복도가 지나가는 넓은 방
   const SPINE = 8 * T;
   const ROOMS_PORT = [
-    { name: '대표실', x: 0, y: 0, w: 7.5, h: 6, side: 'r', doorY: 3 },
+    { name: '아빠 방', x: 0, y: 0, w: 7.5, h: 6, side: 'r', doorY: 3 },
     { name: '기획실', x: 8.5, y: 0, w: 7.5, h: 6, side: 'l', doorY: 3 },
     { name: '홍보팀', x: 0, y: 6.5, w: 7.5, h: 7, side: 'r', doorY: 10 },
     { name: '음성 부스', x: 8.5, y: 6.5, w: 7.5, h: 3.5, side: 'l', doorY: 8.25 },
@@ -85,11 +85,12 @@
     people[key] = { key, label, ch, deskX, deskY, x: deskX, y: deskY + 14, homeX: deskX, homeY: deskY + 14, path: [], speed: 1.4, say: '', sayUntil: 0, carry: false, flip: false, typing: true, ...opts };
   };
   const SEAT = PORTRAIT
-    ? { 대표: [3.7, 2.4], '기획 담당': [12.2, 2.4], 홍보팀장: [2.2, 8.6], '블로그 작가': [5.6, 8.6], '쇼츠 PD': [2.2, 11.2], '업로드 봇': [5.6, 11.2], 내레이터: [12.2, 7.2], '점검 로봇': [12.2, 10.7] }
-    : { 대표: [3, 2.4], '기획 담당': [9, 2.4], 홍보팀장: [14, 2.4], '블로그 작가': [17, 2.4], '쇼츠 PD': [20, 2.4], '업로드 봇': [23, 2.4], 내레이터: [28.5, 2.4], '점검 로봇': [27.5, 9.1] };
+    ? { 아빠: [3.7, 2.4], '아들': [10.6, 2.4], '기획 담당': [14, 2.4], 홍보팀장: [2.2, 8.6], '블로그 작가': [5.6, 8.6], '쇼츠 PD': [2.2, 11.2], '업로드 봇': [5.6, 11.2], 내레이터: [12.2, 7.2], '점검 로봇': [12.2, 10.7] }
+    : { 아빠: [3, 2.4], '아들': [7.8, 2.4], '기획 담당': [10.4, 2.4], 홍보팀장: [14, 2.4], '블로그 작가': [17, 2.4], '쇼츠 PD': [20, 2.4], '업로드 봇': [23, 2.4], 내레이터: [28.5, 2.4], '점검 로봇': [27.5, 9.1] };
   const seat = (k, label, ch, o) => addPerson(k, label, ch, SEAT[k][0] * T, SEAT[k][1] * T, o);
-  seat('대표', '대표', [0, 9]);
-  seat('기획 담당', '기획', [1, 6]);
+  seat('아빠', '아빠', [0, 9]);
+  seat('아들', '아들', [0, 8]);
+  seat('기획 담당', '기획 AI', [1, 6]);
   seat('홍보팀장', '홍보팀장', [0, 5]);
   seat('블로그 작가', '블로그', [0, 7]);
   seat('쇼츠 PD', '쇼츠 PD', [1, 7]);
@@ -158,10 +159,11 @@
   async function story() {
     if (playing) return; playing = true; playBtn && (playBtn.disabled = true);
     const st = (k) => { focusKey = k; busy.add(k); };
-    setCap('대표가 다음 작품 주제를 정합니다');
-    st('대표'); await walkToPerson('대표', '기획 담당'); await say('대표', '다음은 무지개 어때요?');
+    setCap('아들이 다음 작품 주제를 고릅니다');
+    st('아들'); await walkToPerson('아들', '아빠'); await say('아들', '아빠, 다음은 무지개 어때?');
+    st('아빠'); await say('아빠', '좋아, 기획해 보자', 1800);
+    goHome('아들');
     st('기획 담당'); await say('기획 담당', '기획안 정리할게요');
-    goHome('대표');
     setCap('기획실이 기획안을 써서 제작본부로');
     people['기획 담당'].carry = true; await walkTo('기획 담당', STAR.x + 14, STAR.y + 16); await say('기획 담당', '기획안 전달!');
     people['기획 담당'].carry = false; goHome('기획 담당');
@@ -173,9 +175,12 @@
     st(SK); goHome(SK);
     setCap('점검 로봇이 장면을 하나씩 넘기며 확인');
     st('점검 로봇'); await walkTo('점검 로봇', STAR.x + 16, STAR.y + 18); await say('점검 로봇', '휴대폰·PC 화면 점검 중…', 2200); await say('점검 로봇', '통과!', 1400); goHome('점검 로봇');
-    setCap('출시는 대표가 허락할 때만, 하루 한 번');
-    st(SK); await walkToPerson(SK, '대표'); await say(SK, '출시해도 될까요?');
-    st('대표'); await say('대표', '올려!', 1600);
+    setCap('아들이 직접 보며 어려운 곳을 짚습니다');
+    st('아들'); await walkTo('아들', STAR.x + 14, STAR.y + 16); await say('아들', '여기 무슨 말인지 모르겠어', 2200);
+    st(SK); await say(SK, '쉬운 말로 고칠게요', 1600); goHome('아들');
+    setCap('출시는 아빠가 허락할 때만, 하루 한 번');
+    st(SK); await walkToPerson(SK, '아빠'); await say(SK, '출시해도 될까요?');
+    st('아빠'); await say('아빠', '올려!', 1600);
     st(SK); await walkTo(SK, ...spot.서버); flash = 40; await say(SK, '배포!', 1600); goHome(SK);
     setCap('홍보팀은 쇼츠와 블로그 글을 준비');
     st('쇼츠 PD'); await say('쇼츠 PD', '쇼츠 렌더링 중 — 첫 2초는 질문으로', 2400);
@@ -201,8 +206,9 @@
       case '블로그 작가': return dow === 0 && h >= 21 ? '다음 주 글 쓰는 중' : `${md(nextAt([2, 5], 8, 47))} 글 공개 대기`;
       case '쇼츠 PD': return dow === 0 && h >= 21 ? '쇼츠 렌더링 중' : '쇼츠 자막 검토 중';
       case '홍보팀장': return h < 9 ? '오늘 공개분 확인 중' : '검색 색인 확인 중';
-      case '대표': return '결재 대기 중';
+      case '아빠': return '결재 대기 중';
       case '기획 담당': return '다음 주제 검토 중';
+      case '아들': return pick(['다음 주제 고르는 중', '작품 보며 검토 중']);
       case '내레이터': return '다음 원고 대기';
       case '점검 로봇': return '장면 점검 대기';
       default: return '';
@@ -214,8 +220,8 @@
   const at = (key) => [people[key].homeX + 14, people[key].homeY + 2];
   const near = (k) => [SEAT[k][0] * T + 16, SEAT[k][1] * T + 18];
   const spot = PORTRAIT
-    ? { 음성: near('내레이터'), 점검: near('점검 로봇'), 서버: [2.6 * T, 25.1 * T], 서버2: [5.2 * T, 25.1 * T], 커피: [10.2 * T, 24.7 * T], 탁자: [13.4 * T, 25.3 * T], 기획: near('기획 담당'), 대표: near('대표'), 홍보: [4 * T, 10.2 * T] }
-    : { 음성: near('내레이터'), 점검: near('점검 로봇'), 서버: [26.4 * T, 14.2 * T], 서버2: [30 * T, 14.2 * T], 커피: [4 * T, 17.9 * T], 탁자: [10 * T, 18.5 * T], 기획: near('기획 담당'), 대표: near('대표'), 홍보: [17 * T + 16, 2.4 * T + 18] };
+    ? { 음성: near('내레이터'), 점검: near('점검 로봇'), 서버: [2.6 * T, 25.1 * T], 서버2: [5.2 * T, 25.1 * T], 커피: [10.2 * T, 24.7 * T], 탁자: [13.4 * T, 25.3 * T], 기획: near('기획 담당'), 아빠: near('아빠'), 홍보: [4 * T, 10.2 * T] }
+    : { 음성: near('내레이터'), 점검: near('점검 로봇'), 서버: [26.4 * T, 14.2 * T], 서버2: [30 * T, 14.2 * T], 커피: [4 * T, 17.9 * T], 탁자: [10 * T, 18.5 * T], 기획: near('기획 담당'), 아빠: near('아빠'), 홍보: [17 * T + 16, 2.4 * T + 18] };
   const pick = (a) => a[Math.floor(Math.random() * a.length)];
   const randomDesk = () => pick(desks);
   function errands(key) {
@@ -224,9 +230,10 @@
       [spot.음성, '원고 녹음 부탁해요', true], [spot.점검, '점검 부탁해요'], [spot.서버, '배포 준비'], [spot.기획, '기획안 질문 있어요', true], [dp, '이 장면 어때요?'],
     ]);
     switch (key) {
-      case '대표': return pick([[spot.홍보, '조회수 어때요?'], [dp, '잘 돼 가요?'], [spot.커피, '커피 한 잔'], [spot.서버, '오늘 배포 몇 번?']]);
-      case '기획 담당': return pick([[dp, '다음 기획안이에요', true], [spot.대표, '주제 후보 셋', true], [spot.탁자, '아이디어 회의']]);
-      case '홍보팀장': return pick([[spot.대표, '이번 주 글 2편', true], [dp, '쇼츠 장면 골라요'], [spot.커피, '커피 한 잔']]);
+      case '아빠': return pick([[spot.홍보, '조회수 어때요?'], [dp, '잘 돼 가요?'], [spot.커피, '커피 한 잔'], [spot.서버, '오늘 배포 몇 번?']]);
+      case '아들': return pick([[dp, '여기 어려워요'], [dp, '이 장면 재밌다!'], [spot.아빠, '다음 주제 생각났어', true], [spot.기획, '이것도 만들자']]);
+      case '기획 담당': return pick([[dp, '다음 기획안이에요', true], [spot.아빠, '주제 후보 셋', true], [spot.탁자, '아이디어 회의']]);
+      case '홍보팀장': return pick([[spot.아빠, '이번 주 글 2편', true], [dp, '쇼츠 장면 골라요'], [spot.커피, '커피 한 잔']]);
       case '블로그 작가': return pick([[dp, '숫자 확인할게요'], [at('업로드 봇'), '글 예약 부탁', true], [spot.탁자, '글감 고르는 중']]);
       case '쇼츠 PD': return pick([[spot.음성, '쇼츠 녹음 부탁', true], [dp, '표지 장면 찍을게요'], [spot.서버, '렌더링 확인']]);
       case '업로드 봇': return pick([[spot.서버, '업로드 준비', true], [spot.홍보, '공개 목록 확인'], [spot.커피, '충전 중…']]);
@@ -389,7 +396,7 @@
       const rack = (sx, sy, k) => { tile(indoor, 25 + (k % 2), 8, sx, sy, 1, 2); for (let j = 0; j < 4; j++) R(sx + 5, sy + 6 + j * 6, 3, 2, flash > 0 ? (t % 4 < 2 ? '#fff36b' : '#4cd17a') : (t / 4 + j + k) % 5 < 3 ? '#4cd17a' : '#1f6b3b'); };
       if (PORTRAIT) {
         tile(indoor, 23, 0, 0.6 * T, 4.4 * T); tile(indoor, 16, 0, 6.2 * T, 4.4 * T);
-        tile(indoor, 19, 12, 9 * T, 4.2 * T); tile(indoor, 20, 12, 10 * T, 4.2 * T); tile(indoor, 17, 0, 14.6 * T, 4.4 * T);
+        tile(indoor, 19, 12, 9 * T, 4.4 * T); tile(indoor, 20, 12, 10 * T, 4.4 * T); tile(indoor, 17, 0, 14.8 * T, 4.6 * T);
         tile(indoor, 23, 8, 9 * T, 8.4 * T, 2, 1); tile(indoor, 16, 0, 6.3 * T, 12.2 * T);
         for (let k = 0; k < 3; k++) rack((1 + k * 2.1) * T, 22.9 * T, k);
         tag('서버', 3.7 * T, 25.5 * T);
@@ -444,7 +451,7 @@
     const info = DATA.info[p.key];
     tip.innerHTML = p.shelf
       ? `<b>${p.shelf.title}</b><span class="t">출시 작품 · 누르면 열기</span>`
-      : `<b>${info.name}</b><span class="t">${info.who} · ${info.tool}</span><p>${info.does}</p><p class="t">지금: ${status(p.key)}</p>`;
+      : `<b>${info.name}</b><span class="t">${info.who}${info.tool ? ' · ' + info.tool : ''}</span><p>${info.does}</p><p class="t">지금: ${status(p.key)}</p>`;
     canvas.style.cursor = p.shelf ? 'pointer' : 'default';
     tip.hidden = false;
     const [, , r] = worldAt(ev), box = canvas.parentElement.getBoundingClientRect();
