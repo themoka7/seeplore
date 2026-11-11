@@ -261,7 +261,7 @@ ${byField.map(({ f, ws }) => `<p class="f">${esc(f)}</p>\n<ul>\n${ws.map((w) => 
 <ul>
 <li><a href="${BLOG}">seeplore 블로그</a> — 작품 뒤의 원리와 만든 과정을 글로 정리합니다.</li>
 <li><a href="https://www.youtube.com/@seeplore">YouTube @seeplore</a> — 작품의 한 장면을 1분 안쪽 쇼츠로 요약합니다.</li>
-<li><a href="/team">만드는 사람들</a> — 대표 한 명과 AI 팀원들이 일하는 사무실(가상)</li>
+<li><a href="/team">만드는 사람들</a> — 아빠와 아들, AI 팀원들이 일하는 사무실(가상)</li>
 </ul>
 </main>
 </body>
