@@ -35,5 +35,17 @@
       "main": true,
       "**": false
     }
-  }
+  },
+  "redirects": [
+    {
+      "source": "/teams",
+      "destination": "/team",
+      "permanent": true
+    },
+    {
+      "source": "/en/teams",
+      "destination": "/en/team",
+      "permanent": true
+    }
+  ]
 }

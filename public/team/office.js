@@ -20,13 +20,49 @@
   const tip = document.getElementById('tip');
   const playBtn = document.getElementById('play');
 
+  // ---------------------------------------------------------------- 영어판(/en/team): 내부 이름은 한국어 그대로, 화면에 그릴 때만 바꾼다
+  const EN = document.documentElement.lang === 'en';
+  const DICT = {
+    '아빠': 'Dad', '아들': 'Son', '기획 담당': 'Planner', '기획 AI': 'Planner AI', '홍보팀장': 'PR Lead', '블로그': 'Blog', '블로그 작가': 'Blog Writer',
+    '쇼츠 PD': 'Shorts PD', '업로드 봇': 'Upload Bot', '내레이터': 'Narrator', '점검 로봇': 'Test Robot', '제작 담당': 'Maker', '코딩 AI': 'Coding AI',
+    '일이 있을 때 들어와 작품 하나를 맡는다. 3D 화면·장면 글·다큐 원고를 만들고 고친다.': 'Comes in when there is work and takes one title — builds and fixes the 3D scenes, scene text and documentary script.',
+    '아빠 방': "Dad's Room", '기획실': 'Planning', '홍보팀': 'PR Team', '음성 부스': 'Voice Booth', '제작본부': 'Production', '품질관리': 'QA', '서버실': 'Server Room', '휴게실': 'Lounge',
+    '서버': 'Server', '커피': 'Coffee', '출시 작품': 'Released', '불러오는 중…': 'Loading…',
+    '아들이 다음 작품 주제를 고릅니다': 'Son picks the next topic', '아빠, 다음은 무지개 어때?': 'Dad, how about rainbows next?', '좋아, 기획해 보자': "Sounds good, let's plan it",
+    '기획안 정리할게요': "I'll write the plan", '기획실이 기획안을 써서 제작본부로': 'Planning sends the plan to Production', '기획안 전달!': 'Plan delivered!',
+    '장면 만드는 중…': 'Building scenes…', '계획부터 확인받을게요': "I'll get the plan approved first", '다큐 원고는 음성 부스에서 녹음': 'The script is recorded in the voice booth',
+    '원고 녹음 부탁해요': 'Please record this script', '● 녹음 중 — 쉼표에서 0.25초': '● Recording — 0.25 s at commas', '점검 로봇이 장면을 하나씩 넘기며 확인': 'The test robot checks every scene',
+    '휴대폰·PC 화면 점검 중…': 'Checking phone & PC screens…', '통과!': 'Pass!', '아들이 직접 보며 어려운 곳을 짚습니다': 'Son watches it and points out the hard parts',
+    '여기 무슨 말인지 모르겠어': "I don't get this part", '쉬운 말로 고칠게요': "I'll make it simpler", '출시는 아빠가 허락할 때만, 하루 한 번': 'Release only when Dad says so — once a day',
+    '출시해도 될까요?': 'Can we release it?', '올려!': 'Ship it!', '배포!': 'Deploy!', '홍보팀은 쇼츠와 블로그 글을 준비': 'PR prepares a Short and a blog post',
+    '쇼츠 렌더링 중 — 첫 2초는 질문으로': 'Rendering the Short — question first', '블로그 글 예약 — 화·금 08:47': 'Blog post scheduled — Tue/Fri 08:47',
+    '아침 08:47, 업로드 봇이 서버실에서 올립니다': 'At 08:47 the upload bot publishes from the server room', '@seeplore 업로드 완료': 'Uploaded to @seeplore',
+    '이렇게 작품 하나가 나옵니다 — seeplore.com': "That's how one title gets made — seeplore.com",
+    '휴게실 대기': 'Waiting in the lounge', '다음 주 글 쓰는 중': "Writing next week's posts", '쇼츠 렌더링 중': 'Rendering Shorts', '쇼츠 자막 검토 중': 'Checking Shorts captions',
+    '오늘 공개분 확인 중': "Checking today's posts", '검색 색인 확인 중': 'Checking search indexing', '결재 대기 중': 'Waiting to approve', '다음 주제 검토 중': 'Reviewing next topics',
+    '다음 주제 고르는 중': 'Picking the next topic', '작품 보며 검토 중': 'Reviewing a title', '다음 원고 대기': 'Waiting for the next script', '장면 점검 대기': 'Waiting to test scenes',
+    '점검 부탁해요': 'Please test this', '배포 준비': 'Getting ready to deploy', '기획안 질문 있어요': 'Question about the plan', '이 장면 어때요?': 'How does this scene look?',
+    '조회수 어때요?': "How're the views?", '잘 돼 가요?': 'How is it going?', '커피 한 잔': 'Coffee break', '오늘 배포 몇 번?': 'Deploys today?',
+    '여기 어려워요': 'This part is hard', '이 장면 재밌다!': 'This scene is fun!', '다음 주제 생각났어': 'I have a topic idea', '이것도 만들자': "Let's make this too",
+    '다음 기획안이에요': "Here's the next plan", '주제 후보 셋': 'Three topic ideas', '아이디어 회의': 'Idea meeting', '이번 주 글 2편': "This week's two posts",
+    '쇼츠 장면 골라요': 'Picking Shorts scenes', '숫자 확인할게요': "I'll check the numbers", '글 예약 부탁': 'Please schedule this post', '글감 고르는 중': 'Picking a topic',
+    '쇼츠 녹음 부탁': 'Please voice this Short', '표지 장면 찍을게요': "I'll grab the cover shot", '렌더링 확인': 'Checking the render', '업로드 준비': 'Getting ready to upload',
+    '공개 목록 확인': 'Checking the schedule', '충전 중…': 'Charging…', '발음 확인해요': 'Checking pronunciation', '목 풀기': 'Warming up the voice',
+    '장면 점검 중…': 'Testing scenes…', '이름표 잘림 없음': 'No clipped labels', '배포 확인': 'Checking the deploy', '끝! 휴게실로': 'Done! Off to the lounge',
+    '좋아요!': 'Sure!', '바로 할게요': 'On it', '확인!': 'Got it!', '잠깐만요': 'One sec', '출시 작품 · 누르면 열기': 'Released · tap to open', '지금: ': 'Now: ',
+  };
+  const PAT = [
+    [/^제작 (\d)$/, 'Maker $1'], [/^「(.+)」 맡는 중$/, 'Working on “$1”'], [/^「(.+)」 맡았어요$/, 'I’ll take “$1”'],
+    [/^담당 AI가 「(.+)」를 3D로 만듭니다$/, 'A maker AI builds “$1” in 3D'], [/^(\d\d:\d\d) 실행 대기$/, 'Next run $1'], [/^(.+) 글 공개 대기$/, 'Next post $1'], [/^출시 작품 (\d+)$/, 'Released $1'],
+  ];
+  const L = (s) => { if (!EN || !s) return s; if (DICT[s] != null) return DICT[s]; for (const [re, to] of PAT) if (re.test(s)) return s.replace(re, to); return s; };
   // ---------------------------------------------------------------- 그림 불러오기
   const load = (src) => new Promise((r) => { const im = new Image(); im.onload = () => r(im); im.onerror = () => r(null); im.src = src; });
   let indoor = null, chars = null; const icons = {};
   const tile = (sh, cx, cy, x, y, w = 1, h = 1) => sh && g.drawImage(sh, cx * 17, cy * 17, w * 17 - 1, h * 17 - 1, Math.round(x), Math.round(y), w * 16, h * 16);
   const R = (x, y, w, h, c) => { g.fillStyle = c; g.fillRect(x, y, w, h); };
   const FONT = 'Pretendard, "Noto Sans KR", "Apple SD Gothic Neo", sans-serif';
-  const text = (s, x, y, size, col, align = 'center', w = 700) => { g.font = `${w} ${size}px ${FONT}`; g.fillStyle = col; g.textAlign = align; g.fillText(s, x, y); };
+  const text = (s, x, y, size, col, align = 'center', w = 700) => { s = L(s); g.font = `${w} ${size}px ${FONT}`; g.fillStyle = col; g.textAlign = align; g.fillText(s, x, y); };
 
   // ---------------------------------------------------------------- 사무실 배치 (타일)
   // ---------------------------------------------------------------- 시안(테마): ?theme=day|night|line|mono
@@ -155,7 +191,7 @@
   const STAR = { w: STAR_W, get x() { return people[SK].deskX; }, get y() { return people[SK].deskY; } };
   let focusKey = null, flash = 0, playing = false;
   const busy = new Set();            // 하루 보기에 나오는 사람 — 돌아다니기에서 뺀다
-  const setCap = (s) => { if (cap) cap.textContent = s; };
+  const setCap = (s) => { if (cap) cap.textContent = L(s); };
   async function story() {
     if (playing) return; playing = true; playBtn && (playBtn.disabled = true);
     const st = (k) => { focusKey = k; busy.add(k); };
@@ -195,8 +231,8 @@
   // ---------------------------------------------------------------- 자유 모드: 가끔 한 명이 지금 상태를 말한다
   const kst = () => new Date(Date.now() + 9 * 3600e3);
   function nextAt(days, hh, mm) { const n = kst(); for (let d = 0; d < 8; d++) { const x = new Date(Date.UTC(n.getUTCFullYear(), n.getUTCMonth(), n.getUTCDate() + d, hh, mm)); if (days.includes(x.getUTCDay()) && x > n) return x; } }
-  const DAY = '일월화수목금토';
-  const md = (x) => `${x.getUTCMonth() + 1}.${x.getUTCDate()}(${DAY[x.getUTCDay()]})`;
+  const DAY = EN ? ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] : '일월화수목금토';
+  const md = (x) => (EN ? `${DAY[x.getUTCDay()]} ${x.getUTCMonth() + 1}/${x.getUTCDate()}` : `${x.getUTCMonth() + 1}.${x.getUTCDate()}(${DAY[x.getUTCDay()]})`);
   const hm = (x) => `${String(x.getUTCHours()).padStart(2, '0')}:${String(x.getUTCMinutes()).padStart(2, '0')}`;
   function status(key) {
     const n = kst(), h = n.getUTCHours(), dow = n.getUTCDay();
@@ -307,7 +343,7 @@
     if (r.open) { R(SPINE - 10, y, 20, 3, r.floor); R(SPINE - 10, y + h - 3, 20, 3, r.floor); }
     else if (r.side) { const dy = r.doorY * T - 10; if (r.side === 'r') R(x + w - 3, dy, 3, 20, r.floor); else R(x, dy, 3, 20, r.floor); }
     else { const dx = r.door * T - 10; if (r.top) R(dx, y, 20, 3, r.floor); else R(dx, y + h - 2, 20, 2, r.floor); }
-    text(TH.outline ? r.name.toUpperCase() : r.name, x + 7, y + 13, TH.outline ? 6.5 : 7.5, TH.label, 'left', 800);
+    text(TH.outline ? L(r.name).toUpperCase() : r.name, x + 7, y + 13, TH.outline ? 6.5 : 7.5, TH.label, 'left', 800);
   }
   function monitor(x, y, on, icon) {
     R(x - 6, y - 9, 12, 9, '#30353d'); R(x - 5, y - 8, 10, 7, on);
@@ -329,10 +365,12 @@
     else if (p.carry) { R(p.x - 4, p.y - 18 - bob, 8, 9, '#ffffff'); R(p.x - 3, p.y - 16 - bob, 6, 1, '#9aa3ab'); R(p.x - 3, p.y - 13 - bob, 5, 1, '#9aa3ab'); }
   }
   function tag(s, cx, y) {
+    s = L(s);
     g.font = `700 6.5px ${FONT}`; const w = g.measureText(s).width + 7;
     R(cx - w / 2, y, w, 9, TH.tagBg); text(s, cx, y + 6.8, 6.5, '#fff');
   }
   function bubble(s, cx, y) {
+    s = L(s);
     g.font = `700 7px ${FONT}`; const w = g.measureText(s).width + 12;
     const x = Math.max(2, Math.min(WW - w - 2, cx - w / 2)), by = Math.max(2, y - 26);
     g.fillStyle = '#fff'; g.strokeStyle = '#3d3328'; g.lineWidth = 0.8;
@@ -450,8 +488,8 @@
     if (!p) { tip.hidden = true; canvas.style.cursor = 'default'; return; }
     const info = DATA.info[p.key];
     tip.innerHTML = p.shelf
-      ? `<b>${p.shelf.title}</b><span class="t">출시 작품 · 누르면 열기</span>`
-      : `<b>${info.name}</b><span class="t">${info.who}${info.tool ? ' · ' + info.tool : ''}</span><p>${info.does}</p><p class="t">지금: ${status(p.key)}</p>`;
+      ? `<b>${p.shelf.title}</b><span class="t">${L('출시 작품 · 누르면 열기')}</span>`
+      : `<b>${L(info.name)}</b><span class="t">${info.who}${info.tool ? ' · ' + L(info.tool) : ''}</span><p>${L(info.does)}</p><p class="t">${L('지금: ')}${L(status(p.key))}</p>`;
     canvas.style.cursor = p.shelf ? 'pointer' : 'default';
     tip.hidden = false;
     const [, , r] = worldAt(ev), box = canvas.parentElement.getBoundingClientRect();

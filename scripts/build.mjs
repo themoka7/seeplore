@@ -9,6 +9,7 @@
  */
 import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync, existsSync } from 'node:fs';
 import { teamHtml } from './team.mjs';
+import { buildEn } from './en.mjs';
 
 const SITE = 'https://seeplore.com';
 const data = JSON.parse(readFileSync('series.json', 'utf8'));
@@ -18,6 +19,7 @@ const works = data.works;
 const ids = new Set();
 for (const w of works) {
   for (const k of ['id', 'label', 'title', 'url', 'icon', 'desc']) if (typeof w[k] !== 'string' || !w[k]) throw new Error(`[series] ${w.id ?? '?'} 의 ${k} 가 비었습니다`);
+  if (w.urlEn) for (const k of ['titleEn', 'labelEn', 'descEn']) if (typeof w[k] !== 'string' || !w[k]) throw new Error(`[series] ${w.id} 은 urlEn 이 있으니 ${k} 도 넣는다`);
   if (ids.has(w.id)) throw new Error(`[series] 아이디 중복: ${w.id}`);
   ids.add(w.id);
   const local = w.icon.replace(SITE, 'public');
@@ -138,6 +140,9 @@ const html = `<!doctype html>
 <title>seeplore | 지도와 3D로 보는 웹 다큐멘터리 시리즈</title>
 <meta name="description" content="${esc(SHORT_DESC)}">
 <link rel="canonical" href="${SITE}/">
+<link rel="alternate" hreflang="ko" href="${SITE}/">
+<link rel="alternate" hreflang="en" href="${SITE}/en">
+<link rel="alternate" hreflang="x-default" href="${SITE}/">
 <!-- 네이버 서치어드바이저 소유 확인 -->
 <meta name="naver-site-verification" content="07dc96c0d781f67fb9257f031aac64107c365247">
 <meta property="og:type" content="website">
@@ -183,7 +188,7 @@ footer { margin-top: 40px; font-size: 12px; line-height: 1.6; color: #6f777e; }
   </ul>
   <p class="soon">+ 다음 작품 준비 중</p>
   <p class="blog"><a href="${BLOG}">seeplore 블로그 — 작품 뒤의 원리와 만든 이야기 →</a></p>
-  <footer>작품 ${works.length}편 · 무료 · 회원 가입 없음 · <a href="/team" style="color:inherit">만드는 사람들</a></footer>
+  <footer>작품 ${works.length}편 · 무료 · 회원 가입 없음 · <a href="/team" style="color:inherit">만드는 사람들</a> · <a href="/en" style="color:inherit" hreflang="en">English</a></footer>
 </main>
 </body>
 </html>
@@ -214,6 +219,8 @@ const aboutHtml = `<!doctype html>
 <title>${esc(ABOUT_TITLE)}</title>
 <meta name="description" content="${esc(ABOUT_DESC)}">
 <link rel="canonical" href="${SITE}/about">
+<link rel="alternate" hreflang="ko" href="${SITE}/about">
+<link rel="alternate" hreflang="en" href="${SITE}/en/about">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="seeplore">
 <meta property="og:title" content="${esc(ABOUT_TITLE)}">
@@ -262,6 +269,7 @@ ${byField.map(({ f, ws }) => `<p class="f">${esc(f)}</p>\n<ul>\n${ws.map((w) => 
 <li><a href="${BLOG}">seeplore 블로그</a> — 작품 뒤의 원리와 만든 과정을 글로 정리합니다.</li>
 <li><a href="https://www.youtube.com/@seeplore">YouTube @seeplore</a> — 작품의 한 장면을 1분 안쪽 쇼츠로 요약합니다.</li>
 <li><a href="/team">만드는 사람들</a> — 아빠와 아들, AI 팀원들이 일하는 사무실(가상)</li>
+<li><a href="/en/about" hreflang="en">English</a> — 영어 소개 페이지</li>
 </ul>
 </main>
 </body>
@@ -281,6 +289,7 @@ seeplore는 특정 도시·장소나 건축을 소개하는 서비스가 아니�
 
 - [seeplore 소개](${SITE}/about): 무엇을, 누구를 위해, 어떤 방식으로 만드는지
 - [작품 목록 JSON](${SITE}/series.json)
+- [English: About seeplore](${SITE}/en/about)
 
 ${byField.map(({ f, ws }) => `## ${f}\n\n${ws.map((w) => `- [${w.title}](${w.url}): ${w.desc}`).join('\n')}`).join('\n\n')}
 
@@ -294,10 +303,12 @@ ${byField.map(({ f, ws }) => `## ${f}\n\n${ws.map((w) => `- [${w.title}](${w.url
 mkdirSync('dist/team', { recursive: true });
 writeFileSync('dist/team/index.html', teamHtml({ works, esc, SITE, BLOG }));
 
+buildEn({ works, esc, SITE, BLOG, teamHtml });
+
 const today = new Date().toISOString().slice(0, 10);
 writeFileSync(
   'dist/sitemap.xml',
-  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <url><loc>${SITE}/</loc><lastmod>${today}</lastmod></url>\n  <url><loc>${SITE}/about</loc><lastmod>${today}</lastmod></url>\n  <url><loc>${SITE}/team</loc><lastmod>${today}</lastmod></url>\n</urlset>\n`,
+  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <url><loc>${SITE}/</loc><lastmod>${today}</lastmod></url>\n  <url><loc>${SITE}/about</loc><lastmod>${today}</lastmod></url>\n  <url><loc>${SITE}/team</loc><lastmod>${today}</lastmod></url>\n  <url><loc>${SITE}/en</loc><lastmod>${today}</lastmod></url>\n  <url><loc>${SITE}/en/about</loc><lastmod>${today}</lastmod></url>\n  <url><loc>${SITE}/en/team</loc><lastmod>${today}</lastmod></url>\n</urlset>\n`,
 );
 writeFileSync('dist/robots.txt', `User-agent: *\nAllow: /\nSitemap: ${SITE}/sitemap.xml\n`);
 console.log(`[seeplore] 작품 ${works.length}편 → dist/`);
