@@ -57,6 +57,10 @@
       "url": "https://ai-slot.seeplore.com/",
       "icon": "https://seeplore.com/icons/series/slot.png",
       "desc": "다음 글자마다 퍼센트를 매기고, 레버를 당겨 하나를 뽑는다 — 동화를 읽은 작은 AI가 글을 쓰는 과정을 3D 슬롯머신으로",
+      "titleEn": "The AI That Writes One Character at a Time",
+      "labelEn": "One Character\nat a Time",
+      "descEn": "A percent for every possible next character, then pull the lever — a small AI that read 40 fairy tales writes, on a 3D slot machine · narrated",
+      "urlEn": "https://ai-slot.seeplore.com/en/",
       "field": "AI·컴퓨터"
     },
     {
