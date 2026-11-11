@@ -12,7 +12,10 @@
   const canvas = document.getElementById('office');
   const g = canvas.getContext('2d');
   const T = 16;                         // 타일
-  const WW = 32 * T, WH = 25 * T;       // 세계 크기 512×400
+  // 화면 모양: 넓으면 가로 배치(32×25 타일), 휴대폰·쇼츠는 세로 배치(16×34 타일) — 휴대폰에서 글자가 너무 작아지지 않게
+  const PORTRAIT = SHORTS || window.innerWidth < 700;
+  const WW = (PORTRAIT ? 16 : 32) * T, WH = (PORTRAIT ? 34 : 25) * T;
+  if (SHORTS) { canvas.width = 720; canvas.height = 1280; } else if (PORTRAIT) { canvas.width = WW * 3; canvas.height = WH * 3; } else { canvas.width = WW * 2; canvas.height = WH * 2; }
   const cap = document.getElementById('caption');
   const tip = document.getElementById('tip');
   const playBtn = document.getElementById('play');
@@ -48,7 +51,7 @@
   const gray = (a, i) => { const v = 0.3 * a[i] + 0.59 * a[i + 1] + 0.11 * a[i + 2]; a[i] = a[i + 1] = a[i + 2] = v; };
   const SHEETS = {};
   const CORRIDOR_Y = 7.25 * T;          // 위층 방들과 제작본부 사이 복도 가운데
-  const ROOMS0 = [
+  const ROOMS_LAND = [
     { name: '대표실', x: 0, y: 0, w: 6, h: 6.5, floor: '#ead6b4', door: 3 },
     { name: '기획실', x: 6, y: 0, w: 6, h: 6.5, floor: '#dbe8f3', door: 9 },
     { name: '홍보팀', x: 12, y: 0, w: 13, h: 6.5, floor: '#f4e0dc', door: 18.5 },
@@ -58,31 +61,62 @@
     { name: '서버실', x: 23, y: 13.5, w: 9, h: 6, floor: '#dfe4ea', door: 27.5 },
     { name: '휴게실', x: 0, y: 19.5, w: 32, h: 5.5, floor: '#e8efdc', door: 16 },
   ];
-  const ROOMS = ROOMS0.map((r, i) => ({ ...r, floor: TH.floors[i] }));
+  // 세로 배치: 가운데 세로 복도(x 7.5~8.5)를 두고 왼쪽·오른쪽 방, 제작본부는 복도가 지나가는 넓은 방
+  const SPINE = 8 * T;
+  const ROOMS_PORT = [
+    { name: '대표실', x: 0, y: 0, w: 7.5, h: 6, side: 'r', doorY: 3 },
+    { name: '기획실', x: 8.5, y: 0, w: 7.5, h: 6, side: 'l', doorY: 3 },
+    { name: '홍보팀', x: 0, y: 6.5, w: 7.5, h: 7, side: 'r', doorY: 10 },
+    { name: '음성 부스', x: 8.5, y: 6.5, w: 7.5, h: 3.5, side: 'l', doorY: 8.25 },
+    { name: '제작본부', x: 0, y: 14, w: 16, h: 15, open: true },
+    { name: '품질관리', x: 8.5, y: 10, w: 7.5, h: 3.5, side: 'l', doorY: 11.75 },
+    { name: '서버실', x: 0, y: 29.5, w: 7.5, h: 4.5, side: 'r', doorY: 31.75 },
+    { name: '휴게실', x: 8.5, y: 29.5, w: 7.5, h: 4.5, side: 'l', doorY: 31.75 },
+  ];
+  const ROOMS = (PORTRAIT ? ROOMS_PORT : ROOMS_LAND).map((r, i) => ({ ...r, floor: TH.floors[i] }));
 
   // 사람: 자기 자리(책상 앞 의자 위치, 픽셀)와 캐릭터 그림(시트 칸)
   const people = {};
   const addPerson = (key, label, ch, deskX, deskY, opts = {}) => {
     people[key] = { key, label, ch, deskX, deskY, x: deskX, y: deskY + 14, homeX: deskX, homeY: deskY + 14, path: [], speed: 1.4, say: '', sayUntil: 0, carry: false, flip: false, typing: true, ...opts };
   };
-  addPerson('대표', '대표', [0, 9], 3 * T, 2.4 * T);
-  addPerson('기획 담당', '기획', [1, 6], 9 * T, 2.4 * T);
-  addPerson('홍보팀장', '홍보팀장', [0, 5], 14 * T, 2.4 * T);
-  addPerson('블로그 작가', '블로그', [0, 7], 17 * T, 2.4 * T);
-  addPerson('쇼츠 PD', '쇼츠 PD', [1, 7], 20 * T, 2.4 * T);
-  addPerson('업로드 봇', '업로드 봇', [1, 11], 23 * T, 2.4 * T, { speed: 1.9 });
-  addPerson('내레이터', '내레이터', [1, 5], 28.5 * T, 2.4 * T);
-  addPerson('점검 로봇', '점검 로봇', [1, 11], 27.5 * T, 10 * T, { speed: 1.9 });
+  const SEAT = PORTRAIT
+    ? { 대표: [3.7, 2.4], '기획 담당': [12.2, 2.4], 홍보팀장: [2.2, 8.6], '블로그 작가': [5.6, 8.6], '쇼츠 PD': [2.2, 11.2], '업로드 봇': [5.6, 11.2], 내레이터: [12.2, 7.2], '점검 로봇': [12.2, 10.7] }
+    : { 대표: [3, 2.4], '기획 담당': [9, 2.4], 홍보팀장: [14, 2.4], '블로그 작가': [17, 2.4], '쇼츠 PD': [20, 2.4], '업로드 봇': [23, 2.4], 내레이터: [28.5, 2.4], '점검 로봇': [27.5, 10] };
+  const seat = (k, label, ch, o) => addPerson(k, label, ch, SEAT[k][0] * T, SEAT[k][1] * T, o);
+  seat('대표', '대표', [0, 9]);
+  seat('기획 담당', '기획', [1, 6]);
+  seat('홍보팀장', '홍보팀장', [0, 5]);
+  seat('블로그 작가', '블로그', [0, 7]);
+  seat('쇼츠 PD', '쇼츠 PD', [1, 7]);
+  seat('업로드 봇', '업로드 봇', [1, 11], { speed: 1.9 });
+  seat('내레이터', '내레이터', [1, 5]);
+  seat('점검 로봇', '점검 로봇', [1, 11], { speed: 1.9 });
   const WORK_CHARS = [[0, 5], [0, 6], [1, 6], [0, 7], [1, 7], [0, 8], [1, 8], [0, 9], [1, 9], [0, 10]];
   const desks = DATA.works.map((w, i) => {
-    const dx = (1.7 + (i % 5) * 4.4) * T, dy = (9.6 + Math.floor(i / 5) * 2.45) * T;
+    const dx = PORTRAIT ? [2, 5.6, 10.4, 14][i % 4] * T : (1.7 + (i % 5) * 4.4) * T;
+    const dy = PORTRAIT ? (15.4 + Math.floor(i / 4) * 2.7) * T : (9.6 + Math.floor(i / 5) * 2.45) * T;
     addPerson('work:' + w.id, w.title, WORK_CHARS[i % WORK_CHARS.length], dx, dy, { work: w });
     return { w, x: dx, y: dy };
   });
   const roomOf = (p) => ROOMS.find((r) => p.homeX >= r.x * T && p.homeX < (r.x + r.w) * T && p.homeY >= r.y * T && p.homeY < (r.y + r.h) * T);
 
   // ---------------------------------------------------------------- 길 찾기: 내 방 문 → 복도 → 상대 방 문 → 목적지
+  function routePort(p, tx, ty) {
+    const inRoom = (x, y) => ROOMS.find((r) => x >= r.x * T && x < (r.x + r.w) * T && y >= r.y * T && y < (r.y + r.h) * T);
+    const from = inRoom(p.x, p.y) ?? roomOf(p), to = inRoom(tx, ty);
+    const pts = [];
+    const exitOf = (r, y) => (r.open ? [[SPINE, y]] : [[r.side === 'r' ? (r.x + r.w - 1) * T : (r.x + 1) * T, r.doorY * T], [SPINE, r.doorY * T]]);
+    if (from && to && from !== to) {
+      pts.push(...exitOf(from, p.y));
+      const back = exitOf(to, ty).reverse();
+      pts.push([SPINE, back[0][1]], ...back);
+    }
+    pts.push([tx, ty]);
+    return pts;
+  }
   function route(p, tx, ty) {
+    if (PORTRAIT) return routePort(p, tx, ty);
     const from = ROOMS.find((r) => p.x >= r.x * T && p.x < (r.x + r.w) * T && p.y >= r.y * T && p.y < (r.y + r.h) * T) ?? roomOf(p);
     const to = ROOMS.find((r) => tx >= r.x * T && tx < (r.x + r.w) * T && ty >= r.y * T && ty < (r.y + r.h) * T);
     const pts = [];
@@ -129,12 +163,12 @@
     setCap('출시는 대표가 허락할 때만, 하루 한 번');
     st(SK); await walkToPerson(SK, '대표'); await say(SK, '출시해도 될까요?');
     st('대표'); await say('대표', '올려!', 1600);
-    st(SK); await walkTo(SK, 26 * T, 16.6 * T); flash = 40; await say(SK, '배포!', 1600); goHome(SK);
+    st(SK); await walkTo(SK, ...spot.서버); flash = 40; await say(SK, '배포!', 1600); goHome(SK);
     setCap('홍보팀은 쇼츠와 블로그 글을 준비');
     st('쇼츠 PD'); await say('쇼츠 PD', '쇼츠 렌더링 중 — 첫 2초는 질문으로', 2400);
     st('블로그 작가'); await say('블로그 작가', '블로그 글 예약 — 화·금 08:47', 2200);
     setCap('아침 08:47, 업로드 봇이 서버실에서 올립니다');
-    st('업로드 봇'); people['업로드 봇'].carry = true; await walkTo('업로드 봇', 30 * T, 16.6 * T); people['업로드 봇'].carry = false; flash = 40; await say('업로드 봇', '@seeplore 업로드 완료', 2200); goHome('업로드 봇');
+    st('업로드 봇'); people['업로드 봇'].carry = true; await walkTo('업로드 봇', ...spot.서버2); people['업로드 봇'].carry = false; flash = 40; await say('업로드 봇', '@seeplore 업로드 완료', 2200); goHome('업로드 봇');
     setCap('이렇게 작품 하나가 나옵니다 — seeplore.com');
     focusKey = null; busy.clear(); await wait(2500);
     setCap(''); playing = false; playBtn && (playBtn.disabled = false);
@@ -165,7 +199,10 @@
   const keys = Object.keys(people);
   const out = new Set();               // 지금 자리를 비운 사람
   const at = (key) => [people[key].homeX + 14, people[key].homeY + 2];
-  const spot = { 음성: [28.5 * T + 16, 2.4 * T + 18], 점검: [27.5 * T + 16, 10 * T + 18], 서버: [26.4 * T, 16.6 * T], 커피: [4 * T, 22.4 * T], 탁자: [10 * T, 23 * T], 기획: [9 * T + 16, 2.4 * T + 18], 대표: [3 * T + 16, 2.4 * T + 18], 홍보: [17 * T + 16, 2.4 * T + 18] };
+  const near = (k) => [SEAT[k][0] * T + 16, SEAT[k][1] * T + 18];
+  const spot = PORTRAIT
+    ? { 음성: near('내레이터'), 점검: near('점검 로봇'), 서버: [2.6 * T, 32.6 * T], 서버2: [5.2 * T, 32.6 * T], 커피: [10.2 * T, 32.2 * T], 탁자: [13.4 * T, 32.8 * T], 기획: near('기획 담당'), 대표: near('대표'), 홍보: [4 * T, 10.2 * T] }
+    : { 음성: near('내레이터'), 점검: near('점검 로봇'), 서버: [26.4 * T, 16.6 * T], 서버2: [30 * T, 16.6 * T], 커피: [4 * T, 22.4 * T], 탁자: [10 * T, 23 * T], 기획: near('기획 담당'), 대표: near('대표'), 홍보: [17 * T + 16, 2.4 * T + 18] };
   const pick = (a) => a[Math.floor(Math.random() * a.length)];
   const randomDesk = () => pick(desks);
   function errands(key) {
@@ -216,8 +253,9 @@
     if (TH.outline) { if (!TH.chip) for (let gx = x + 8; gx < x + w; gx += 16) for (let gy = y + 8; gy < y + h; gy += 16) R(gx, gy, 1, 1, '#1a2028'); R(x, y, w, 1, TH.wall); R(x, y, 1, h, TH.wall); R(x + w - 1, y, 1, h, TH.wall); R(x, y + h - 1, w, 1, TH.wall); }
     else { R(x, y, w, 3, TH.wall); R(x, y, 2, h, TH.wall); R(x + w - 2, y, 2, h, TH.wall); R(x, y + h - 2, w, 2, TH.wall); }
     // 문(벽 틈)
-    const dx = r.door * T - 10;
-    if (r.top) R(dx, y, 20, 3, r.floor); else R(dx, y + h - 2, 20, 2, r.floor);
+    if (r.open) { R(SPINE - 10, y, 20, 3, r.floor); R(SPINE - 10, y + h - 3, 20, 3, r.floor); }
+    else if (r.side) { const dy = r.doorY * T - 10; if (r.side === 'r') R(x + w - 3, dy, 3, 20, r.floor); else R(x, dy, 3, 20, r.floor); }
+    else { const dx = r.door * T - 10; if (r.top) R(dx, y, 20, 3, r.floor); else R(dx, y + h - 2, 20, 2, r.floor); }
     text(TH.outline ? r.name.toUpperCase() : r.name, x + 7, y + 13, TH.outline ? 6.5 : 7.5, TH.label, 'left', 800);
   }
   function monitor(x, y, on, icon) {
@@ -254,14 +292,7 @@
   // 카메라: 항상 사무실 전체
   const cam = { x: WW / 2, y: WH / 2, z: 1 };
   function updateCam() {
-    const portrait = canvas.height > canvas.width;
-    const fit = Math.min(canvas.width / WW, canvas.height / WH);
-    let tx = WW / 2, ty = WH / 2, tz = fit;
-    if (portrait) { tz = canvas.width / WW; ty = WH / 2 + (canvas.height * 0.08) / tz; } // 항상 사무실 전체 — 세로(쇼츠)는 폭에 맞추고 위쪽에
-    cam.x += (tx - cam.x) * 0.08; cam.y += (ty - cam.y) * 0.08; cam.z += (tz - cam.z) * 0.08;
-    // 화면 밖으로 나가지 않게
-    const hw = canvas.width / cam.z / 2, hh = canvas.height / cam.z / 2;
-
+    cam.x = WW / 2; cam.y = WH / 2; cam.z = Math.min(canvas.width / WW, canvas.height / WH);
   }
   let t = 0;
   function frame() {
@@ -278,33 +309,49 @@
     g.setTransform(1, 0, 0, 1, 0, 0); g.imageSmoothingEnabled = false;
     R(0, 0, canvas.width, canvas.height, TH.bg);
     g.setTransform(cam.z, 0, 0, cam.z, canvas.width / 2 - cam.x * cam.z, canvas.height / 2 - cam.y * cam.z);
-    R(0, 7 * T, WW, 1 * T, TH.corridor);                      // 복도
-    if (!TH.outline) R(0, 19.5 * T - 1, WW, 1, TH.wall);
-    if (TH.chip) {
-      for (const yy of [7.2 * T, 7.5 * T, 7.8 * T]) R(0, yy, WW, 1, '#0f4a35');
-      R(11.5 * T, 6.5 * T, 1, 13 * T, '#0f4a35'); R(27.5 * T, 6.5 * T, 1, 13 * T, '#0f4a35');
-      for (let k = 0; k < 9; k++) { const px = ((t * (1.2 + (k % 3) * 0.5) + k * 61) % (WW + 40)) - 20, yy = [7.2, 7.5, 7.8][k % 3] * T; g.fillStyle = 'rgba(61,220,151,.9)'; g.fillRect(px, yy - 1, 6, 3); g.fillStyle = 'rgba(61,220,151,.25)'; g.fillRect(px - 10, yy, 10, 1); }
-      for (let k = 0; k < 3; k++) { const py = 6.5 * T + ((t * 0.9 + k * 70) % (13 * T)); R(11.5 * T - 1, py, 3, 5, '#7dffcf'); R(27.5 * T - 1, (py + 90) % (13 * T) + 6.5 * T, 3, 5, '#7dffcf'); }
+    if (PORTRAIT) {
+      R(7.5 * T, 0, T, WH, TH.corridor);                       // 세로 복도
+      if (TH.chip) {
+        for (const xx of [7.7 * T, 8 * T, 8.3 * T]) R(xx, 0, 1, WH, '#0f4a35');
+        for (let k = 0; k < 7; k++) { const py = ((t * (1.1 + (k % 3) * 0.5) + k * 77) % (WH + 40)) - 20, xx = [7.7, 8, 8.3][k % 3] * T; g.fillStyle = 'rgba(61,220,151,.9)'; g.fillRect(xx - 1, py, 3, 6); g.fillStyle = 'rgba(61,220,151,.25)'; g.fillRect(xx, py - 10, 1, 10); }
+      }
+    } else {
+      R(0, 7 * T, WW, 1 * T, TH.corridor);                    // 복도
+      if (!TH.outline) R(0, 19.5 * T - 1, WW, 1, TH.wall);
+      if (TH.chip) {
+        for (const yy of [7.2 * T, 7.5 * T, 7.8 * T]) R(0, yy, WW, 1, '#0f4a35');
+        R(11.5 * T, 6.5 * T, 1, 13 * T, '#0f4a35'); R(27.5 * T, 6.5 * T, 1, 13 * T, '#0f4a35');
+        for (let k = 0; k < 9; k++) { const px = ((t * (1.2 + (k % 3) * 0.5) + k * 61) % (WW + 40)) - 20, yy = [7.2, 7.5, 7.8][k % 3] * T; g.fillStyle = 'rgba(61,220,151,.9)'; g.fillRect(px, yy - 1, 6, 3); g.fillStyle = 'rgba(61,220,151,.25)'; g.fillRect(px - 10, yy, 10, 1); }
+        for (let k = 0; k < 3; k++) { const py = 6.5 * T + ((t * 0.9 + k * 70) % (13 * T)); R(11.5 * T - 1, py, 3, 5, '#7dffcf'); R(27.5 * T - 1, (py + 90) % (13 * T) + 6.5 * T, 3, 5, '#7dffcf'); }
+      }
     }
     // 테마에 맞는 그림 시트
     indoor = SHEETS['in_' + TH.furn] ?? SHEETS.in_normal; chars = SHEETS['ch_' + TH.people] ?? SHEETS.ch_normal;
     for (const r of ROOMS) drawRoom(r);
     if (indoor && chars) {
       // 소품
-      tile(indoor, 23, 0, 0.4 * T, 1 * T); tile(indoor, 24, 0, 1.4 * T, 1 * T);
-      tile(indoor, 16, 0, 4.7 * T, 4.9 * T); tile(indoor, 17, 0, 10.7 * T, 4.9 * T); tile(indoor, 16, 0, 23.7 * T, 4.9 * T);
-      tile(indoor, 19, 12, 6.5 * T, 3.9 * T); tile(indoor, 20, 12, 7.5 * T, 3.9 * T);
-      tile(indoor, 23, 8, 25.6 * T, 4.4 * T, 2, 1);
-      for (let k = 0; k < 3; k++) {
-        const sx = (24.2 + k * 2.6) * T, sy = 15.1 * T;
-        tile(indoor, 25 + (k % 2), 8, sx, sy, 1, 2);
-        for (let j = 0; j < 4; j++) R(sx + 5, sy + 6 + j * 6, 3, 2, flash > 0 ? (t % 4 < 2 ? '#fff36b' : '#4cd17a') : (t / 4 + j + k) % 5 < 3 ? '#4cd17a' : '#1f6b3b');
+      const rack = (sx, sy, k) => { tile(indoor, 25 + (k % 2), 8, sx, sy, 1, 2); for (let j = 0; j < 4; j++) R(sx + 5, sy + 6 + j * 6, 3, 2, flash > 0 ? (t % 4 < 2 ? '#fff36b' : '#4cd17a') : (t / 4 + j + k) % 5 < 3 ? '#4cd17a' : '#1f6b3b'); };
+      if (PORTRAIT) {
+        tile(indoor, 23, 0, 0.4 * T, 1 * T); tile(indoor, 16, 0, 6.2 * T, 4.4 * T);
+        tile(indoor, 19, 12, 9 * T, 4.2 * T); tile(indoor, 20, 12, 10 * T, 4.2 * T); tile(indoor, 17, 0, 14.6 * T, 4.4 * T);
+        tile(indoor, 23, 8, 9 * T, 8.4 * T, 2, 1); tile(indoor, 16, 0, 6.3 * T, 12.2 * T);
+        for (let k = 0; k < 3; k++) rack((1 + k * 2.1) * T, 30.4 * T, k);
+        tag('서버', 3.7 * T, 33 * T);
+        tile(indoor, 0, 12, 9 * T, 30.2 * T, 2, 1); tile(indoor, 5, 12, 11 * T, 30.2 * T);
+        tile(indoor, 3, 0, 13.6 * T, 31.8 * T); tile(indoor, 1, 2, 12.6 * T, 31.8 * T); tile(indoor, 3, 2, 14.6 * T, 31.8 * T);
+        text('커피', 10.4 * T, 32.4 * T, 6, TH.label);
+      } else {
+        tile(indoor, 23, 0, 0.4 * T, 1 * T); tile(indoor, 24, 0, 1.4 * T, 1 * T);
+        tile(indoor, 16, 0, 4.7 * T, 4.9 * T); tile(indoor, 17, 0, 10.7 * T, 4.9 * T); tile(indoor, 16, 0, 23.7 * T, 4.9 * T);
+        tile(indoor, 19, 12, 6.5 * T, 3.9 * T); tile(indoor, 20, 12, 7.5 * T, 3.9 * T);
+        tile(indoor, 23, 8, 25.6 * T, 4.4 * T, 2, 1);
+        for (let k = 0; k < 3; k++) rack((24.2 + k * 2.6) * T, 15.1 * T, k);
+        tag('서버', 27.6 * T, 18.4 * T);
+        tile(indoor, 0, 12, 2 * T, 20.8 * T, 3, 1); tile(indoor, 5, 12, 5 * T, 20.8 * T);
+        for (const bx of [10, 15]) { tile(indoor, 3, 0, bx * T, 21.6 * T); tile(indoor, 1, 2, (bx - 1) * T, 21.6 * T); tile(indoor, 3, 2, (bx + 1) * T, 21.6 * T); }
+        tile(indoor, 16, 0, 20 * T, 22 * T); tile(indoor, 17, 0, 30.4 * T, 22 * T);
+        text('커피', 3.5 * T, 22.8 * T, 6, TH.label);
       }
-      tag('서버', 27.6 * T, 18.4 * T);
-      tile(indoor, 0, 12, 2 * T, 20.8 * T, 3, 1); tile(indoor, 5, 12, 5 * T, 20.8 * T);
-      for (const bx of [10, 15]) { tile(indoor, 3, 0, bx * T, 21.6 * T); tile(indoor, 1, 2, (bx - 1) * T, 21.6 * T); tile(indoor, 3, 2, (bx + 1) * T, 21.6 * T); }
-      tile(indoor, 16, 0, 20 * T, 22 * T); tile(indoor, 17, 0, 30.4 * T, 22 * T);
-      text('커피', 3.5 * T, 22.8 * T, 6, TH.label);
       // 책상과 사람 (위에서 아래 순서로)
       const all = Object.values(people);
       for (const p of all) deskAt(p.deskX, p.deskY, p.work ? icons[p.work.id] : null, p.typing && !p.path.length && Math.abs(p.x - p.homeX) < 1, t);

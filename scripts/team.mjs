@@ -73,7 +73,7 @@ export function teamHtml({ works, esc, SITE, BLOG }) {
 :root { --bg: #050608; --panel: rgba(255,255,255,.03); --ink: #f3f5f7; --soft: #9aa3ab; --body: #c9d0d6; --line: rgba(255,255,255,.12); --accent: #ffd24a;
   color-scheme: dark; font-family: 'Pretendard', 'Noto Sans KR', system-ui, -apple-system, sans-serif; color: var(--ink); }
 * { box-sizing: border-box; }
-html, body { margin: 0; background: var(--bg); }
+html, body { margin: 0; background: var(--bg); color: var(--ink); }
 body { padding-block: calc(env(safe-area-inset-top, 0px) + 28px) 56px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); word-break: keep-all; }
 .wrap { max-width: 1040px; margin: 0 auto; display: grid; gap: 16px; }
 .back { font-size: 14px; color: var(--soft); text-decoration: none; }
@@ -93,7 +93,7 @@ h1 { margin: 6px 0 0; font-size: clamp(40px, 10vw, 72px); line-height: 1; font-w
 .tip { position: absolute; z-index: 3; max-width: 250px; background: #11151a; color: var(--ink); border: 1px solid var(--line); border-radius: 10px; padding: 9px 11px; font-size: 12.5px; line-height: 1.55; box-shadow: 0 8px 24px rgba(0,0,0,.5); pointer-events: none; }
 .tip b { display: block; font-size: 13.5px; } .tip .t { color: var(--soft); font-size: 11.5px; } .tip p { margin: 4px 0 0; color: var(--body); }
 .box { border: 1px solid var(--line); border-radius: 16px; padding: 16px 18px; background: var(--panel); min-width: 0; }
-h2 { margin: 0 0 10px; font-size: 16px; letter-spacing: -0.01em; }
+h2 { margin: 0 0 10px; font-size: 16px; letter-spacing: -0.01em; color: var(--ink); }
 ul { list-style: none; margin: 0; padding: 0; }
 .team { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
 .team li { border: 1px solid var(--line); border-radius: 12px; padding: 11px 13px; background: rgba(255,255,255,.02); }
@@ -106,7 +106,7 @@ body.shorts .wrap > :not(.stage) { display: none; }
 body.shorts .wrap { max-width: none; }
 body.shorts .stage { border: 0; border-radius: 0; height: 100vh; aspect-ratio: 9 / 16; margin: 0 auto; }
 body.shorts #office { width: 100%; height: 100%; }
-body.shorts #caption { top: 57%; bottom: auto; font-size: 22px; }
+body.shorts #caption { top: 5%; bottom: auto; font-size: 20px; }
 </style>
 </head>
 <body>
@@ -133,7 +133,6 @@ body.shorts #caption { top: 57%; bottom: auto; font-size: 22px; }
   </div>
   <footer>가구·사람 그림: Kenney Roguelike Indoor · Roguelike Characters (CC0) · <a href="/about">seeplore 소개</a> · <a href="${BLOG}">블로그</a> · <a href="https://www.youtube.com/@seeplore">YouTube</a></footer>
 </div>
-<script>if (document.body.classList.contains('shorts')) { const c = document.getElementById('office'); c.width = 720; c.height = 1280; }</script>
 <script id="office-data" type="application/json">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>
 <script src="/team/office.js"></script>
 <script>{ const bs = document.querySelectorAll('.themes button'); const cur = new URLSearchParams(location.search).get('theme') || 'day'; bs.forEach((b) => { b.setAttribute('aria-pressed', b.dataset.t === cur); b.onclick = () => { window.__setTheme(b.dataset.t); bs.forEach((x) => x.setAttribute('aria-pressed', x === b)); }; }); }</script>
