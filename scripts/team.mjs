@@ -135,7 +135,7 @@ body.shorts #caption { top: 5%; bottom: auto; font-size: 20px; }
 </div>
 <script id="office-data" type="application/json">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>
 <script src="/team/office.js"></script>
-<script>{ const bs = document.querySelectorAll('.themes button'); const cur = new URLSearchParams(location.search).get('theme') || 'day'; bs.forEach((b) => { b.setAttribute('aria-pressed', b.dataset.t === cur); b.onclick = () => { window.__setTheme(b.dataset.t); bs.forEach((x) => x.setAttribute('aria-pressed', x === b)); }; }); }</script>
+<script>{ const bs = document.querySelectorAll('.themes button'); const cur = new URLSearchParams(location.search).get('theme') || 'base'; bs.forEach((b) => { b.setAttribute('aria-pressed', b.dataset.t === cur); b.onclick = () => { window.__setTheme(b.dataset.t); bs.forEach((x) => x.setAttribute('aria-pressed', x === b)); }; }); }</script>
 </body>
 </html>
 `;
