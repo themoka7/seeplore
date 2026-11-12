@@ -230,6 +230,19 @@
       "descEn": "Wages stay the same, but prices keep rising? From 10-won ramen in 1963, the value of money in 3D with Bank of Korea data · narrated",
       "urlEn": "https://valueofmoney.seeplore.com/en/",
       "field": "사회·경제"
+    },
+    {
+      "id": "aircon",
+      "label": "에어컨은\n열을 옮긴다",
+      "title": "에어컨은 열을 옮긴다",
+      "url": "https://airconditioner.seeplore.com/",
+      "icon": "https://seeplore.com/icons/series/aircon.png",
+      "desc": "에어컨은 왜 시원할까 — 방의 열을 싣고 한 바퀴 도는 냉매를 계산해 따라가는 3D · 음성 해설",
+      "titleEn": "Air Conditioners Move Heat",
+      "labelEn": "Air Conditioners\nMove Heat",
+      "descEn": "Why does an air conditioner feel cool? Follow the refrigerant that carries your room’s heat outdoors, calculated in 3D · narrated",
+      "urlEn": "https://airconditioner.seeplore.com/en/",
+      "field": "물리"
     }
   ]
 }
