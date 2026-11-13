@@ -256,6 +256,19 @@
       "descEn": "How does a microwave heat food without a flame? Follow the waves that shake water molecules, one question at a time, calculated in 3D · narrated",
       "urlEn": "https://microwaveoven.seeplore.com/en/",
       "field": "물리"
+    },
+    {
+      "id": "drone",
+      "label": "날개 4개로\n나는 컴퓨터",
+      "title": "날개 4개로 나는 컴퓨터",
+      "url": "https://drone.seeplore.com/",
+      "icon": "https://seeplore.com/icons/series/drone.png",
+      "desc": "프로펠러 4개와 1초에 1000번 계산하는 컴퓨터 — 드론이 뜨고, 숙여서 앞으로 가고, 돌풍을 버티는 원리를 3D로 · 드론 쇼 그리기",
+      "titleEn": "The Flying Computer",
+      "labelEn": "The Flying\nComputer",
+      "descEn": "Four propellers and a computer that corrects itself 1,000 times a second. See how a drone lifts off, leans to fly forward and rides out a gust, in 3D. Plus: draw with a 450-drone light show.",
+      "urlEn": "https://drone.seeplore.com/en/",
+      "field": "물리"
     }
   ]
 }
