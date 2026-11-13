@@ -10,6 +10,7 @@
 import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync, existsSync } from 'node:fs';
 import { teamHtml } from './team.mjs';
 import { buildEn } from './en.mjs';
+import { groupWorks } from './groups.mjs';
 
 const SITE = 'https://seeplore.com';
 const data = JSON.parse(readFileSync('series.json', 'utf8'));
@@ -34,9 +35,8 @@ writeFileSync('dist/series.json', JSON.stringify({ works }, null, 1));
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
 const host = (u) => new URL(u).host;
 
-const cards = works
-  .map(
-    (w, i) => `
+// 첫 페이지는 분야 묶음으로 (scripts/groups.mjs — field 로 나눈다)
+const card = (w, i) => `
       <li>
         <a class="work" href="${esc(w.url)}">
           <img src="${esc(w.icon.replace(SITE, ''))}" alt="" width="72" height="72" ${i > 3 ? 'loading="lazy"' : ''}>
@@ -46,9 +46,19 @@ const cards = works
             <span class="host">${esc(host(w.url))}</span>
           </span>
         </a>
-      </li>`,
-  )
+      </li>`;
+const groups = groupWorks(works);
+let ci = 0;
+const sections = groups
+  .map(({ g, ws }) => `
+  <section class="grp" id="${g.key}" aria-labelledby="h-${g.key}">
+    <h2 id="h-${g.key}">${esc(g.ko)}<small>${ws.length}편</small></h2>
+    <p>${esc(g.introKo)}</p>
+    <ul>${ws.map((w) => card(w, ci++)).join('')}
+    </ul>
+  </section>`)
   .join('');
+const jump = `<nav class="jump" aria-label="분야">${groups.map(({ g, ws }) => `<a href="#${g.key}">${esc(g.ko)}<small>${ws.length}</small></a>`).join('')}</nav>`;
 
 // 구조화 데이터: 이 사이트가 'seeplore' 라는 시리즈(조직)의 중심이라는 것 + 작품·블로그 연결
 // (구글 'seeplore' 검색에서 이름이 같은 다른 프로젝트로 잡히던 문제 — 2026-11-07)
@@ -177,6 +187,9 @@ ul { list-style: none; margin: 40px 0 0; padding: 0; display: grid; gap: 10px; }
 .host { font-size: 12px; color: var(--muted); }
 .soon { margin: 10px 0 0; padding: 14px 18px; border: 1px dashed var(--border); border-radius: 16px; color: var(--muted); font-size: 14px; }
 footer { margin-top: 40px; font-size: 12px; line-height: 1.6; color: #6f777e; }
+.jump { display: flex; flex-wrap: wrap; gap: 8px; margin: 28px 0 0; } .jump a { font-size: 14px; font-weight: 600; color: var(--text); text-decoration: none; border: 1px solid var(--border); border-radius: 999px; padding: 8px 14px; } .jump a:hover { border-color: rgba(255,255,255,.35); } .jump small { color: var(--muted); font-weight: 500; margin-left: 4px; }
+.grp { margin: 44px 0 0; scroll-margin-top: 16px; } .grp h2 { margin: 0; font-size: 22px; letter-spacing: -0.02em; } .grp h2 small { font-size: 14px; font-weight: 600; color: var(--muted); margin-left: 6px; } .grp > p { margin: 6px 0 0; font-size: 14px; line-height: 1.6; color: var(--muted); }
+.grp ul { margin-top: 16px; }
 </style>
 </head>
 <body>
@@ -184,8 +197,7 @@ footer { margin-top: 40px; font-size: 12px; line-height: 1.6; color: #6f777e; }
   <p class="kicker">보면서(see) 탐험하는(explore) 웹 다큐멘터리</p>
   <h1>seeplore</h1>
   <p class="lead">과학과 역사의 원리를 지도와 3D 위에서 장면을 하나씩 넘기며 음성 해설로 설명하는 교육용 웹 다큐멘터리 시리즈입니다. 작품마다 축이 하나 있습니다 — 시간, 거리, 깊이처럼. 축을 따라가면 이야기가 됩니다. <a href="/about">seeplore 소개 →</a></p>
-  <ul>${cards}
-  </ul>
+  ${jump}${sections}
   <p class="soon">+ 다음 작품 준비 중</p>
   <p class="blog"><a href="${BLOG}">seeplore 블로그 — 작품 뒤의 원리와 만든 이야기 →</a></p>
   <footer>작품 ${works.length}편 · 무료 · 회원 가입 없음 · <a href="/team" style="color:inherit">만드는 사람들</a> · <a href="/en" style="color:inherit" hreflang="en">English</a></footer>

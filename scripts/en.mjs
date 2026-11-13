@@ -5,6 +5,7 @@
  * 한국어 문장을 고치면 여기 영어 문장도 함께 맞춘다(같은 내용, 숫자는 계산).
  */
 import { mkdirSync, writeFileSync } from 'node:fs';
+import { groupWorks } from './groups.mjs';
 
 const FIELD_EN = {
   역사: 'History', 우주: 'Space', 지구: 'Earth', 물리: 'Physics', 'AI·컴퓨터': 'AI & Computers', 공학: 'Engineering',
@@ -52,9 +53,7 @@ html, body { margin: 0; background: var(--bg); -webkit-text-size-adjust: 100%; }
 a { color: var(--text); }`;
 
   // ---- /en ----
-  const cards = works
-    .map(
-      (w, i) => `
+  const card = (w, i) => `
       <li>
         <a class="work" href="${esc(href(w))}">
           <img src="${esc(w.icon.replace(SITE, ''))}" alt="" width="72" height="72" ${i > 3 ? 'loading="lazy"' : ''}>
@@ -64,9 +63,19 @@ a { color: var(--text); }`;
             <span class="host">${esc(host(href(w)))}</span>
           </span>
         </a>
-      </li>`,
-    )
+      </li>`;
+  const groups = groupWorks(works);
+  let ci = 0;
+  const sections = groups
+    .map(({ g, ws }) => `
+  <section class="grp" id="${g.key}" aria-labelledby="h-${g.key}">
+    <h2 id="h-${g.key}">${esc(g.en)}<small>${ws.length}</small></h2>
+    <p>${esc(g.introEn)}</p>
+    <ul>${ws.map((w) => card(w, ci++)).join('')}
+    </ul>
+  </section>`)
     .join('');
+  const jump = `<nav class="jump" aria-label="Subjects">${groups.map(({ g, ws }) => `<a href="#${g.key}">${esc(g.en)}<small>${ws.length}</small></a>`).join('')}</nav>`;
   const ld = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
@@ -102,6 +111,9 @@ ul { list-style: none; margin: 40px 0 0; padding: 0; display: grid; gap: 10px; }
 .soon { margin: 10px 0 0; padding: 14px 18px; border: 1px dashed var(--border); border-radius: 16px; color: var(--muted); font-size: 14px; }
 .blog { margin: 28px 0 0; font-size: 15px; } .blog a { text-decoration: none; border-bottom: 1px solid var(--border); padding-bottom: 2px; }
 footer { margin-top: 40px; font-size: 12px; line-height: 1.6; color: #6f777e; } footer a { color: inherit; }
+.jump { display: flex; flex-wrap: wrap; gap: 8px; margin: 28px 0 0; } .jump a { font-size: 14px; font-weight: 600; color: var(--text); text-decoration: none; border: 1px solid var(--border); border-radius: 999px; padding: 8px 14px; } .jump a:hover { border-color: rgba(255,255,255,.35); } .jump small { color: var(--muted); font-weight: 500; margin-left: 4px; }
+.grp { margin: 44px 0 0; scroll-margin-top: 16px; } .grp h2 { margin: 0; font-size: 22px; letter-spacing: -0.02em; } .grp h2 small { font-size: 14px; font-weight: 600; color: var(--muted); margin-left: 6px; } .grp > p { margin: 6px 0 0; font-size: 14px; line-height: 1.6; color: var(--muted); }
+.grp ul { margin-top: 16px; }
 </style>
 </head>
 <body>
@@ -110,8 +122,7 @@ footer { margin-top: 40px; font-size: 12px; line-height: 1.6; color: #6f777e; } 
   <p class="kicker">Web documentaries you see and explore</p>
   <h1>seeplore</h1>
   <p class="lead">An educational web documentary series that explains how science and history work — step through the scenes on a map or in 3D, with voice narration. Each title follows one axis, like time, distance or depth. Follow the axis and it becomes a story. <a href="/en/about">About seeplore →</a></p>
-  <ul>${cards}
-  </ul>
+  ${jump}${sections}
   <p class="soon">+ More titles on the way</p>
   <p class="blog"><a href="${BLOG_EN}">seeplore blog — the ideas behind each title →</a></p>
   <footer>${n} titles in English · free · no sign-up · <a href="/en/team">Who makes it</a> · <a href="/" hreflang="ko">한국어</a></footer>

@@ -13,3 +13,4 @@
 - `/team` 시안은 '컴퓨터 속'(칩 모양 방·회로 복도·흐르는 데이터)으로 정했다(2026-11-11). 다른 시안(base·day·night·line·mono·space·neon·gold)은 `?theme=` 로만 볼 수 있다.
 - **영어판** `/en`·`/en/about`·`/en/team` 은 `scripts/en.mjs` 가 만든다(2026-11-11). **영어판이 있는 작품(`urlEn`)만** 싣고, 영어 페이지 안에서는 한국어가 나오지 않는다(한국어로 가는 곳은 `한국어` 링크 하나). `urlEn` 이 있으면 `titleEn`·`labelEn`·`descEn` 도 필수(빌드가 막는다).
 - 한국어 문장(`WHAT`·`/about`·`team.mjs` 의 팀원 설명·`office.js` 의 말풍선·자막·방 이름)을 고치면 **영어 문장도 같은 커밋에서** 고친다 — `en.mjs`, `team.mjs` 의 `EN` 표, `office.js` 의 `DICT`·`PAT`. 사무실 영어 확인: Playwright 로 `/en/team` 에서 `fillText` 를 가로채 한글이 그려지는지 본다.
+- **첫 페이지 묶음**(/, /en): `scripts/groups.mjs` 의 GROUPS — 역사·사회 / 우주·지구 / AI·컴퓨터·공학·생명. 작품의 `field` 로 저절로 나뉘고, field 와 다르게 놓을 작품만 `ids`(지금 life·rainbow → 우주·지구). 묶음 이름·소개를 고치면 영어(`en`·`introEn`)도 함께.
