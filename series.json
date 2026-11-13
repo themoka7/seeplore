@@ -282,6 +282,19 @@
       "descEn": "Without Einstein, GPS distances would drift 11 km a day — find yourself with three satellite spheres and see how relativity keeps the clocks right, in 3D · narrated",
       "urlEn": "https://gps.seeplore.com/en/",
       "field": "물리"
+    },
+    {
+      "id": "net",
+      "label": "0.1초\n해저 여행",
+      "title": "0.1초 해저 여행",
+      "url": "https://internet.seeplore.com/",
+      "icon": "https://seeplore.com/icons/series/net.png",
+      "desc": "인터넷은 구름이 아니라 바다 밑에 있다 — 부산에서 누른 영상이 해저 케이블로 태평양을 건너 미국에 다녀오는 0.1초를 3D · 음성 해설로",
+      "titleEn": "0.1 Seconds Under the Sea",
+      "labelEn": "0.1 Seconds\nUnder the Sea",
+      "descEn": "The internet lives under the sea — a 0.1-second round trip from Busan to the US, in 3D · narrated",
+      "urlEn": "https://internet.seeplore.com/en/",
+      "field": "AI·컴퓨터"
     }
   ]
 }
