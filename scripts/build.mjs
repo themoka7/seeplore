@@ -10,7 +10,8 @@
 import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync, existsSync } from 'node:fs';
 import { teamHtml } from './team.mjs';
 import { buildEn } from './en.mjs';
-import { groupWorks } from './groups.mjs';
+import { groupWorks, GROUPS } from './groups.mjs';
+const GROUP_FIELDS = GROUPS.flatMap((g) => g.fields);
 
 const SITE = 'https://seeplore.com';
 const data = JSON.parse(readFileSync('series.json', 'utf8'));
@@ -21,6 +22,8 @@ const ids = new Set();
 for (const w of works) {
   for (const k of ['id', 'label', 'title', 'url', 'icon', 'desc']) if (typeof w[k] !== 'string' || !w[k]) throw new Error(`[series] ${w.id ?? '?'} 의 ${k} 가 비었습니다`);
   if (w.urlEn) for (const k of ['titleEn', 'labelEn', 'descEn']) if (typeof w[k] !== 'string' || !w[k]) throw new Error(`[series] ${w.id} 은 urlEn 이 있으니 ${k} 도 넣는다`);
+  // 분야 칸: 첫 페이지 묶음(scripts/groups.mjs)·/about·llms.txt 가 쓴다. 새 작품도 반드시 넣는다
+  if (!GROUP_FIELDS.includes(w.field)) throw new Error(`[series] ${w.id} 의 field '${w.field ?? ''}' — 이 중 하나로: ${GROUP_FIELDS.join(', ')}`);
   if (ids.has(w.id)) throw new Error(`[series] 아이디 중복: ${w.id}`);
   ids.add(w.id);
   const local = w.icon.replace(SITE, 'public');
