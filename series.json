@@ -269,6 +269,19 @@
       "descEn": "Four propellers and a computer that corrects itself 1,000 times a second. See how a drone lifts off, leans to fly forward and rides out a gust, in 3D. Plus: draw with a 450-drone light show.",
       "urlEn": "https://drone.seeplore.com/en/",
       "field": "물리"
+    },
+    {
+      "id": "gps",
+      "label": "길을 찾는\n시간",
+      "title": "길을 찾는 시간",
+      "url": "https://gps.seeplore.com/",
+      "icon": "https://seeplore.com/icons/series/gps.png",
+      "desc": "아인슈타인이 없었다면 GPS가 잰 거리는 하루 11km씩 어긋난다 — 위성 공 세 개로 내 위치를 찾고, 위성 시계를 바로잡는 상대성 이론을 질문을 따라 계산해 보는 3D · 음성 해설",
+      "titleEn": "Time to Find Your Way",
+      "labelEn": "Time to\nFind Your Way",
+      "descEn": "Without Einstein, GPS distances would drift 11 km a day — find yourself with three satellite spheres and see how relativity keeps the clocks right, in 3D · narrated",
+      "urlEn": "https://gps.seeplore.com/en/",
+      "field": "물리"
     }
   ]
 }
