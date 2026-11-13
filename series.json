@@ -243,6 +243,19 @@
       "descEn": "Why does an air conditioner feel cool? Follow the refrigerant that carries your room’s heat outdoors, calculated in 3D · narrated",
       "urlEn": "https://airconditioner.seeplore.com/en/",
       "field": "물리"
+    },
+    {
+      "id": "mw",
+      "label": "전자레인지는\n물을 흔든다",
+      "title": "전자레인지는 물을 흔든다",
+      "url": "https://microwaveoven.seeplore.com/",
+      "icon": "https://seeplore.com/icons/series/mw.png",
+      "desc": "전자레인지는 불 없이 어떻게 음식을 데울까 — 전파가 물 분자를 흔드는 과정을 질문을 따라 계산해 보는 3D · 음성 해설",
+      "titleEn": "Microwaves Shake Water",
+      "labelEn": "Microwaves\nShake Water",
+      "descEn": "How does a microwave heat food without a flame? Follow the waves that shake water molecules, one question at a time, calculated in 3D · narrated",
+      "urlEn": "https://microwaveoven.seeplore.com/en/",
+      "field": "물리"
     }
   ]
 }
