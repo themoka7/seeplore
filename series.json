@@ -334,6 +334,19 @@
       "descEn": "A story of population — why Korea is shrinking and what changes next, as a 3D pyramid where each dot is 10,000 people · narrated",
       "urlEn": "https://population.seeplore.com/en/",
       "field": "일상·마음·건강"
+    },
+    {
+      "id": "coffee",
+      "label": "커피가\n온 길",
+      "title": "커피가 온 길",
+      "url": "https://coffee.seeplore.com/",
+      "icon": "https://seeplore.com/icons/series/coffee.png",
+      "desc": "에티오피아 숲의 열매가 우리 동네 카페가 되기까지 — 지구본 위의 600년 · 전국 카페·다방 인허가 자료 · 음성 해설",
+      "titleEn": "The Road of Coffee",
+      "labelEn": "The Road\nof Coffee",
+      "descEn": "From a fruit in an Ethiopian forest to the café down the street — 600 years on a globe, drawn from Korea's café and dabang license records · narrated",
+      "urlEn": "https://coffee.seeplore.com/en/",
+      "field": "일상·마음·건강"
     }
   ]
 }
