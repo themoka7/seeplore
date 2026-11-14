@@ -92,7 +92,7 @@ seeplore는 **"왜 그럴까?"를 눈으로 따라가는 교육용 웹 다큐멘
 
 아빠와 아들이 주제를 고르고 검토하고, 나머지는 AI와 자동화 도구가 맡습니다. 누가 무슨 일을 하는지는 [가상의 사무실](https://seeplore.com/team)에서 볼 수 있습니다.
 
-- 작품마다 저장소 하나, 주소 하나(`<작품>.seeplore.com`). three.js · GSAP · Vite · TypeScript, 지도 작품은 MapLibre.
+- 작품마다 저장소 하나, 주소 하나(`<작품>.seeplore.com`). three.js · GSAP · Vite · TypeScript, 지도 작품은 OpenLayers.
 - 음성 해설은 음성 합성으로 만들고, 화면은 그 음성의 시각에 맞춰 움직입니다.
 - 블로그 글과 쇼츠는 매주 자동으로 만들어 올립니다.
 
