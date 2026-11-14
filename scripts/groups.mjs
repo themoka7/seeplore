@@ -26,6 +26,13 @@ export const GROUPS = [
     introKo: 'AI가 배우는 법, 컴퓨터 속 0.05초, 아파트와 다리, 비행기와 원자핵, 병원체까지 — 기술과 몸속의 원리.',
     introEn: 'How AI learns, how machines at home work, and the physics of flight — the ideas inside technology.',
   },
+  {
+    key: 'mind',
+    ko: '일상·마음·건강', en: 'Everyday Life, Mind & Health',
+    fields: ['일상·마음·건강'],
+    introKo: '같은 일에도 사람마다 다른 감정의 크기처럼, 매일의 마음과 몸 안에서 일어나는 일.',
+    introEn: 'What happens inside our everyday minds and bodies — like why the same event feels bigger to some people.',
+  },
 ];
 
 /** works → [{ g, ws }] (비어 있는 묶음은 뺀다, 묶음 안 순서는 series.json 순서) */

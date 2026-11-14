@@ -295,6 +295,19 @@
       "descEn": "The internet lives under the sea — a 0.1-second round trip from Busan to the US, in 3D · narrated",
       "urlEn": "https://internet.seeplore.com/en/",
       "field": "AI·컴퓨터"
+    },
+    {
+      "id": "emotion",
+      "label": "감정의 크기는\n왜 다를까?",
+      "title": "감정의 크기는 왜 다를까?",
+      "url": "https://emotion.seeplore.com/",
+      "icon": "https://seeplore.com/icons/series/emotion.png",
+      "desc": "같은 일에도 누구는 크게 울고 누구는 금방 웃는다 — 기질·잠·뇌·곱씹기로 본 감정의 크기와 감정을 다루는 법을 3D 감정의 파도 · 음성 해설로",
+      "titleEn": "Why Do Feelings Come in Different Sizes?",
+      "labelEn": "Why Feelings\nDiffer in Size",
+      "descEn": "The same event, different hearts — temperament, sleep, the brain and replaying, and what helps us handle feelings, as 3D waves of emotion · narrated",
+      "urlEn": "https://emotion.seeplore.com/en/",
+      "field": "일상·마음·건강"
     }
   ]
 }
