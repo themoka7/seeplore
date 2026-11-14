@@ -308,6 +308,19 @@
       "descEn": "The same event, different hearts — temperament, sleep, the brain and replaying, and what helps us handle feelings, as 3D waves of emotion · narrated",
       "urlEn": "https://emotion.seeplore.com/en/",
       "field": "일상·마음·건강"
+    },
+    {
+      "id": "amnesia",
+      "label": "기억은 왜\n사라질까?",
+      "title": "기억은 왜 사라질까?",
+      "url": "https://amnesia.seeplore.com/",
+      "icon": "https://seeplore.com/icons/series/amnesia.png",
+      "desc": "우리는 왜 기억하고 왜 잊을까 — 사진 한 장이 그날을 되살리는 원리와 매일 지우고 쌓는 기억을, 실제로 계산하는 작은 기억망과 망각 곡선으로 3D · 음성 해설",
+      "titleEn": "Why Do Memories Fade?",
+      "labelEn": "Why Memories\nFade",
+      "descEn": "Why we remember and why we forget — how one photo brings a day back, and how memory is erased and rebuilt every day, with a small memory network that really computes · 3D · narrated",
+      "urlEn": "https://amnesia.seeplore.com/en/",
+      "field": "일상·마음·건강"
     }
   ]
 }
