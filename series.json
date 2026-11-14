@@ -321,6 +321,19 @@
       "descEn": "Why we remember and why we forget — how one photo brings a day back, and how memory is erased and rebuilt every day, with a small memory network that really computes · 3D · narrated",
       "urlEn": "https://amnesia.seeplore.com/en/",
       "field": "일상·마음·건강"
+    },
+    {
+      "id": "pop",
+      "label": "줄어드는\n대한민국",
+      "title": "줄어드는 대한민국",
+      "url": "https://population.seeplore.com/",
+      "icon": "https://seeplore.com/icons/series/pop.png",
+      "desc": "인구 이야기 — 인구가 줄어드는 까닭과 그때 바뀌는 것들을 점 하나가 1만 명인 3D 화면으로 · 음성 해설",
+      "titleEn": "Shrinking Korea",
+      "labelEn": "Shrinking\nKorea",
+      "descEn": "A story of population — why Korea is shrinking and what changes next, as a 3D pyramid where each dot is 10,000 people · narrated",
+      "urlEn": "https://population.seeplore.com/en/",
+      "field": "일상·마음·건강"
     }
   ]
 }
