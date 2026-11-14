@@ -11,6 +11,7 @@ import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync, existsSync } fr
 import { teamHtml } from './team.mjs';
 import { buildEn } from './en.mjs';
 import { groupWorks, GROUPS } from './groups.mjs';
+import { updateReadme } from './readme.mjs';
 const GROUP_FIELDS = GROUPS.flatMap((g) => g.fields);
 
 const SITE = 'https://seeplore.com';
@@ -325,5 +326,6 @@ writeFileSync(
   'dist/sitemap.xml',
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <url><loc>${SITE}/</loc><lastmod>${today}</lastmod></url>\n  <url><loc>${SITE}/about</loc><lastmod>${today}</lastmod></url>\n  <url><loc>${SITE}/team</loc><lastmod>${today}</lastmod></url>\n  <url><loc>${SITE}/en</loc><lastmod>${today}</lastmod></url>\n  <url><loc>${SITE}/en/about</loc><lastmod>${today}</lastmod></url>\n  <url><loc>${SITE}/en/team</loc><lastmod>${today}</lastmod></url>\n</urlset>\n`,
 );
+updateReadme(works); // README 의 작품 목록·편수도 같이 맞춘다
 writeFileSync('dist/robots.txt', `User-agent: *\nAllow: /\nSitemap: ${SITE}/sitemap.xml\n`);
 console.log(`[seeplore] 작품 ${works.length}편 → dist/`);

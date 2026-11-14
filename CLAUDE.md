@@ -1,6 +1,6 @@
 # seeplore — 작업 규칙
 
-시리즈 허브 저장소. README.md 를 먼저 읽는다.
+시리즈 허브 저장소. `docs/DEVELOPMENT.md`(개발 메모)를 먼저 읽는다. `README.md` 는 공개 저장소의 소개 글(홍보용)이다 — 작품 목록·편수는 `node scripts/build.mjs` 가 `series.json` 으로 다시 쓰니(`scripts/readme.mjs`), 작품을 넣고 빌드한 뒤 바뀐 README 도 함께 커밋한다.
 
 - `series.json` 이 시리즈 목록의 **유일한 원본**이다. 순서 = 화면 순서. 출시한 작품만 넣는다.
 - 아이콘은 `public/icons/series/<id>.png` (192×192). 문법은 계정 스킬 `series-web-doc` 4절.
