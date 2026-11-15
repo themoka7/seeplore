@@ -33,10 +33,21 @@ export const GROUPS = [
     introKo: '같은 일에도 사람마다 다른 감정의 크기처럼, 매일의 마음과 몸 안에서 일어나는 일.',
     introEn: 'What happens inside our everyday minds and bodies — like why the same event feels bigger to some people.',
   },
+  {
+    // 해설 없이 직접 해 보는 작품 (2026-11-15 「빛의 속도로 가는 우주」로 새로 만듦, field '체험')
+    key: 'play',
+    ko: '체험', en: 'Experiences',
+    fields: ['체험'],
+    introKo: '해설 없이 직접 타 보고 돌려 보는 작품. 설명을 듣는 대신 거리와 시간을 몸으로 느낀다.',
+    introEn: 'No narration — just get in and try it. Feel distance and time for yourself instead of being told.',
+  },
 ];
+
+/** 맞는 묶음이 없는 field 는 '일상·마음·건강' 묶음으로 (예전 동작 유지 — '체험'이 마지막에 생겼다) */
+const FALLBACK = 'mind';
 
 /** works → [{ g, ws }] (비어 있는 묶음은 뺀다, 묶음 안 순서는 series.json 순서) */
 export function groupWorks(works) {
-  const of = (w) => GROUPS.find((g) => g.ids?.includes(w.id)) ?? GROUPS.find((g) => g.fields.includes(w.field)) ?? GROUPS[GROUPS.length - 1];
+  const of = (w) => GROUPS.find((g) => g.ids?.includes(w.id)) ?? GROUPS.find((g) => g.fields.includes(w.field)) ?? GROUPS.find((g) => g.key === FALLBACK);
   return GROUPS.map((g) => ({ g, ws: works.filter((w) => of(w) === g) })).filter((x) => x.ws.length);
 }

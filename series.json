@@ -347,6 +347,19 @@
       "descEn": "From a fruit in an Ethiopian forest to the café down the street — 600 years on a globe, drawn from Korea's café and dabang license records · narrated",
       "urlEn": "https://coffee.seeplore.com/en/",
       "field": "일상·마음·건강"
+    },
+    {
+      "id": "light",
+      "label": "빛의 속도로\n가는 우주",
+      "title": "빛의 속도로 가는 우주",
+      "url": "https://speedoflight.seeplore.com/",
+      "icon": "https://seeplore.com/icons/series/light.png",
+      "desc": "빛과 같은 속도로, 실제 거리 그대로 — 태양에서 가장 가까운 별까지 · 해설 없는 체험",
+      "titleEn": "Space at the Speed of Light",
+      "labelEn": "At the Speed\nof Light",
+      "descEn": "At the speed of light, with real distances — from the Sun to the nearest star · an experience with no narration",
+      "urlEn": "https://speedoflight.seeplore.com/en/",
+      "field": "체험"
     }
   ]
 }

@@ -9,7 +9,7 @@ import { groupWorks } from './groups.mjs';
 
 const FIELD_EN = {
   역사: 'History', 우주: 'Space', 지구: 'Earth', 물리: 'Physics', 'AI·컴퓨터': 'AI & Computers', 공학: 'Engineering',
-  '사회·경제': 'Society & Economy', '생명·건강': 'Life & Health', 생명: 'Life', 건강: 'Health', '그 밖의 주제': 'Other topics',
+  '사회·경제': 'Society & Economy', '생명·건강': 'Life & Health', 생명: 'Life', 건강: 'Health', '일상·마음·건강': 'Everyday Life, Mind & Health', 체험: 'Experiences', '그 밖의 주제': 'Other topics',
 };
 
 export function buildEn({ works: all, esc, SITE, BLOG, teamHtml }) {
