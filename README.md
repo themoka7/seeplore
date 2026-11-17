@@ -58,7 +58,7 @@ seeplore는 **"왜 그럴까?"를 눈으로 따라가는 교육용 웹 다큐멘
 | <img src="https://seeplore.com/icons/series/rainbow.png" width="44" height="44" alt=""> | **[42도의 무지개](https://rainbow.seeplore.com/)** · [EN](https://rainbow.seeplore.com/en/) | 햇빛은 왜 42°에서 무지개가 될까 — 빗방울 속 빛의 길을 따라가는 3D · 음성 해설 |
 | <img src="https://seeplore.com/icons/series/wave.png" width="44" height="44" alt=""> | **[파도의 긴 여행](https://wave.seeplore.com/)** · [EN](https://wave.seeplore.com/en/) | 파도는 가고 물은 남는다 — 바람에서 해변까지, 파도가 치는 원리를 3D로 · 음성 해설 |
 | <img src="https://seeplore.com/icons/series/stars.png" width="44" height="44" alt=""> | **[별의 운명](https://destinyofstars.seeplore.com/)** · [EN](https://destinyofstars.seeplore.com/en/) | 태어날 때의 질량이 정하는 세 가지 죽음 — 블랙홀, 중성자별, 백색왜성을 3D로 · 음성 해설 |
-| <img src="https://seeplore.com/icons/series/ns.png" width="44" height="44" alt=""> | **[깊이로 보는 중성자별](https://neutronstar.seeplore.com/)** · [EN](https://neutronstar.seeplore.com/en/) | 지구에서 2,300광년, 1초에 161바퀴 도는 죽은 별의 겉과 속, 그리고 금이 태어나는 충돌까지 3D로 · 음성 해설 |
+| <img src="https://seeplore.com/icons/series/ns.png" width="44" height="44" alt=""> | **[깊이로 보는 중성자별](https://neutron.seeplore.com/)** · [EN](https://neutron.seeplore.com/en/) | 지구에서 2,300광년, 1초에 161바퀴 도는 죽은 별의 겉과 속, 그리고 금이 태어나는 충돌까지 3D로 · 음성 해설 |
 
 ### AI·컴퓨터·공학·생명 · AI, Computers, Engineering & Life (13)
 
