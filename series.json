@@ -373,6 +373,19 @@
       "descEn": "2,300 light-years from Earth: a dead star that spins 161 times a second, outside and in, and the collision where gold is born, in 3D · narrated",
       "urlEn": "https://neutron.seeplore.com/en/",
       "field": "우주"
+    },
+    {
+      "id": "cheat",
+      "label": "AI 커닝의\n시대",
+      "title": "AI 커닝의 시대",
+      "url": "https://aicheating.seeplore.com/",
+      "icon": "https://seeplore.com/icons/series/cheat.png",
+      "desc": "평범한 물건이 카메라가 되는 시험장 — 가상의 이야기로 보는 AI 커닝과 시험의 미래, 3D로",
+      "titleEn": "The Age of AI Cheating",
+      "labelEn": "The Age of\nAI Cheating",
+      "descEn": "When ordinary objects become cameras — an imaginary story about AI cheating and the future of tests, in 3D",
+      "urlEn": "https://aicheating.seeplore.com/en/",
+      "field": "일상·마음·건강"
     }
   ]
 }

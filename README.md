@@ -22,7 +22,7 @@
 
 ## 무엇인가요?
 
-seeplore는 **"왜 그럴까?"를 눈으로 따라가는 교육용 웹 다큐멘터리 시리즈**입니다. 지금까지 <!-- n -->33<!-- /n -->편을 냈고, 그중 <!-- nEn -->19<!-- /nEn -->편은 영어판도 있습니다.
+seeplore는 **"왜 그럴까?"를 눈으로 따라가는 교육용 웹 다큐멘터리 시리즈**입니다. 지금까지 <!-- n -->34<!-- /n -->편을 냈고, 그중 <!-- nEn -->20<!-- /nEn -->편은 영어판도 있습니다.
 
 - **축 하나를 따라갑니다.** 작품마다 시간·거리·깊이 같은 축이 하나 있습니다. 한국사는 연도, 바다는 수심, 블랙홀은 시계가 느려지는 정도. 축을 따라가면 이야기가 됩니다.
 - **보는 것과 듣는 것을 함께.** 장면을 직접 넘겨 볼 수도 있고, '다큐멘터리 모드'를 켜면 음성 해설에 맞춰 화면이 저절로 움직입니다.
@@ -78,7 +78,7 @@ seeplore는 **"왜 그럴까?"를 눈으로 따라가는 교육용 웹 다큐멘
 | <img src="https://seeplore.com/icons/series/gps.png" width="44" height="44" alt=""> | **[길을 찾는 시간](https://gps.seeplore.com/)** · [EN](https://gps.seeplore.com/en/) | 아인슈타인이 없었다면 GPS가 잰 거리는 하루 11km씩 어긋난다 — 위성 공 세 개로 내 위치를 찾고, 위성 시계를 바로잡는 상대성 이론을 질문을 따라 계산해 보는 3D · 음성 해설 |
 | <img src="https://seeplore.com/icons/series/net.png" width="44" height="44" alt=""> | **[0.1초 해저 여행](https://internet.seeplore.com/)** · [EN](https://internet.seeplore.com/en/) | 인터넷은 구름이 아니라 바다 밑에 있다 — 부산에서 누른 영상이 해저 케이블로 태평양을 건너 미국에 다녀오는 0.1초를 3D · 음성 해설로 |
 
-### 일상·마음·건강 · Everyday Life, Mind & Health (4)
+### 일상·마음·건강 · Everyday Life, Mind & Health (5)
 
 | | 작품 | 한 줄 소개 |
 |---|---|---|
@@ -86,6 +86,7 @@ seeplore는 **"왜 그럴까?"를 눈으로 따라가는 교육용 웹 다큐멘
 | <img src="https://seeplore.com/icons/series/amnesia.png" width="44" height="44" alt=""> | **[기억은 왜 사라질까?](https://amnesia.seeplore.com/)** · [EN](https://amnesia.seeplore.com/en/) | 우리는 왜 기억하고 왜 잊을까 — 사진 한 장이 그날을 되살리는 원리와 매일 지우고 쌓는 기억을, 실제로 계산하는 작은 기억망과 망각 곡선으로 3D · 음성 해설 |
 | <img src="https://seeplore.com/icons/series/pop.png" width="44" height="44" alt=""> | **[줄어드는 대한민국](https://population.seeplore.com/)** · [EN](https://population.seeplore.com/en/) | 인구 이야기 — 인구가 줄어드는 까닭과 그때 바뀌는 것들을 점 하나가 1만 명인 3D 화면으로 · 음성 해설 |
 | <img src="https://seeplore.com/icons/series/coffee.png" width="44" height="44" alt=""> | **[커피가 온 길](https://coffee.seeplore.com/)** · [EN](https://coffee.seeplore.com/en/) | 에티오피아 숲의 열매가 우리 동네 카페가 되기까지 — 지구본 위의 600년 · 전국 카페·다방 인허가 자료 · 음성 해설 |
+| <img src="https://seeplore.com/icons/series/cheat.png" width="44" height="44" alt=""> | **[AI 커닝의 시대](https://aicheating.seeplore.com/)** · [EN](https://aicheating.seeplore.com/en/) | 평범한 물건이 카메라가 되는 시험장 — 가상의 이야기로 보는 AI 커닝과 시험의 미래, 3D로 |
 
 ### 체험 · Experiences (1)
 
