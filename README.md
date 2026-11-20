@@ -22,7 +22,7 @@
 
 ## 무엇인가요?
 
-seeplore는 **"왜 그럴까?"를 눈으로 따라가는 교육용 웹 다큐멘터리 시리즈**입니다. 지금까지 <!-- n -->34<!-- /n -->편을 냈고, 그중 <!-- nEn -->20<!-- /nEn -->편은 영어판도 있습니다.
+seeplore는 **"왜 그럴까?"를 눈으로 따라가는 교육용 웹 다큐멘터리 시리즈**입니다. 지금까지 <!-- n -->35<!-- /n -->편을 냈고, 그중 <!-- nEn -->21<!-- /nEn -->편은 영어판도 있습니다.
 
 - **축 하나를 따라갑니다.** 작품마다 시간·거리·깊이 같은 축이 하나 있습니다. 한국사는 연도, 바다는 수심, 블랙홀은 시계가 느려지는 정도. 축을 따라가면 이야기가 됩니다.
 - **보는 것과 듣는 것을 함께.** 장면을 직접 넘겨 볼 수도 있고, '다큐멘터리 모드'를 켜면 음성 해설에 맞춰 화면이 저절로 움직입니다.
@@ -44,7 +44,7 @@ seeplore는 **"왜 그럴까?"를 눈으로 따라가는 교육용 웹 다큐멘
 | <img src="https://seeplore.com/icons/series/class.png" width="44" height="44" alt=""> | **[통계로 보는 우리 반](https://class.seeplore.com/)** | 15세 교실에서 80세 동창회까지 — 공식 통계를 한 반 25명으로 줄여 진학·직업·소득·은퇴를 3D로 · 내 구슬 고르기 |
 | <img src="https://seeplore.com/icons/series/value.png" width="44" height="44" alt=""> | **[라면값으로 보는 돈의 값](https://valueofmoney.seeplore.com/)** · [EN](https://valueofmoney.seeplore.com/en/) | 월급은 그대로인데 물가만 오른다? 1963년 10원 라면에서 시작해, 한국은행 통계로 돈의 값을 따라가는 3D · 음성 해설 |
 
-### 우주·지구 · Space & Earth (11)
+### 우주·지구 · Space & Earth (12)
 
 | | 작품 | 한 줄 소개 |
 |---|---|---|
@@ -59,6 +59,7 @@ seeplore는 **"왜 그럴까?"를 눈으로 따라가는 교육용 웹 다큐멘
 | <img src="https://seeplore.com/icons/series/wave.png" width="44" height="44" alt=""> | **[파도의 긴 여행](https://wave.seeplore.com/)** · [EN](https://wave.seeplore.com/en/) | 파도는 가고 물은 남는다 — 바람에서 해변까지, 파도가 치는 원리를 3D로 · 음성 해설 |
 | <img src="https://seeplore.com/icons/series/stars.png" width="44" height="44" alt=""> | **[별의 운명](https://destinyofstars.seeplore.com/)** · [EN](https://destinyofstars.seeplore.com/en/) | 태어날 때의 질량이 정하는 세 가지 죽음 — 블랙홀, 중성자별, 백색왜성을 3D로 · 음성 해설 |
 | <img src="https://seeplore.com/icons/series/ns.png" width="44" height="44" alt=""> | **[깊이로 보는 중성자별](https://neutron.seeplore.com/)** · [EN](https://neutron.seeplore.com/en/) | 지구에서 2,300광년, 1초에 161바퀴 도는 죽은 별의 겉과 속, 그리고 금이 태어나는 충돌까지 3D로 · 음성 해설 |
+| <img src="https://seeplore.com/icons/series/sun.png" width="44" height="44" alt=""> | **[태양 속으로](https://sun.seeplore.com/)** · [EN](https://sun.seeplore.com/en/) | 빛 알갱이 하나의 여정 — 태양의 중심에서 지구까지 3D로 · 음성 해설 |
 
 ### AI·컴퓨터·공학·생명 · AI, Computers, Engineering & Life (13)
 

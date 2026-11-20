@@ -386,6 +386,19 @@
       "descEn": "When ordinary objects become cameras — an imaginary story about AI cheating and the future of tests, in 3D",
       "urlEn": "https://aicheating.seeplore.com/en/",
       "field": "일상·마음·건강"
+    },
+    {
+      "id": "sun",
+      "label": "태양\n속으로",
+      "title": "태양 속으로",
+      "url": "https://sun.seeplore.com/",
+      "icon": "https://seeplore.com/icons/series/sun.png",
+      "desc": "빛 알갱이 하나의 여정 — 태양의 중심에서 지구까지 3D로 · 음성 해설",
+      "titleEn": "Into the Sun",
+      "labelEn": "Into\nthe Sun",
+      "descEn": "The journey of one particle of light — from the center of the Sun to Earth, in 3D · narrated",
+      "urlEn": "https://sun.seeplore.com/en/",
+      "field": "우주"
     }
   ]
 }
